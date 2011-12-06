@@ -10,8 +10,6 @@ class bacula::config::validate(
     $storage_server,
     $manage_console,
     $manage_bat,
-    $manage_mysql,
-    $manage_sqlite,
     $console_password,
     $use_console
   ) {
@@ -22,8 +20,6 @@ class bacula::config::validate(
   validate_bool($is_director)
   validate_bool($is_storage)
   validate_bool($is_client)
-  validate_bool($manage_mysql)
-  validate_bool($manage_sqlite)
   validate_bool($use_console)
 
   if $use_console {
