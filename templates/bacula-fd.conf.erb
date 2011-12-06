@@ -1,0 +1,25 @@
+# DO NOT EDIT - Managed by Puppet
+#
+# Bacula File Daemon Configuration
+#   for <%= hostname.split('.').first %>
+#   via <%= director_server -%>:director (<%= director_server -%>)
+
+# Configure the Director which will manage this host's backups
+Director {
+  Name = "<%= director_name -%>:director"
+  Password = "<%= director_password -%>"
+}
+
+# Now configure the actual File Daemon
+FileDaemon {
+  Name = "<%= hostname.split('.').first -%>"
+  Working Directory = /var/lib/bacula
+  PID Directory = /var/run/bacula
+  Maximum Concurrent Jobs = 3
+}
+
+# Finally, set where the messages are going to go
+Messages {
+  Name = "<%= director_name -%>:messages:standard"
+  Director = "<%= director_name -%>:director" = all, !skipped, !restored
+}

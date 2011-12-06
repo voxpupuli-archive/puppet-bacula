@@ -1,0 +1,370 @@
+# DO NOT EDIT - Managed by Puppet
+#
+# Bacula Director Master Configuration
+#   for <%= director_name %>
+
+# Define the name of this director so other clients can
+# connect to it and work with our system
+Director {
+  Name = "<%= director_name -%>:director"
+  Query File = "/etc/bacula/scripts/query.sql"
+  Working Directory = "/var/lib/bacula"
+  PID Directory = "/var/run/bacula"
+  Maximum Concurrent Jobs = 5
+  Password = "<%= password -%>"
+  Messages = "<%= director_name -%>:messages:daemon"
+}
+
+# This is where the catalog information will be stored (basically
+# this should be how to connect to whatever database we're using)
+Catalog {
+  Name = "<%= director_name -%>:sqlite"
+  dbname = "bacula"; dbuser = ""; dbpassword = ""
+}
+
+# Configure how the directory will log and/or send messages. This
+# should should be for just about everything.
+Messages {
+  Name = "<%= director_name -%>:messages:standard"
+  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula %t %e (for %c)\" %r"
+  Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
+  Mail = <%= mail_to -%> = all, !skipped
+  Operator = <%= mail_to -%> = mount
+  Console = all, !skipped, !saved
+  # WARNING! the following will create a file that you must cycle from
+  #          time to time as it will grow indefinitely. However, it will
+  #          also keep all your messages if they scroll off the console.
+  Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
+  Catalog = all
+}
+
+# These are messages directly from the various daemons themselves.
+Messages {
+  Name = "<%= director_name -%>:messages:daemon"
+  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Notice (from Director %d)\" %r"
+  Mail = <%= mail_to -%> = all, !skipped
+  Console = all, !skipped, !saved
+  Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
+}
+
+<% if use_console -%>
+# Restricted console used by tray-monitor to get the status of the director
+Console {
+  Name = "<%= director_name -%>:monitor:director"
+  Password = "<%= console_password -%>"
+  CommandACL = status, .status
+}
+<% end -%>
+
+# DEFAULT STORAGE SERVER ------------------------------------------------------
+# All the clients will define their own Storage Daemon configuration as they
+# will connect to a dedicated File device on that director_name (to aid Pool & Volume
+# management along with concurrent access). This section will define a default
+# Storage Daemon to connect to (using the standard FileStorage device) and a
+# Pool which will be used with that as well.
+Storage {
+  Name = "<%= storage_name -%>:storage:default"
+  Address = <%= safe_storage_hostname %>
+  Password = "<%= password -%>"
+  Device = "FileStorage"
+  Media Type = File
+}
+
+Pool {
+  Name = "<%= storage_name -%>:pool:default"
+  # All Volumes will have the format standard.date.time to ensure they
+  # are kept unique throughout the operation and also aid quick analysis
+  # We won't use a counter format for this at the moment.
+  Label Format = "unknown.${Year}${Month:p/2/0/r}${Day:p/2/0/r}.${Hour:p/2/0/r}${Minute:p/2/0/r}"
+  Pool Type = Backup
+  # Clean up any we don't need, and keep them for a maximum of a month (in
+  # theory the same time period for weekly backups from the clients)
+  Recycle = Yes
+  Auto Prune = Yes
+  Volume Retention = 1 Week
+  # Don't allow re-use of volumes; one volume per job only
+  Maximum Volume Jobs = 1
+}
+
+Pool {
+  Name = "<%= storage_name -%>:pool:catalog"
+  # All Volumes will have the format director.catalog.date.time to ensure they
+  # are kept unique throughout the operation and also aid quick analysis
+  Label Format = "<%= director_name -%>.catalog.${Counter<%= server.capitalize -%>Catalog+:p/3/0/r}"
+  Pool Type = Backup
+  # Clean up any we don't need, and keep them for a maximum of a month (in
+  # theory the same time period for weekly backups from the clients)
+  Recycle = Yes
+  Auto Prune = Yes
+  # We have no limit on the number of volumes, but we will simply set that
+  # we should keep at least three days worth of backups of the database
+  Volume Retention = 3 Days
+  # Don't allow re-use of volumes; one volume per job only
+  Maximum Volume Jobs = 1
+}
+
+# Create a Counter which will be used to label the catalog volumes on the sytem
+Counter {
+  Name    = "Counter<%= server.capitalize -%>Catalog"
+  Minimum = 1
+  Catalog = "<%= director_name -%>:sqlite"
+}
+
+# FILE SETS -------------------------------------------------------------------
+# Define the standard set of locations which which will be backed up (along
+# what within those should not be). In general, we have two types:
+#
+#   Basic:noHome     This doesn't back up the /home directory as its mounted
+#                    from an NFS director_name on the network (this is the default).
+#   Basic:withHome   This one does for servers where we don't mount NFS on it.
+
+FileSet {
+  Name = "Basic:noHome"
+  Include {
+    Options {
+      Signature   = MD5
+      Compression = GZIP
+    }
+
+    # Don't worry about most of the director_name as Puppet manages the
+    # configuration. Ensure that per-machine state files or settings
+    # are backed up, along with stuff from /var or /srv which should be
+    # most service-related files
+    File = /boot
+    File = /etc
+    File = /usr/local
+    File = /var
+    File = /opt
+    File = /srv
+    # /home will not be backed up on any normal director_name as it's managed from
+    # a central file-server for most servers.
+  }
+
+  Exclude {
+    # Ignore stuff that can be ignored
+    File = /var/cache
+    File = /var/tmp
+    # The state of the packages installed, or their files, etc.
+    # can be ignored as we use puppet to rebuild much of the server
+    File = /var/lib/apt
+    File = /var/lib/dpkg
+    File = /var/lib/puppet
+    # Ignore database stuff; this will need to be handled
+    # using some sort of a dump script
+    File = /var/lib/mysql
+    File = /var/lib/postgresql
+    File = /var/lib/ldap
+    # Bacula's state files are no use to us on restore
+    File = /var/lib/bacula
+  }
+}
+
+FileSet {
+  Name = "Basic:withHome"
+  Include {
+    Options {
+      Signature   = SHA1
+      Compression = GZIP
+    }
+
+    File = /boot
+    File = /etc
+    File = /usr/local
+    File = /var
+    File = /opt
+    File = /srv
+    # This set does include /home
+    File = /home
+  }
+
+  Exclude {
+    File = /var/cache
+    File = /var/tmp
+    File = /var/lib/apt
+    File = /var/lib/dpkg
+    File = /var/lib/puppet
+    File = /var/lib/mysql
+    File = /var/lib/postgresql
+    File = /var/lib/ldap
+    File = /var/lib/bacula
+  }
+}
+
+# This set is specifically for Bacula to allow it to backup its own internal
+# cataloge as part of the normal process.
+FileSet {
+  Name = "Catalog"
+  Include {
+    Options {
+      Signature   = SHA1
+      Compression = GZIP
+    }
+    File = "/var/lib/bacula/bacula.sql"
+  }
+}
+
+
+# SCHEDULE --------------------------------------------------------------------
+# Define when jobs should be run, and what Levels of backups they will be when
+# they are run.
+
+# These two are the default backup schedule; don't change them
+Schedule {
+  Name = "WeeklyCycle"
+  Run = Level=Full First Sun at 23:05
+  Run = Level=Differential Second-Fifth Sun at 23:05
+  Run = Level=Incremental Mon-Sat at 23:05
+}
+
+Schedule {
+  Name = "WeeklyCycleAfterBackup"
+  Run = Level=Full Mon-Sun at 23:10
+}
+
+# These cycles are set up so that we can spread out the full backups of our
+# servers across the week. Some at the weekend, some mid-week.
+Schedule {
+  Name = "Weekly:onFriday"
+  Run = Level=Full First Fri at 18:30
+  Run = Level=Differential Second-Fifth Fri at 18:30
+  Run = Level=Incremental Sat-Thu at 20:00
+}
+
+Schedule {
+  Name = "Weekly:onSaturday"
+  # Because this is a weekend job, we'll start the full runs earlier
+  Run = Level=Full First Sat at 15:30
+  Run = Level=Differential Second-Fifth Sat at 15:30
+  Run = Level=Incremental Sun-Fri at 20:00
+}
+
+Schedule {
+  Name = "Weekly:onSunday"
+  # Because this is a weekend job, we'll start the full runs earlier
+  Run = Level=Full First Sun at 15:30
+  Run = Level=Differential Second-Fifth Sun at 15:30
+  Run = Level=Incremental Mon-Sat at 20:00
+}
+
+Schedule {
+  Name = "Weekly:onMonday"
+  Run = Level=Full First Mon at 18:30
+  Run = Level=Differential Second-Fifth Mon at 18:30
+  Run = Level=Incremental Tue-Sun at 20:00
+}
+
+Schedule {
+  Name = "Weekly:onTuesday"
+  Run = Level=Full First Tue at 18:30
+  Run = Level=Differential Second-Fifth Tue at 18:30
+  Run = Level=Incremental Wed-Mon at 20:00
+}
+
+Schedule {
+  Name = "Weekly:onWednesday"
+  Run = Level=Full First Wed at 18:30
+  Run = Level=Differential Second-Fifth Wed at 18:30
+  Run = Level=Incremental Thu-Tue at 20:00
+}
+
+Schedule {
+  Name = "Weekly:onThursday"
+  Run = Level=Full First Thu at 18:30
+  Run = Level=Differential Second-Fifth Thu at 18:30
+  Run = Level=Incremental Fri-Wed at 20:00
+}
+
+
+# JOB DEFINITIONS -------------------------------------------------------------
+# Create the types of jobs we need to run.
+
+# Create a standard profile for all normal servers
+<%
+  ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].each do |onDay|
+    ['noHome','withHome'].each do |doHome| -%>
+JobDefs {
+  Name = "Basic:<%= doHome -%>:on<%= onDay -%>"
+  Type = Backup
+  Level = Incremental
+  FileSet = "Basic:<%= doHome -%>"
+  Schedule = "Weekly:on<%= onDay -%>"
+  Messages = "<%= director_name -%>:messages:standard"
+  # Set the job to work as standard with the default Pool & Storage
+  # (this will be overridden by the Job configuration for each Client)
+  Storage = "<%= storage_name -%>:storage:default"
+  Pool = "<%= storage_name -%>:pool:default"
+  Write Bootstrap = "/var/lib/bacula/%c.bsr"
+  Priority = 15
+  # Define how long any of these jobs are allowed to run for before we should
+  # kill them. Note that this is the run time (how long the actual backup is
+  # running for after starting, and not a maximum time after it was scheduled)
+  Full Max Run Time = 36 Hours
+  Differential Max Run Time = 6 Hours
+  Incremental Max Run Time = 6 Hours
+}
+<%  end
+  end %>
+
+# JOBS ------------------------------------------------------------------------
+# Backup the catalog database (after the nightly save)
+Job {
+  Name = "<%= director_name -%>:catalog"
+  Client = "<%= director_name -%>"
+  Type = Backup
+  # Make sure this is a Full backup every time.
+  Level = Full
+  FileSet = "Catalog"
+  Schedule = "WeeklyCycleAfterBackup"
+  # Add commands to export the database and delete it when backed up
+  RunBeforeJob = "/etc/bacula/scripts/make_catalog_backup.pl <%= director_name -%>:sqlite"
+  RunAfterJob  = "/etc/bacula/scripts/delete_catalog_backup"
+  # This will be backed up to the default storage location
+  Storage = "<%= storage_name -%>:storage:default"
+  Pool = "<%= storage_name -%>:pool:catalog"
+  Messages = "<%= director_name -%>:messages:standard"
+  Write Bootstrap = "/var/lib/bacula/%n.bsr"
+  # Make sure this is run after main backups
+  Priority = 100
+}
+
+# Standard Restore template, to be changed by Console program
+#  Only one such job is needed for all Jobs/Clients/Storage ...
+Job {
+  Name = "Restore Template"
+  Client = "<%= director_name -%>"
+  Type = Restore
+  FileSet = "Basic:noHome"
+  Storage = "<%= storage_name -%>:storage:default"
+  Pool = "<%= storage_name -%>:pool:default"
+  Messages = "<%= director_name -%>:messages:standard"
+  Where = "/tmp"
+}
+
+# CLIENTS ---------------------------------------------------------------------
+# No client (other than this director_name itself) will normally be defined directly
+# in this file. We'll get Puppet to create individual config files under
+# /etc/bacula/bacula-dir.d and then the following code will import them for us.
+
+# The only client we will define is this director_name itself to do the catalog
+# backups after each day's run
+Client {
+  Name = "<%= director_name -%>"
+  Password = "<%= password -%>"
+  Address = <%= director_name %>
+  # This will be managed by the default catalog
+  Catalog = "<%= director_name -%>:sqlite"
+  # Any files backed up will only be kept for maximum of
+  # around 1 month, so we'll set retention of that information
+  # to a maximum of 6 weeks
+  File Retention = 6 Weeks
+  # However, we'll keep a log of all the work done on the server
+  # for around a year so we can keep an eye on it and see
+  # general progression or changes over time.
+  Job Retention = 1 Year
+  # Get rid of any data or files as they expire.
+  Auto Prune = Yes
+}
+
+# Finally, bring in all the additional pieces of configuration from the
+# different servers for which this Director was configured to manage
+@|"sh -c 'for f in /etc/bacula/bacula-dir.d/*.conf ; do echo @${f} ; done'"
