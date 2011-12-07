@@ -3,7 +3,7 @@ class bacula::storage(
     $director_server,
     $director_password,
     $storage_server,
-    $storage_package,
+    $storage_package = '',
     $mysql_package,
     $sqlite_package,
     $console_password,
@@ -20,7 +20,19 @@ class bacula::storage(
     'sqlite' => $sqlite_package,
   }
 
-  package { [$db_package, $storage_package]:
+  if $storage_package {
+    package { $storage_package:
+      ensure => installed,
+    }
+    File['/etc/bacula/bacula-sd.conf'] {
+      require +> Package[$storage_package],
+    }
+    Service['bacula-sd'] {
+      require +> Package[$storage_package],
+    }
+  }
+
+  package { $db_package:
     ensure => installed,
   }
 
@@ -30,7 +42,7 @@ class bacula::storage(
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-sd'],
-    require => Package[$db_package, $storage_package],
+    require => Package[$db_package],
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:
@@ -44,7 +56,7 @@ class bacula::storage(
   service { 'bacula-sd':
     enable     => true,
     ensure     => running,
-    require    => Package[$db_package, $storage_package],
+    require    => Package[$db_package],
     hasstatus  => true,
     hasrestart => true,
   }

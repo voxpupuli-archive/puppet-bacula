@@ -98,12 +98,12 @@ class bacula::config {
   }
 
   $director_package = $::bacula_director_package ? {
-    undef   => 'bacula-director-common',
+    undef   => '', # By default, let the db package handle this
     default => $::bacula_director_package,
   }
 
   $storage_package = $::bacula_storage_package ? {
-    undef   => 'bacula-storage-common',
+    undef   => '', # By default, let the db package handle this
     default => $::bacula_storage_package,
   }
 

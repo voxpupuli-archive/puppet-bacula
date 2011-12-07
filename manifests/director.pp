@@ -3,7 +3,7 @@ class bacula::director(
     $password,
     $db_backend,
     $storage_server,
-    $director_package,
+    $director_package = '',
     $mysql_package,
     $mail_to,
     $sqlite_package,
@@ -25,7 +25,16 @@ class bacula::director(
     'sqlite' => $sqlite_package,
   }
   
-  package { [$db_package, $director_package]:
+  if $director_package {
+    package { $director_package:
+      ensure => installed,
+    }
+    File['/etc/bacula/bacula-dir.conf'] {
+      require +> Package[$director_pacakge],
+    }
+  }
+
+  package { $db_package:
     ensure => installed,
   }
 
@@ -38,7 +47,7 @@ class bacula::director(
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-dir'],
-    require => Package[$db_package, $director_package],
+    require => Package[$db_package],
   }
 
   # Register the Service so we can manage it through Puppet
