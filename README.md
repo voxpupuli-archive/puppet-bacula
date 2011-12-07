@@ -108,4 +108,6 @@ TODO
 ====
 
  * Add ability to set custom Filesets for clients.
+ * Add support mysql backend
+ * Add ability to manage the DB backend instead of just using it
 
