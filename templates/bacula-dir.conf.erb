@@ -19,7 +19,7 @@ Director {
 # this should be how to connect to whatever database we're using)
 Catalog {
   Name = "<%= director_name -%>:sqlite"
-  dbname = "bacula"; dbuser = ""; dbpassword = ""
+  dbname = "<%= director_name -%>:sqlite"; dbuser = ""; dbpassword = ""
 }
 
 # Configure how the directory will log and/or send messages. This
