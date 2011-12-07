@@ -64,7 +64,7 @@ Console {
 # Pool which will be used with that as well.
 Storage {
   Name = "<%= storage_name -%>:storage:default"
-  Address = <%= safe_storage_hostname %>
+  Address = <%= storage_name %>
   Password = "<%= password -%>"
   Device = "FileStorage"
   Media Type = File
