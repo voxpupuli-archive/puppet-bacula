@@ -30,7 +30,7 @@ class bacula::storage(
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-sd'],
-    require => Package[$db_package],
+    require => Package[$db_package, $storage_package],
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:

@@ -38,7 +38,7 @@ class bacula::director(
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-dir'],
-    require => Package[$db_package],
+    require => Package[$db_package, $director_package],
   }
 
   # Register the Service so we can manage it through Puppet
