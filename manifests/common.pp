@@ -2,6 +2,7 @@ class bacula::common {
 
   user { 'bacula':
     ensure => present,
+    gid    => 'bacula',
   }
 
   group { 'bacula':
