@@ -8,4 +8,4 @@ description 'UNKNOWN'
 project_page 'http://github.com/puppetlabs/puppetlabs-bacula'
 
 ## Add dependencies, if any:
-dependency 'puppetlabs/stdlib', '>= 2.20'
+dependency 'puppetlabs/stdlib', '>= 2.2.0'
