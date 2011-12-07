@@ -41,6 +41,8 @@ class bacula(
     manage_bat        => $manage_bat,
   }
 
+  class { 'bacula::common': }
+
   if $is_director {
     class { 'bacula::director':
       db_backend       => $db_backend,
@@ -54,6 +56,7 @@ class bacula(
       template         => $director_template,
       use_console      => $use_console,
       console_password => $console_password,
+      require          => Class['bacula::common'],
     }
   }
 
@@ -68,6 +71,7 @@ class bacula(
       storage_package   => $storage_package,
       console_password  => $console_password,
       template          => $storage_template,
+      require           => Class['bacula::common'],
     }
   }
 
@@ -76,6 +80,7 @@ class bacula(
       director_server   => $director_server,
       director_password => $director_password,
       client_package    => $client_package,
+      require           => Class['bacula::common'],
     }
   }
 
@@ -83,10 +88,13 @@ class bacula(
     class { 'bacula::console':
       director_server   => $director_server,
       director_password => $director_password,
+      require           => Class['bacula::common'],
     }
   }
 
   if $manage_bat {
-    class { 'bacula::bat': }
+    class { 'bacula::bat': 
+      require => Class['bacula::common'],
+    }
   }
 }
