@@ -33,7 +33,7 @@ class bacula::director(
   # the per-Client configuration is created before we run the realization for
   # the exported files below
   file { '/etc/bacula/bacula-dir.conf':
-    ensure  => 'present',
+    ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),

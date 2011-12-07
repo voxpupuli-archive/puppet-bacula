@@ -25,7 +25,7 @@ class bacula::storage(
   }
 
   file { '/etc/bacula/bacula-sd.conf':
-    ensure  => installed,
+    ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),
@@ -36,16 +36,16 @@ class bacula::storage(
   file { ['/mnt/bacula', '/mnt/bacula/default']:
     ensure  => 'directory',
     owner   => 'bacula',
-    group   => 'tape',
-    mode    => '0750';
+    group   => 'bacula',
+    mode    => '0750',
   }
 
   # Register the Service so we can manage it through Puppet
   service { 'bacula-sd':
     enable     => true,
     ensure     => running,
-    require    => Package[$db_package],
+    require    => Package[$db_package, $storage_package],
     hasstatus  => true,
-    hasrestart => true;
+    hasrestart => true,
   }
 }

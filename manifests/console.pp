@@ -12,7 +12,7 @@ class bacula::console(
   }
 
   file { '/etc/bacula/bconsole.conf':
-    ensure  => 'present',
+    ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),
