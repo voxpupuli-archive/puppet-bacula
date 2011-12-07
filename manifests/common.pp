@@ -9,9 +9,14 @@ class bacula::common {
     ensure => present,
   }
 
-  file { '/var/lib/bacula':
+  file { '/var/spool/bacula':
     ensure => directory,
     owner  => bacula,
     group  => bacula,
+  }
+
+  file { '/var/lib/bacula':
+    ensure => symlink,
+    target => '/var/spool/bacula',
   }
 }
