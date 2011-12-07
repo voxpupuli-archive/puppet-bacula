@@ -15,6 +15,7 @@ class bacula::client(
     ensure  => file,
     content => template('bacula/bacula-fd.conf.erb'),
     notify  => Service['bacula-fd'],
+    require => Package[$client_package],
   }
 
   service { 'bacula-fd':
