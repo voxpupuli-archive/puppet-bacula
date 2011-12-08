@@ -1,0 +1,11 @@
+# DO NOT EDIT - Managed by Puppet
+#
+# Bacula Console Configuration
+#   for <%= fqdn %>
+#    to <%= director_name -%>:director (<%= director_server -%>)
+
+Director {
+  Name = "<%= director_name -%>:monitor:director"
+  Address = <%= director_server %>
+  Password = "<%= director_password -%>"
+}
