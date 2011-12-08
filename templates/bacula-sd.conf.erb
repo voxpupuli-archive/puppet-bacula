@@ -1,0 +1,49 @@
+# DO NOT EDIT - Managed by Puppet
+#
+# Bacula Storage Daemon Configuration
+#   for <%= storage_name %>
+#   via <%= director_name -%>:director (<%= director_name -%>)
+
+# Configure the Director which will manage this Storage Daemon, and the
+# Director through which we'll send our messages (will be the same) one.
+Director {
+  Name = "<%= director_name -%>:director"
+  Password = "<%= director_password -%>"
+}
+
+Messages {
+  Name = "<%= storage_name -%>:messages:standard"
+  Director = "<%= director_name -%>:director" = all
+}
+
+# Configure the basic details for the Storage Daemon on this server
+Storage {
+  Name = "<%= storage_name -%>:storage"
+  Working Directory = "/var/lib/bacula"
+  PID Directory = "/var/run/bacula"
+  Maximum Concurrent Jobs = 20
+}
+
+# Also configure access for something to monitor this Storage Daemon
+Director {
+  Name = "<%= storage_name -%>:monitor:storage"
+  Password = "<%= console_password -%>"
+  Monitor = Yes
+}
+
+# Not configure the default Device this Storage Daemon will provide
+Device {
+  Name = "FileStorage"
+  Media Type = File
+  Archive Device = /mnt/bacula/default
+  Label Media = Yes
+  Random Access = Yes
+  Automatic Mount = Yes
+  Removable Media = No
+  Always Open = No
+}
+
+# All other Devices are created by the clients that need them - each will
+# prepare their own device and pool configuration, which will then be
+# saved under /etc/bacula/bacula-sd.d and imported by the following line:
+@|"sh -c 'for f in /etc/bacula/bacula-sd.d/*.conf ; do echo @${f} ; done'"
