@@ -1,3 +1,7 @@
+# Class: bacula::config::validate
+#
+# This class takes parameters which values need to be
+# validated in some way
 class bacula::config::validate(
     $db_backend,
     $mail_to,

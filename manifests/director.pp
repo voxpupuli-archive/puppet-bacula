@@ -1,3 +1,41 @@
+# Class: bacula::director
+#
+# This class manages the bacula director component
+#
+# Parameters:
+#   $server:
+#     The FQDN of the bacula director
+#   $password:
+#     The password of the director
+#   $db_backend:
+#     The DB backend to store the catalogs in. (Currently only support sqlite)
+#   $storage_server:
+#     The FQDN of the storage daemon server
+#   $director_package:
+#     The name of the package that installs the director (Optional)
+#   $mysql_package:
+#     The name of the package that installs the mysql support for the director
+#   $sqlite_package:
+#     The name of the package that installs the sqlite support for the director
+#   $template:
+#     The ERB template to us to generate the bacula-dir.conf file
+#     - Default: 'bacula/bacula-dir.conf.erb'
+#   $use_console:
+#     Whether to manage the Console resource in the director
+#   $console_password:
+#     If $use_console is true, then use this value for the password
+#
+# Sample Usage:
+#
+# class { 'bacula::director':
+#   server           => 'bacula.domain.com',
+#   password         => 'XXXXXXXXX',
+#   db_backend       => 'sqlite',
+#   storage_server   => 'bacula.domain.com',
+#   mail_to          => 'bacula-admin@domain.com',
+#   use_console      => true,
+#   console_password => 'XXXXXX',
+# }
 class bacula::director(
     $server,
     $password,

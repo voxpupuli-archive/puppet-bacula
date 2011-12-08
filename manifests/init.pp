@@ -1,3 +1,69 @@
+# Class: bacula
+#
+# This is the main class to manage all the components of a Bacula
+# infrastructure. This is the only class that needs to be declared.
+#
+# Parameters:
+#   $db_backend:
+#     Currently only supports sqlite
+#   $mail_to:
+#     Address to email reports to
+#   $is_director:
+#     Whether the node should be a director
+#   $is_client
+#     Whether the node should be a client
+#   $is_storage
+#     Whether the node should be a storage server
+#   $director_password
+#     The director's password
+#   $console_password
+#     The console's password
+#   $director_server
+#     The FQDN of the bacula director
+#   $storage_server
+#     The FQDN of the storage server
+#   $manage_console
+#     Whether the bconsole should be managed on the node
+#   $manage_bat
+#     Whether the bat should be managed on the node
+#   $director_package
+#     The name of the package to install the director
+#   $storage_package
+#     The name of the package to install the storage
+#   $client_package
+#     The name of the package to install the client
+#   $director_sqlite_package
+#     The name of the package to install the director's sqlite functionality
+#   $storage_sqlite_package
+#     The name of the package to install the storage daemon's sqlite functionality
+#   $director_mysql_package
+#     The name of the package to install the director's mysql functionality
+#   $storage_mysql_package
+#     The name of the package to install the storage's sqlite functionality
+#   $director_template
+#     The ERB template to use for configuring the director instead of the one included with the module
+#   $storage_template
+#     The ERB template to use for configuring the storage daemon instead of the one included with the module
+#   $console_template
+#     The ERB template to use for configuring the bconsole instead of the one included with the module
+#   $use_console
+#     Whether to configure a console resource on the director
+#   $console_password
+#     The password to use for the console resource on the director
+#
+# Sample Usage
+#
+# class { 'bacula':
+#   is_storage        => true,
+#   is_director       => true,
+#   is_client         => true,
+#   manage_console    => true,
+#   director_password => 'xxxxxxxxx',
+#   console_password  => 'xxxxxxxxx',
+#   director_server   => 'bacula.domain.com',
+#   mail_to           => 'bacula-admin@domain.com',
+#   storage_server    => 'bacula.domain.com',
+# }
 class bacula(
     $db_backend              = $bacula::config::db_backend,
     $mail_to                 = $bacula::config::mail_to,
