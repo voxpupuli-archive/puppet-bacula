@@ -1,0 +1,6 @@
+2011-12-08 - Carl Caum <carl@puppetlabs.com> - 0.0.1
+ - Manage a Bacula director
+ - Manage Bacula clients
+ - Manage a Bacula storage daemon
+ - Manage console installations
+ - Customize configuration files with custom templates
