@@ -80,8 +80,10 @@ class bacula::storage(
     }
   }
 
-  package { $db_package:
-    ensure => installed,
+  if $db_package {
+    package { $db_package:
+      ensure => installed,
+    }
   }
 
   file { '/etc/bacula/bacula-sd.conf':
@@ -90,22 +92,40 @@ class bacula::storage(
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-sd'],
-    require => Package[$db_package],
+    require => $db_package ? {
+      ''      => undef,
+      default => Package[$db_package],
+    }
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:
-    ensure  => 'directory',
+    ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0750',
+  }
+
+  file { '/etc/bacula/bacula-sd.d':
+    ensure => directory,
+    owner  => 'bacula',
+    group  => 'bacula',
+    before => Service['bacula-sd'],
+  }
+
+  file { '/etc/bacula/bacula-sd.d/empty.conf':
+    ensure => file,
+    before => Service['bacula-sd'],
   }
 
   # Register the Service so we can manage it through Puppet
   service { 'bacula-sd':
     enable     => true,
     ensure     => running,
-    require    => Package[$db_package],
     hasstatus  => true,
     hasrestart => true,
+    require    => $db_package ? {
+      ''      => undef,
+      default => Package[$db_package],
+    }
   }
 }
