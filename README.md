@@ -16,6 +16,8 @@ REQUIREMENTS
 
  * Puppet >=2.6 if using parameterized classes
  * Puppetlabs/stdlib module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/stdlib or with the command `puppet-module install puppetlabs/stdlib`
+ * Puppetlabs/mysql module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/mysql or with the command `puppet-module install puppetlabs/mysql`
+ * Puppetlabs/sqlite module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/sqlite or with the command `puppet-module install puppetlabs/sqlite`
 
 
 CONFIGURATION
@@ -73,7 +75,7 @@ The following lists all the class parameters the bacula class accepts as well as
     -------------------------------------------------------------------------
 
     COMMON PARAMETERS:
-    db_backend                    bacula_db_backend               Currently only supports sqlite
+    db_backend                    bacula_db_backend               Which database backend system you want to use to store the catalog data
     mail_to                       bacula_mail_to                  Address to email reports to
     is_director                   bacula_is_director              Whether the node should be a director
     is_client                     bacula_is_client                Whether the node should be a client
@@ -87,6 +89,9 @@ The following lists all the class parameters the bacula class accepts as well as
 
 
     UNCOMMON PARAMETERS:
+    manage_db_tables              bacula_manage_db_tables         Whether to manage the SQL tables in te database specified in db_backend. Defaults to true
+    manage_db                     bacula_manage_db                Whether to manage creation of the database specified by db_database. Default to false. In order
+                                                                  for this to work, you must declare the `mysql::server` class
     director_package              bacula_director_package         The name of the package to install the director
     storage_package               bacula_storage_package          The name of the package to install the storage
     client_package                bacula_client_package           The name of the package to install the client
@@ -115,6 +120,4 @@ TODO
 ====
 
  * Add ability to set custom Filesets for clients.
- * Add support mysql backend
- * Add ability to manage the DB backend instead of just using it
 
