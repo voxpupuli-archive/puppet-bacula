@@ -18,8 +18,11 @@ Director {
 # This is where the catalog information will be stored (basically
 # this should be how to connect to whatever database we're using)
 Catalog {
-  Name = "<%= director_name -%>:sqlite"
-  dbname = "<%= director_name -%>:sqlite"; dbuser = ""; dbpassword = ""
+  Name = "<%= director_name -%>:<%= db_backend -%>"
+  dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
+  <% unless db_backend == 'sqlite' -%>
+  dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
+  <% end %>
 }
 
 # Configure how the directory will log and/or send messages. This
@@ -107,7 +110,7 @@ Pool {
 Counter {
   Name    = "Counter<%= server.capitalize -%>Catalog"
   Minimum = 1
-  Catalog = "<%= director_name -%>:sqlite"
+  Catalog = "<%= director_name -%>:<%= db_backend %>"
 }
 
 # FILE SETS -------------------------------------------------------------------
@@ -316,7 +319,7 @@ Job {
   FileSet = "Catalog"
   Schedule = "WeeklyCycleAfterBackup"
   # Add commands to export the database and delete it when backed up
-  RunBeforeJob = "/etc/bacula/scripts/make_catalog_backup.pl <%= director_name -%>:sqlite"
+  RunBeforeJob = "/etc/bacula/scripts/make_catalog_backup.pl <%= director_name -%>:<%= db_backend %>"
   RunAfterJob  = "/etc/bacula/scripts/delete_catalog_backup"
   # This will be backed up to the default storage location
   Storage = "<%= storage_name -%>:storage:default"
@@ -352,7 +355,7 @@ Client {
   Password = "<%= password -%>"
   Address = <%= director_name %>
   # This will be managed by the default catalog
-  Catalog = "<%= director_name -%>:sqlite"
+  Catalog = "<%= director_name -%>:<%= db_backend %>"
   # Any files backed up will only be kept for maximum of
   # around 1 month, so we'll set retention of that information
   # to a maximum of 6 weeks
