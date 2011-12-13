@@ -84,6 +84,26 @@ class bacula::config {
     $safe_use_console = $use_console
   }
 
+  $manage_db = $::bacula_manage_db ? {
+    undef   => false,
+    default => $::bacula_manage_db,
+  }
+  if is_string($manage_db) {
+    $safe_manage_db = str2bool($manage_db)
+  } else {
+    $safe_manage_db = $manage_db
+  }
+
+  $manage_db_tables = $::bacula_manage_db_tables ? {
+    undef   => true,
+    default => $::bacula_manage_db_tables,
+  }
+  if is_string($manage_db_tables) {
+    $safe_manage_db_tables = str2bool($manage_db_tables)
+  } else {
+    $safe_manage_db_tables = $manage_db_tables
+  }
+
   $db_backend =  $::bacula_db_backend ? {
     undef   => 'sqlite',
     default => $::bacula_db_backend,
@@ -129,25 +149,66 @@ class bacula::config {
     default => $::bacula_client_package,
   }
 
+  $director_mysql_package  = $::bacula_director_mysql_package ? {
+    undef   => 'bacula-director-mysql',
+    default => $::bacula_director_mysql_package,
+  }
+
+  $storage_mysql_package  = $::bacula_storage_mysql_package ? {
+    undef   => 'bacula-sd-mysql',
+    default => $::bacula_storage_mysql_package,
+  }
+
   $director_sqlite_package = $::bacula_director_sqlite_package ? {
     undef   => 'bacula-director-sqlite3',
     default => $::bacula_director_sqlite_package,
   }
 
   $storage_sqlite_package = $::bacula_storage_sqlite_package ? {
-    undef   => 'bacula-storage-sqlite3',
+    undef   => 'bacula-sd-sqlite3',
     default => $::bacula_storage_sqlite_package,
   }
 
-  $director_mysql_package = $::bacula_director_mysql_package ? {
-    undef   => 'bacula-director-mysql',
-    default => $::bacula_director_mysql_package,
+  $director_db_package = $::bacula_director_db_package ? {
+    undef   => '',
+    default => $::bacula_director_db_package,
   }
 
-  $storage_mysql_package = $::bacula_storage_mysql_package ? {
-    undef   => 'bacula-storage-mysql',
-    default => $::bacula_director_mysql_package,
+  $console_package = $::bacula_console_package ? {
+    undef   => 'bacula-console',
+    default => $::bacula_console_package,
   }
+
+  $storage_db_package = $::bacula_storage_db_package ? {
+    undef   => '',
+    default => $::bacula_director_db_package,
+  }
+
+  $db_user = $::bacula_db_user ? {
+    undef   => '',
+    default => $::bacula_db_user,
+  }
+ 
+  $db_port = $::bacula_db_port ? {
+    undef   => '3306',
+    default => $::bacula_db_user,
+  }
+
+  $db_password = $::bacula_db_password ? {
+    undef   => '',
+    default => $::bacula_db_password,
+  }
+
+  $db_host = $::bacula_db_host ? {
+    undef   => 'localhost',
+    default => $::bacula_db_host,
+  }
+
+  $db_database = $::bacula_db_database ? {
+    undef   => 'bacula',
+    default => $::bacula_db_database,
+  }
+
 
   #If it's undef, that's fine
   $director_template = $::bacula_director_template

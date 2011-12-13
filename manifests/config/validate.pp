@@ -4,6 +4,11 @@
 # validated in some way
 class bacula::config::validate(
     $db_backend,
+    $db_database,
+    $db_port,
+    $db_host,
+    $db_user,
+    $db_password,
     $mail_to,
     $is_director,
     $is_client,
@@ -15,7 +20,9 @@ class bacula::config::validate(
     $manage_console,
     $manage_bat,
     $console_password,
-    $use_console
+    $use_console,
+    $manage_db,
+    $manage_db_tables
   ) {
 
   #Validate our booleans
@@ -25,6 +32,8 @@ class bacula::config::validate(
   validate_bool($is_storage)
   validate_bool($is_client)
   validate_bool($use_console)
+  validate_bool($manage_db_tables)
+  validate_bool($manage_db)
 
   if $use_console {
     if empty($console_password) {
@@ -49,13 +58,6 @@ class bacula::config::validate(
     fail '$storage_server cannot be empty'
   }
 
-  #Validate we support db_backend
-  if $is_director or $is_storage {
-    if ! ($db_backend in ['mysql','sqlite']) {
-      fail 'Bacula db_backend must be either mysql or sqlite'
-    }
-  }
-
   #Validate the passwords aren't empty
   if $is_director {
     if empty($director_password) {
@@ -66,6 +68,25 @@ class bacula::config::validate(
   if $manage_console {
     if empty($console_password) {
       fail '$console_password cannot be empty'
+    }
+  }
+
+  if empty($db_database) {
+    fail '$db_database cannot be empty'
+  }
+
+  if $db_backend != 'sqlite' {
+    if empty($db_host) {
+      fail '$db_host cannot be empty'
+    }
+    if empty($db_user) {
+      fail '$db_user cannot be empty'
+    }
+    if ! is_integer($db_port) {
+      fail '$db_port must be a port number'
+    }
+    if empty($db_password) {
+      fail '$db_password cannot be empty'
     }
   }
 }
