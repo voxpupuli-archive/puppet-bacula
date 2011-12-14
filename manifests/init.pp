@@ -65,6 +65,22 @@
 #   $manage_db
 #     Whether to manage the existance of the database.  If true, the $db_user must have privileges 
 #     to create databases on $db_host
+#   $clients
+#     For directors, $clients is a hash of clients.  The keys are the clients while the value is a hash of parameters
+#     The parameters accepted are fileset and schedule.
+#
+# Example clients hash
+#  $clients = {
+#    'somenode' => {
+#      'fileset'  => 'Basic:noHome',
+#      'schedule' => 'Hourly',
+#    },
+#    'node2' => {
+#      'fileset'  => 'Basic:noHome',
+#      'schedule' => 'Hourly',
+#    }
+#  }
+#
 #
 # Sample Usage
 #
@@ -78,6 +94,7 @@
 #   director_server   => 'bacula.domain.com',
 #   mail_to           => 'bacula-admin@domain.com',
 #   storage_server    => 'bacula.domain.com',
+#   clients           => $clients,
 # }
 class bacula(
     $db_backend              = $bacula::config::db_backend,
@@ -110,9 +127,11 @@ class bacula(
     $storage_template        = $bacula::config::storage_template,
     $console_template        = $bacula::config::console_template,
     $use_console             = $bacula::config::safe_use_console,
-    $console_password        = $bacula::config::console_password
+    $console_password        = $bacula::config::console_password,
+    $clients                 = {}
   ) inherits bacula::config {
     
+
 
   #Validate our parameters
   #It's ugly to do it in the parent class

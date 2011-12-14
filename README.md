@@ -86,6 +86,7 @@ The following lists all the class parameters the bacula class accepts as well as
     storage_server                bacula_storage_server           The FQDN of the storage server
     manage_console                bacula_manage_console           Whether the bconsole should be managed on the node
     manage_bat                    bacula_manage_bat               Whether the bat should be managed on the node
+    clients                       *See Adding Clients section*    
 
 
     UNCOMMON PARAMETERS:
@@ -105,6 +106,151 @@ The following lists all the class parameters the bacula class accepts as well as
     use_console                   bacula_use_console              Whether to configure a console resource on the director
     console_password              bacula_console_password         The password to use for the console resource on the director
 
+CLIENTS
+=======
+
+To back up clients on your network, you need to tell the director about them. The director is whichever node you included the 
+`bacula` class and you specifed the parameter `is_director` to true.  The way to add clients is different depending on if 
+you're using an ENC such as Dashboard or if you're using parameterized classes.  Both need to know the parameters of the client
+
+Client Parameters
+-----------------
+
+    PARAMETERS   DESCRIPTION
+
+    fileset      Which FileSet to assign to the client
+    schedule     Which schedule to assign to the client
+
+Using Parameterized Classes
+---------------------------
+
+The `bacula` class takes a `clients` parameter.  The value for `clients` must be a hash with the keys of the hash being
+the FQDN of the client.  The value of the client needs to be a hash containing the parameters for the client.
+
+```puppet
+  $clients = {
+    'node1.domain.com' = {
+      'fileset'  => 'Basic:noHome',
+      'schedule' => 'Weekly'
+    }
+  }
+
+  class { 'bacula':
+    is_storage        => true,
+    is_director       => true,
+    is_client         => true,
+    manage_console    => true,
+    director_password => 'XXXXXXXXX',
+    console_password  => 'XXXXXXXXX',
+    director_server   => 'bacula.domain.com',
+    mail_to           => 'bacula-admin@domain.com',
+    storage_server    => 'bacula.domain.com',
+    clients           => $clients,
+  }
+```
+
+Using Top Scope (Dashboard)
+---------------------------
+
+The bacula module will look for parameters of a certain format to build its clients list. For each client, make a parmaeter of this
+format:
+  bacula_client_client1.domain.com 
+with value:
+  fileset=MyFileSet,schedule=MySchedule
+
+
+Included FileSets
+=================
+
+ * Basic:noHome:
+   Include:
+    * /boot
+    * /etc
+    * /usr/local
+    * /var
+    * /opt
+    * /srv
+
+   Exclude:
+    * /var/cache
+    * /var/tmp
+    * /var/lib/apt
+    * /var/lib/dpkg
+    * /var/lib/puppet
+    * /var/lib/mysql
+    * /var/lib/postgresql
+    * /var/lib/ldap
+    * /var/lib/bacula
+
+ * Basic:withHome
+   Include:
+    * /home
+    * /boot
+    * /etc
+    * /usr/local
+    * /var
+    * /opt
+    * /srv
+
+   Exclude:
+    * /var/cache
+    * /var/tmp
+    * /var/lib/apt
+    * /var/lib/dpkg
+    * /var/lib/puppet
+    * /var/lib/mysql
+    * /var/lib/postgresql
+    * /var/lib/ldap
+    * /var/lib/bacula
+
+Included Schedules
+==================
+
+ * WeeklyCycle  
+   * Full First Sun at 23:05
+   * Differential Second-Fifth Sun at 23:05
+   * Incremental Mon-Sat at 23:05
+ 
+ * WeeklyCycleAfterBackup
+   * Full Mon-Sun at 23:10
+
+ * Weekly:onFriday
+   * Full First Fri at 18:30
+   * Differential Second-Fifth Fri at 18:30
+   * Incremental Sat-Thu at 20:00
+
+ * Weekly:onSaturday
+   * Full First Sat at 15:30
+   * Differential Second-Fifth Sat at 15:30
+   * Incremental Sun-Fri at 20:00
+
+ * Weekly:onSunday
+   * Full First Sun at 15:30
+   * Differential Second-Fifth Sun at 15:30
+   * Incremental Mon-Sat at 20:00
+   
+ * Weekly:onMonday
+   * Full First Mon at 18:30 
+   * Differential Second-Fifth Mon at 18:30
+   * Incremental Tue-Sun at 20:00
+
+ * Weekly:onTuesday
+   * Full First Tue at 18:30
+   * Differential Second-Fifth Tue at 18:30
+   * Incremental Wed-Mon at 20:00
+
+ * Weekly:onWednesday
+   * Full First Wed at 18:30
+   * Differential Second-Fifth Wed at 18:30
+   * Incremental Thu-Tue at 20:00
+
+ * Weekly:onThursday
+   * Full First Thu at 18:30
+   * Differential Second-Fifth Thu at 18:30
+   * Incremental Fri-Wed at 20:00
+
+ * Hourly
+   * Incremental hourly at 0:30
 
 TEMPLATES
 =========
