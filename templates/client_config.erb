@@ -1,0 +1,9 @@
+Client {
+  Name     = "<%= hostname %>"
+  Address  = "<%= name %>"
+  Password = "<%= scope.lookupvar('bacula::director::password') %>"
+  Catalog  = "<%= scope.lookupvar('bacula::director::director_name') %>"
+  File Retention = 6 Weeks
+  Job Retention  = 1 Year
+  Auto Prune = Yes
+}

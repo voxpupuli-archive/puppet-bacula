@@ -52,13 +52,24 @@ class bacula::director(
     $sqlite_package,
     $template = 'bacula/bacula-dir.conf.erb',
     $use_console,
-    $console_password
+    $console_password,
+    $clients = {}
   ) {
 
+  
   $storage_name_array = split($storage_server, '[.]')
   $director_name_array = split($server, '[.]')
   $storage_name = $storage_name_array[0]
   $director_name = $director_name_array[0]
+
+  
+  # This function takes each client specified in $clients
+  # and generates a bacula::client resource for each
+  #
+  # It also searches top scope for variables in the style
+  # $bacula_client_mynode with values in format
+  # fileset=Basic:noHome,schedule=Hourly
+  generate_clients($clients)
 
   # Only support mysql or sqlite.
   # The given backend is validated in the bacula::config::validate class
