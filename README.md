@@ -10,6 +10,13 @@ ABOUT
 
 This module manages [Bacula](http://bacula.org).  Through declaration of the `bacula` class, you can configure Directors, Storage Daemons, Clients, and consoles.
 
+INSTALLATION
+============
+
+The module can be obtained from the [Puppet Forge](http://forge.puppetlabs.com/puppetlabs/bacula).  Select `Download` which downloads a tar.gz file.  Upload the tar.gz file to your Puppet Master.  Untar the file.  This will create a new directory called `puppetlabs-bacula-${version_number}`.  Rename this directory to just **bacula** and place it in your [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules). 
+
+You can also use the [puppet-module tool](https://github.com/puppetlabs/puppet-module-tool).  Just run this command from your modulepath.
+`puppet-module install puppetlabs/bacula`
 
 REQUIREMENTS
 ============
@@ -17,7 +24,9 @@ REQUIREMENTS
  * Puppet >=2.6 if using parameterized classes
  * Puppetlabs/stdlib module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/stdlib or with the command `puppet-module install puppetlabs/stdlib`
  * Puppetlabs/mysql module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/mysql or with the command `puppet-module install puppetlabs/mysql`
+   Declare the mysql::server class to set up a mysql server on the bacula director node and set `manage_db` to true to have bacula manage the mysql database.
  * Puppetlabs/sqlite module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/sqlite or with the command `puppet-module install puppetlabs/sqlite`
+   Declare the mysql::sqlite class so it's available for the bacula class to use.
 
 
 CONFIGURATION
