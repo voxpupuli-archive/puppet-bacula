@@ -277,6 +277,10 @@ Schedule {
   Run = Level=Incremental Fri-Wed at 20:00
 }
 
+Schedule {
+  Name = "Hourly"
+  Run = Level=Incremental hourly at 0:30
+}
 
 # JOB DEFINITIONS -------------------------------------------------------------
 # Create the types of jobs we need to run.
@@ -307,66 +311,6 @@ JobDefs {
 }
 <%  end
   end %>
-
-# JOBS ------------------------------------------------------------------------
-# Backup the catalog database (after the nightly save)
-Job {
-  Name = "<%= director_name -%>:catalog"
-  Client = "<%= director_name -%>"
-  Type = Backup
-  # Make sure this is a Full backup every time.
-  Level = Full
-  FileSet = "Catalog"
-  Schedule = "WeeklyCycleAfterBackup"
-  # Add commands to export the database and delete it when backed up
-  RunBeforeJob = "/etc/bacula/scripts/make_catalog_backup.pl <%= director_name -%>:<%= db_backend %>"
-  RunAfterJob  = "/etc/bacula/scripts/delete_catalog_backup"
-  # This will be backed up to the default storage location
-  Storage = "<%= storage_name -%>:storage:default"
-  Pool = "<%= storage_name -%>:pool:catalog"
-  Messages = "<%= director_name -%>:messages:standard"
-  Write Bootstrap = "/var/lib/bacula/%n.bsr"
-  # Make sure this is run after main backups
-  Priority = 100
-}
-
-# Standard Restore template, to be changed by Console program
-#  Only one such job is needed for all Jobs/Clients/Storage ...
-Job {
-  Name = "Restore Template"
-  Client = "<%= director_name -%>"
-  Type = Restore
-  FileSet = "Basic:noHome"
-  Storage = "<%= storage_name -%>:storage:default"
-  Pool = "<%= storage_name -%>:pool:default"
-  Messages = "<%= director_name -%>:messages:standard"
-  Where = "/tmp"
-}
-
-# CLIENTS ---------------------------------------------------------------------
-# No client (other than this director_name itself) will normally be defined directly
-# in this file. We'll get Puppet to create individual config files under
-# /etc/bacula/bacula-dir.d and then the following code will import them for us.
-
-# The only client we will define is this director_name itself to do the catalog
-# backups after each day's run
-Client {
-  Name = "<%= director_name -%>"
-  Password = "<%= password -%>"
-  Address = <%= director_name %>
-  # This will be managed by the default catalog
-  Catalog = "<%= director_name -%>:<%= db_backend %>"
-  # Any files backed up will only be kept for maximum of
-  # around 1 month, so we'll set retention of that information
-  # to a maximum of 6 weeks
-  File Retention = 6 Weeks
-  # However, we'll keep a log of all the work done on the server
-  # for around a year so we can keep an eye on it and see
-  # general progression or changes over time.
-  Job Retention = 1 Year
-  # Get rid of any data or files as they expire.
-  Auto Prune = Yes
-}
 
 # Finally, bring in all the additional pieces of configuration from the
 # different servers for which this Director was configured to manage
