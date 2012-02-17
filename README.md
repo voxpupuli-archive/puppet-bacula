@@ -115,6 +115,16 @@ The following lists all the class parameters the bacula class accepts as well as
     use_console                   bacula_use_console              Whether to configure a console resource on the director
     console_password              bacula_console_password         The password to use for the console resource on the director
 
+Additionally the following (uncommon) parameters can be passed to the bacula::client class:
+
+    client_conf                   -                               File name of bacula-fd configuration file
+    client_conf_template          -                               Template for bacula-fd configuration file
+    client_service                -                               The name of bacula-fd service
+    package_provider              -                               Package provider (for solaris only)
+    pid_dir                       -                               The bacula-fd pid dir
+    working_dir                   -                               The bacula-fd working dir
+
+
 CLIENTS
 =======
 
@@ -270,6 +280,26 @@ module).  Make the modifications you want and set the director_template paramete
 stored the custom template.
 
 [Using Puppet Templates](http://docs.puppetlabs.com/guides/templating.html)
+
+SOLARIS SUPPORT
+===============
+
+Currently this module only configures the Bacula client on Solaris. Bacula Directors and Storage Daemon are not supported yet.
+
+To use bacula::client with the Solaris CSWbaculaclient package set the following class paramenters:
+
+```puppet
+  class { 'bacula::client':
+    director_server   => 'bacula.domain.com',
+    director_password => 'xxxxxxx',
+    client_package    => 'CSWbaculaclient',
+    package_provider  => "pkgutil",
+    client_conf       => "/opt/csw/etc/bacula/bacula-fd.conf",
+    client_service    => "cswbacula",
+    working_dir       => "/opt/csw/var/bacula/working",
+    pid_dir           => "/opt/csw/var/bacula/run"
+  }
+```
 
 TODO
 ====
