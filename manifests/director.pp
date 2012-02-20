@@ -53,7 +53,7 @@ class bacula::director(
     $template = 'bacula/bacula-dir.conf.erb',
     $use_console,
     $console_password,
-    $clients = {}
+    $clients = $clients
   ) {
 
   
