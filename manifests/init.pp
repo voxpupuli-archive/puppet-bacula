@@ -187,6 +187,7 @@ class bacula(
       db_host          => $db_host,
       db_port          => $db_port,
       db_database      => $db_database,
+      clients          => $clients
       require          => Class['bacula::common'],
     }
   }
