@@ -53,7 +53,8 @@ class bacula::director(
     $template = 'bacula/bacula-dir.conf.erb',
     $use_console,
     $console_password,
-    $clients = {}
+    $clients = {},
+    $filesets = {},
   ) {
 
   
@@ -69,7 +70,13 @@ class bacula::director(
   # It also searches top scope for variables in the style
   # $bacula_client_mynode with values in format
   # fileset=Basic:noHome,schedule=Hourly
+  notify { 'running generate_clients': }
   generate_clients($clients)
+
+  # This function takes each fileset specified in $filesets
+  # and generates a baculs::fileset resource for each
+  notify { 'running generate_filesets': }
+  generate_filesets($filesets)
 
   # Only support mysql or sqlite.
   # The given backend is validated in the bacula::config::validate class
@@ -84,7 +91,7 @@ class bacula::director(
       ensure => installed,
     }
     File['/etc/bacula/bacula-dir.conf'] {
-      require +> Package[$director_pacakge],
+      require +> Package[$director_package],
     }
   }
 
@@ -102,29 +109,36 @@ class bacula::director(
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),
-    notify  => Service['bacula-director'],
+    notify  => Service['bacula-dir'],
     require => $db_package ? {
       ''      => undef,
       default => Package[$db_package],
     }
   }
 
+  file {'/etc/bacula':
+    ensure => directory,
+    owner  => 'bacula',
+    group  => 'bacula',
+    before => File['/etc/bacula/bacula-dir.d'],
+  }
   file { '/etc/bacula/bacula-dir.d':
     ensure => directory,
     owner  => 'bacula',
     group  => 'bacula',
-    before => Service['bacula-director'],
+    before => Service['bacula-dir'],
   }
 
   file { '/etc/bacula/bacula-dir.d/empty.conf':
     ensure => file,
-    before => Service['bacula-director'],
+    before => Service['bacula-dir'],
   }
 
   # Register the Service so we can manage it through Puppet
-  service { 'bacula-director':
+  notify { 'Running service': }
+  service { 'bacula-dir':
     enable     => true,
-    ensure     => running,
+    ensure     => stopped,
     hasstatus  => true,
     hasrestart => true,
     require    => $db_package ? {

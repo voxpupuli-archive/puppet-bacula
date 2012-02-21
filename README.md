@@ -96,6 +96,7 @@ The following lists all the class parameters the bacula class accepts as well as
     manage_console                bacula_manage_console           Whether the bconsole should be managed on the node
     manage_bat                    bacula_manage_bat               Whether the bat should be managed on the node
     clients                       *See Adding Clients section*    
+    filesets			  *See Adding Filesets section*
 
 
     UNCOMMON PARAMETERS:
@@ -130,6 +131,16 @@ Client Parameters
     fileset      Which FileSet to assign to the client
     schedule     Which schedule to assign to the client
 
+Fileset Parameters
+------------------
+
+    PARAMETERS   DESCRIPTION
+
+    files        Which files to backup
+    excludes     Which files to exclude from being backed up
+    signature    Which signature to create to allow for varification
+    compression  What compression to apply to the backup files
+
 Using Parameterized Classes
 ---------------------------
 
@@ -143,6 +154,18 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
       'schedule' => 'Weekly'
     }
   }
+
+  $filesets = { 'test1' => {
+                'files' => ['/etc','/tmp'],
+                'exclude' => ['/etc/steve','/etc/passwd','/etc/shadow'],
+                'compression' => 'GZIP',
+                'signature' => 'MD5',
+           },
+                      'test2' => {
+                'files' => '/tmp/',
+                'exclude' => '/var/tmp',
+           }
+        }
 
   class { 'bacula':
     is_storage        => true,
@@ -160,6 +183,8 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
 
 Using Top Scope (Dashboard)
 ---------------------------
+
+**TOP SCOPE HAS NOT BEEN TESTED WITH CUSTOM FILESETS**
 
 The bacula module will look for parameters of a certain format to build its clients list. For each client, make a parmaeter of this
 format:
@@ -270,9 +295,4 @@ module).  Make the modifications you want and set the director_template paramete
 stored the custom template.
 
 [Using Puppet Templates](http://docs.puppetlabs.com/guides/templating.html)
-
-TODO
-====
-
- * Add ability to set custom Filesets for clients.
 
