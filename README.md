@@ -147,6 +147,18 @@ Schedule Parameters
     PARAMETERS   DESCRIPTION
     run          What level to back up (Full, Differential, Incremental) and which schedule to do this on
 
+Storage Pool Parameters
+-----------------------
+
+    PARAMETERS   DESCRIPTION
+    type         Type of volume pool (Backup, Archive, Cloned, Migration, Copy, Save)
+    recycle      Automatically recycle volumes?
+    prune        Prune Expired Volumes
+    retention    Length of time to retain a volume
+    maxbytes     Maximum Size of a volume
+    maxjobs      Max concurrent jobs on a volume
+    label        Label to give the volumes within the pool
+
 Using Parameterized Classes
 ---------------------------
 
@@ -179,6 +191,18 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
            },
         }
 
+  $pools = {
+                'File' => {
+                 'pooltype' => 'Backup',
+                 'retention' => '365 days',
+                 'prune' => 'yes',
+                 'label' => 'File-',
+                 'maxbytes' => '5G',
+                 'maxjobs' => '10',
+                 'recycle' => 'yes',
+                },
+        }
+
   class { 'bacula':
     is_storage        => true,
     is_director       => true,
@@ -192,13 +216,14 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
     clients           => $clients,
     filesets          => $filesets,
     schedules         => $schedules,
+    pools	      => $pools,
   }
 ```
 
 Using Top Scope (Dashboard)
 ---------------------------
 
-**TOP SCOPE HAS NOT BEEN TESTED WITH CUSTOM FILESETS OR SCHEDULES**
+**TOP SCOPE HAS NOT BEEN TESTED WITH CUSTOM FILESETS OR SCHEDULES OR STORAGE POOLS**
 
 The bacula module will look for parameters of a certain format to build its clients listi, filesets, and schedules. For each client, make a parmaeter of this
 format:
@@ -215,5 +240,10 @@ with value
   bacula_schedule_name
 with value
   run=[level= schedule]
+
+ For each storage pool make a parameter of this format:
+  bacula_storagepool_name
+with value
+  pooltype=PoolType,retention=RetentionLength,Prune=Prune,Label=Label,Maxbytes=Maxbytes,Maxjobs=Maxjobs,Recycle=Recycle
 
 [Using Puppet Templates](http://docs.puppetlabs.com/guides/templating.html)

@@ -131,6 +131,7 @@ class bacula(
     $filesets		     = {},
     $clients                 = {},
     $schedules		     = {},
+    $pools		     = {},
   ) inherits bacula::config {
     
 
@@ -192,6 +193,7 @@ class bacula(
       clients	       => $clients,
       filesets	       => $filesets,
       schedules	       => $schedules,
+      pools            => $pools,
       require          => Class['bacula::common'],
     }
   }

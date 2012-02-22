@@ -56,6 +56,7 @@ class bacula::director(
     $clients = {},
     $filesets = {},
     $schedules = {},
+    $pools = {},
   ) {
 
   
@@ -83,6 +84,11 @@ class bacula::director(
   # and generates a baculs::schedule resource for each
   notify { 'running generate_schedules': }
   generate_schedules($schedules)
+
+  # This function takes each storage pool specified in $pools
+  # and generates a baculs::storagepools resource for each
+  notify { 'running generate_storagepools': }
+  generate_storagepools($pools)
 
   # Only support mysql or sqlite.
   # The given backend is validated in the bacula::config::validate class
