@@ -55,6 +55,7 @@ class bacula::director(
     $console_password,
     $clients = {},
     $filesets = {},
+    $schedules = {},
   ) {
 
   
@@ -77,6 +78,11 @@ class bacula::director(
   # and generates a baculs::fileset resource for each
   notify { 'running generate_filesets': }
   generate_filesets($filesets)
+
+  # This function takes each schedule specified in $schedules
+  # and generates a baculs::schedule resource for each
+  notify { 'running generate_schedules': }
+  generate_schedules($schedules)
 
   # Only support mysql or sqlite.
   # The given backend is validated in the bacula::config::validate class

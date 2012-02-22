@@ -130,6 +130,7 @@ class bacula(
     $console_password        = $bacula::config::console_password,
     $filesets		     = {},
     $clients                 = {},
+    $schedules		     = {},
   ) inherits bacula::config {
     
 
@@ -190,6 +191,7 @@ class bacula(
       db_database      => $db_database,
       clients	       => $clients,
       filesets	       => $filesets,
+      schedules	       => $schedules,
       require          => Class['bacula::common'],
     }
   }
