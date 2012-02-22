@@ -1,7 +1,8 @@
 define bacula::config::schedule (
 	$run = '',
 ) {
- file { "/etc/bacula/bacula-dir.d/${name}-sched.conf":
+$fname = regsubst($name, ' ', '_', 'G')
+ file { "/etc/bacula/bacula-dir.d/${fname}-sched.conf":
    ensure  => file,
    content => template('bacula/schedule_config.erb'),
    notify  => Service['bacula-dir'],

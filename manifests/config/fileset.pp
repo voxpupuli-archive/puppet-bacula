@@ -4,7 +4,8 @@ define bacula::config::fileset (
 	$compression = '',
 	$signature = ''
 ) {
- file { "/etc/bacula/bacula-dir.d/${name}-fset.conf":
+$fname = regsubst($name, ' ', '_', 'G')
+ file { "/etc/bacula/bacula-dir.d/${fname}-fset.conf":
    ensure  => file,
    content => template('bacula/fileset_config.erb'),
    notify  => Service['bacula-dir'],

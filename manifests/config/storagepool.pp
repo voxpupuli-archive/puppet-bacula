@@ -8,7 +8,8 @@ define bacula::config::storagepool (
         $label = '',
         $maxjobs = ''
 ) {
- file { "/etc/bacula/bacula-dir.d/${name}-pool.conf":
+$fname = regsubst($name, ' ', '_', 'G')
+ file { "/etc/bacula/bacula-dir.d/${fname}-pool.conf":
    ensure  => file,
    content => template('bacula/storagepool_config.erb'),
    notify  => Service['bacula-dir'],

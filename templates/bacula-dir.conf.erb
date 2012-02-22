@@ -106,43 +106,6 @@ Pool {
   Maximum Volume Jobs = 1
 }
 
-# Create a Counter which will be used to label the catalog volumes on the sytem
-Counter {
-  Name    = "Counter<%= server.capitalize -%>Catalog"
-  Minimum = 1
-  Catalog = "<%= director_name -%>:<%= db_backend %>"
-}
-
-# JOB DEFINITIONS -------------------------------------------------------------
-# Create the types of jobs we need to run.
-
-# Create a standard profile for all normal servers
-<%
-  ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].each do |onDay|
-    ['noHome','withHome'].each do |doHome| -%>
-JobDefs {
-  Name = "Basic:<%= doHome -%>:on<%= onDay -%>"
-  Type = Backup
-  Level = Incremental
-  FileSet = "Basic:<%= doHome -%>"
-  Schedule = "Weekly:on<%= onDay -%>"
-  Messages = "<%= director_name -%>:messages:standard"
-  # Set the job to work as standard with the default Pool & Storage
-  # (this will be overridden by the Job configuration for each Client)
-  Storage = "<%= storage_name -%>:storage:default"
-  Pool = "<%= storage_name -%>:pool:default"
-  Write Bootstrap = "/var/lib/bacula/%c.bsr"
-  Priority = 15
-  # Define how long any of these jobs are allowed to run for before we should
-  # kill them. Note that this is the run time (how long the actual backup is
-  # running for after starting, and not a maximum time after it was scheduled)
-  Full Max Run Time = 36 Hours
-  Differential Max Run Time = 6 Hours
-  Incremental Max Run Time = 6 Hours
-}
-<%  end
-  end %>
-
 # Finally, bring in all the additional pieces of configuration from the
 # different servers for which this Director was configured to manage
 @|"sh -c 'for f in /etc/bacula/bacula-dir.d/*.conf ; do echo @${f} ; done'"

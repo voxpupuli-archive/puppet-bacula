@@ -1,12 +1,12 @@
 Pool {
   Name = "<%= name %>"
   <% if ! pooltype.empty? -%>
-  Type = "<%= pooltype %>"
+  Pool Type = "<%= pooltype %>"
   <% end %>
   Recycle = "<%= recycle %>"
   Autoprune = "<%= prune %>"
-  Volume Retention = "<%= retention %>"
-  Maximum Volume Bytes = "<%= maxbytes %>"
+  Volume Retention = <%= retention %>
+  Maximum Volume Bytes = <%= maxbytes %>
   Maximum Volumes = "<%= maxvolumes %>"
   <% if ! maxjobs.empty? -%>
   Maximum Volume Jobs = "<%= maxjobs %>"

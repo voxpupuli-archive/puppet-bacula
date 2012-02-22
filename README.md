@@ -159,6 +159,24 @@ Storage Pool Parameters
     maxjobs      Max concurrent jobs on a volume
     label        Label to give the volumes within the pool
 
+Job Definition Perameters
+-------------------------
+
+    PARAMETERS   DESCRIPTION
+    type	 Which type of job to run (Backup, Verify, Restore, Admin)
+    level	 Which level of job to run (Full, Differential, Incremental)
+    client	 Which client to run the job on - client must already be defined in puppet
+    fileset	 Which fileset defines the files you wish to backup - fileset must already be defined in puppet
+    schedule     Which schedule would you like to run this job according to - schedule must already be defined in puppet
+    storage	 Which storage director would you like to write to
+    pool	 Which volume pool do you want to write to on this director
+    messages	 Where should messages be sent
+    runbefore    What script to run on the bacula server before backup commences
+    runafter     What script to run on the bacula server after backup ceases
+    runclientbefore What script to run on the bacula client before backup commences
+    runclientafter What script to run on the bacula client after backup ceases
+    
+
 Using Parameterized Classes
 ---------------------------
 
@@ -203,6 +221,19 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
                 },
         }
 
+  $jobs = {
+                'test-job' => {
+                 'jobtype' => 'Backup',
+                 'level' => 'Incremental',
+                 'client' => 'bacula-fd',
+                 'fileset' => 'test',
+                 'schedule' => 'WeekleyCycle',
+                 'storage' => 'bacula-sd:storage:default',
+                 'pool' => 'File',
+                 'messages' => 'bacula-dir:messages:standard',
+                },
+        }
+
   class { 'bacula':
     is_storage        => true,
     is_director       => true,
@@ -217,6 +248,7 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
     filesets          => $filesets,
     schedules         => $schedules,
     pools	      => $pools,
+    jobs	      => $jobs,
   }
 ```
 

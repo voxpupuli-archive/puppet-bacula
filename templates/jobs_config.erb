@@ -1,0 +1,16 @@
+Job {
+  Name = "<%= name %>"
+  Type = <%= jobtype %>
+  Level = <%= level %>
+  Client = <%= client %>
+  FileSet = "<%= fileset %>"
+  Schedule = <%= schedule %>
+  Storage = <%= storage %>
+  Pool = <%= pool %>
+  Messages = <%= messages %>
+  <% if ! priority -%> Priority = <%= priority %> <% end -%>
+  <% if ! runbefore.empty? -%> Run Before Job = <%= runbefore %> <% end -%>
+  <% if ! runafter.empty? -%> Run After Job = <%= runafter %> <% end -%>
+  <% if ! clientrunbefore.empty? -%> Client Run Before Job = <%= clientrunbefore %> <% end -%>
+  <% if ! clientrunafter.empty? -%> Client Run After Job = <%= clientrunafter %> <% end -%>
+}
