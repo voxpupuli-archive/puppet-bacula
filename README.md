@@ -141,6 +141,12 @@ Fileset Parameters
     signature    Which signature to create to allow for varification
     compression  What compression to apply to the backup files
 
+Schedule Parameters
+-------------------
+
+    PARAMETERS   DESCRIPTION
+    run          What level to back up (Full, Differential, Incremental) and which schedule to do this on
+
 Using Parameterized Classes
 ---------------------------
 
@@ -167,6 +173,12 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
            }
         }
 
+  $schedules = {
+                'WeekleyCycle' => {
+                 'run' => ['Level=Full 1st sun at 02:00', 'Level=Differential 2nd-5th sun at 02:00', 'Level=Incremental mon-sat at 02:00'],
+           },
+        }
+
   class { 'bacula':
     is_storage        => true,
     is_director       => true,
@@ -178,121 +190,30 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
     mail_to           => 'bacula-admin@domain.com',
     storage_server    => 'bacula.domain.com',
     clients           => $clients,
+    filesets          => $filesets,
+    schedules         => $schedules,
   }
 ```
 
 Using Top Scope (Dashboard)
 ---------------------------
 
-**TOP SCOPE HAS NOT BEEN TESTED WITH CUSTOM FILESETS**
+**TOP SCOPE HAS NOT BEEN TESTED WITH CUSTOM FILESETS OR SCHEDULES**
 
-The bacula module will look for parameters of a certain format to build its clients list. For each client, make a parmaeter of this
+The bacula module will look for parameters of a certain format to build its clients listi, filesets, and schedules. For each client, make a parmaeter of this
 format:
   bacula_client_client1.domain.com 
 with value:
   fileset=MyFileSet,schedule=MySchedule
 
+ For each fileset make a parameter of this format:
+  bacula_fileset_name
+with value
+  files=[files],excludes=[excludes],signature=sig_type,compression=compression_type
 
-Included FileSets
-=================
-
- * Basic:noHome:
-   Include:
-    * /boot
-    * /etc
-    * /usr/local
-    * /var
-    * /opt
-    * /srv
-
-   Exclude:
-    * /var/cache
-    * /var/tmp
-    * /var/lib/apt
-    * /var/lib/dpkg
-    * /var/lib/puppet
-    * /var/lib/mysql
-    * /var/lib/postgresql
-    * /var/lib/ldap
-    * /var/lib/bacula
-
- * Basic:withHome
-   Include:
-    * /home
-    * /boot
-    * /etc
-    * /usr/local
-    * /var
-    * /opt
-    * /srv
-
-   Exclude:
-    * /var/cache
-    * /var/tmp
-    * /var/lib/apt
-    * /var/lib/dpkg
-    * /var/lib/puppet
-    * /var/lib/mysql
-    * /var/lib/postgresql
-    * /var/lib/ldap
-    * /var/lib/bacula
-
-Included Schedules
-==================
-
- * WeeklyCycle  
-   * Full First Sun at 23:05
-   * Differential Second-Fifth Sun at 23:05
-   * Incremental Mon-Sat at 23:05
- 
- * WeeklyCycleAfterBackup
-   * Full Mon-Sun at 23:10
-
- * Weekly:onFriday
-   * Full First Fri at 18:30
-   * Differential Second-Fifth Fri at 18:30
-   * Incremental Sat-Thu at 20:00
-
- * Weekly:onSaturday
-   * Full First Sat at 15:30
-   * Differential Second-Fifth Sat at 15:30
-   * Incremental Sun-Fri at 20:00
-
- * Weekly:onSunday
-   * Full First Sun at 15:30
-   * Differential Second-Fifth Sun at 15:30
-   * Incremental Mon-Sat at 20:00
-   
- * Weekly:onMonday
-   * Full First Mon at 18:30 
-   * Differential Second-Fifth Mon at 18:30
-   * Incremental Tue-Sun at 20:00
-
- * Weekly:onTuesday
-   * Full First Tue at 18:30
-   * Differential Second-Fifth Tue at 18:30
-   * Incremental Wed-Mon at 20:00
-
- * Weekly:onWednesday
-   * Full First Wed at 18:30
-   * Differential Second-Fifth Wed at 18:30
-   * Incremental Thu-Tue at 20:00
-
- * Weekly:onThursday
-   * Full First Thu at 18:30
-   * Differential Second-Fifth Thu at 18:30
-   * Incremental Fri-Wed at 20:00
-
- * Hourly
-   * Incremental hourly at 0:30
-
-TEMPLATES
-=========
-
-The Bacula module comes with templates that set default Fileset resources.  To configure different Filesets, copy the
-bacula-dir.conf.erb file out of the bacula/templates directory to another location in your manifests (can be another
-module).  Make the modifications you want and set the director_template parameter (listed above) to point to the path where you have
-stored the custom template.
+ For each schedule make a parameter of this format:
+  bacula_schedule_name
+with value
+  run=[level= schedule]
 
 [Using Puppet Templates](http://docs.puppetlabs.com/guides/templating.html)
-
