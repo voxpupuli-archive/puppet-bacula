@@ -101,6 +101,15 @@ class bacula::director(
     }
   }
 
+  # Determine where the bacula director is running on top of CentOS or another
+  # and set service name accordingly.
+
+  $director_service = $operatingsystem ? {
+        CentOS  => "bacula-dir",
+	Fedora  => "bacula-dir",
+        default => "bacula-director",
+    }
+
   # Create the configuration for the Director and make sure the directory for
   # the per-Client configuration is created before we run the realization for
   # the exported files below
@@ -136,8 +145,9 @@ class bacula::director(
 
   # Register the Service so we can manage it through Puppet
   notify { 'Running service': }
-  service { 'bacula-dir':
+  service { "$director_service":
     enable     => true,
+    alias      => bacula-dir,
     ensure     => stopped,
     hasstatus  => true,
     hasrestart => true,
