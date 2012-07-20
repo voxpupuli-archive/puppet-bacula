@@ -47,6 +47,7 @@ class bacula::director(
     $db_port,
     $storage_server,
     $director_package = '',
+    $pgsql_package,
     $mysql_package,
     $mail_to,
     $sqlite_package,

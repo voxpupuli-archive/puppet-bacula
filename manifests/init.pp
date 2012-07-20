@@ -200,6 +200,7 @@ class bacula(
       director_server   => $director_server,
       director_password => $director_password,
       storage_server    => $storage_server,
+      pgsql_package     => $storage_pgsql_package,
       mysql_package     => $storage_mysql_package,
       sqlite_package    => $storage_sqlite_package,
       storage_package   => $storage_package,
