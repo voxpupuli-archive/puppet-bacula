@@ -123,6 +123,8 @@ class bacula(
     $storage_sqlite_package  = $bacula::config::storage_sqlite_package,
     $director_mysql_package  = $bacula::config::director_mysql_package,
     $storage_mysql_package   = $bacula::config::storage_mysql_package,
+    $director_pgsql_package  = $bacula::config::director_pgsql_package,
+    $storage_pgsql_package   = $bacula::config::storage_pgsql_package,
     $director_template       = $bacula::config::director_template,
     $storage_template        = $bacula::config::storage_template,
     $console_template        = $bacula::config::console_template,
