@@ -75,7 +75,7 @@ class bacula::config::validate(
     fail '$db_database cannot be empty'
   }
 
-  if $db_backend != 'sqlite' {
+  if $db_backend == 'mysql' {
     if empty($db_host) {
       fail '$db_host cannot be empty'
     }
