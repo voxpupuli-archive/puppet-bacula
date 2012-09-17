@@ -4,19 +4,25 @@ bacula
 Author: Carl Caum <carl@puppetlabs.com>
 Copyright (c) 2011, Puppet Labs Inc.
 
+Author: Russell Harrison <rharrison@fedoraproject.org>
+Copyright (c) 2012, Russell Harrison
+
 
 ABOUT
 =====
 
 This module manages [Bacula](http://bacula.org).  Through declaration of the `bacula` class, you can configure Directors, Storage Daemons, Clients, and consoles.
 
+This module is a fork of the [Puppet Labs](http://puppetlabs.com/) [Bacula](http://forge.puppetlabs.com/puppetlabs/bacula) module.
+
 INSTALLATION
 ============
 
-The module can be obtained from the [Puppet Forge](http://forge.puppetlabs.com/puppetlabs/bacula).  Select `Download` which downloads a tar.gz file.  Upload the tar.gz file to your Puppet Master.  Untar the file.  This will create a new directory called `puppetlabs-bacula-${version_number}`.  Rename this directory to just **bacula** and place it in your [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules). 
-
+The module can be obtained from the [github repository](https://github.com/rharrison10/rharrison-bacula).  Select `Downloads` and then `Download as tar.gz` which downloads a tar.gz file.  Upload the tar.gz file to your Puppet Master.  Untar the file.  This will create a new directory called `rharrison10-rharrison-bacula-${commit_hash}`.  Rename this directory to just **bacula** and place it in your [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules). 
+<!---
 You can also use the [puppet-module tool](https://github.com/puppetlabs/puppet-module-tool).  Just run this command from your modulepath.
 `puppet-module install puppetlabs/bacula`
+--->
 
 REQUIREMENTS
 ============
