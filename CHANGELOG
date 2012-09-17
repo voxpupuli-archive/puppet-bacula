@@ -1,13 +1,17 @@
-2011-12-15 - Carl Caum <carl@puppetlabs.com> - 0.0.2
- - Support multiple DB backends
- - Support Managing databases through 3rd party modules
- - Ability to declare clients through class parameters
-   or ENC variables
- - Documentation improvements
+* Mon Sep 17 2012 Russell Harrison <rharrison@fedoraproject.org> - 0.0.3
+- Documenting this is a fork under my name
+- Simple script to update installed module by hand
 
-2011-12-08 - Carl Caum <carl@puppetlabs.com> - 0.0.1
- - Manage a Bacula director
- - Manage Bacula clients
- - Manage a Bacula storage daemon
- - Manage console installations
- - Customize configuration files with custom templates
+* Thu Dec 15 2011 Carl Caum <carl@puppetlabs.com> - 0.0.2
+- Support multiple DB backends
+- Support Managing databases through 3rd party modules
+- Ability to declare clients through class parameters
+  or ENC variables
+- Documentation improvements
+
+* Thu Dec  8 2011 Carl Caum <carl@puppetlabs.com> - 0.0.1
+- Manage a Bacula director
+- Manage Bacula clients
+- Manage a Bacula storage daemon
+- Manage console installations
+- Customize configuration files with custom templates
