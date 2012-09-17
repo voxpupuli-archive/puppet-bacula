@@ -1,4 +1,4 @@
-2011-12-15 - Carl Caum <carl@puppetlabs.com> - 0.0.1
+2011-12-15 - Carl Caum <carl@puppetlabs.com> - 0.0.2
  - Support multiple DB backends
  - Support Managing databases through 3rd party modules
  - Ability to declare clients through class parameters
