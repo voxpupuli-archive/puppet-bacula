@@ -33,54 +33,57 @@
 # [*client_package*]
 #   The name of the package to install the client
 # [*director_sqlite_package*]
-#   The name of the package to install the director's sqlite functionality
+#   The name of the package to install the director's SQLite functionality
 # [*storage_sqlite_package*]
-#   The name of the package to install the storage daemon's sqlite functionality
+#   The name of the package to install the storage daemon's SQLite
+#   functionality
 # [*director_mysql_package*]
-#   The name of the package to install the director's mysql functionality
+#   The name of the package to install the director's MySQL functionality
 # [*storage_mysql_package*]
-#   The name of the package to install the storage's sqlite functionality
+#   The name of the package to install the storage's SQLite functionality
 # [*director_template*]
-#   The ERB template to use for configuring the director instead of the one included with the module
+#   The ERB template to use for configuring the director instead of the one
+#   included with the module
 # [*storage_template*]
-#   The ERB template to use for configuring the storage daemon instead of the one included with the module
+#   The ERB template to use for configuring the storage daemon instead of the
+#   one included with the module
 # [*console_template*]
-#   The ERB template to use for configuring the bconsole instead of the one included with the module
+#   The ERB template to use for configuring the bconsole instead of the one
+#   included with the module
 # [*use_console*]
 #   Whether to configure a console resource on the director
 # [*console_password*]
 #   The password to use for the console resource on the director
 # [*db_user*]
-#   The user to authenticate to $db_db with.
+#   The user to authenticate to +$db_db+ with.
 # [*db_password*]
-#   The password to authenticate $db_user with
+#   The password to authenticate +$db_user+ with
 # [*db_host*]
 #   The db server host to connect to
 # [*db_database*]
-#   The db database to connect to on $db_host
+#   The db database to connect to on +$db_host+
 # [*console_package*]
 #   The package to install the bconsole application
 # [*manage_db_tables*]
 #   Whether to create the DB tables during install
 # [*manage_db*]
-#   Whether to manage the existance of the database.  If true, the $db_user must have privileges
-#   to create databases on $db_host
+#   Whether to manage the existance of the database.  If true, the +$db_user+
+#   must have privileges to create databases on +$db_host+
 # [*clients*]
-#   For directors, $clients is a hash of clients.  The keys are the clients while the value is a hash of parameters
-#   The parameters accepted are fileset and schedule.
-#
-# Example clients hash
-#  $clients = {
-#    'somenode' => {
-#      'fileset'  => 'Basic:noHome',
-#      'schedule' => 'Hourly',
-#    },
-#    'node2' => {
-#      'fileset'  => 'Basic:noHome',
-#      'schedule' => 'Hourly',
-#    }
-#  }
-#
+#   For directors, +$clients+ is a hash of clients.  The keys are the clients
+#   while the value is a hash of parameters The parameters accepted are
+#   +fileset+ and +schedule+.
+#   Example clients hash:
+#     $clients = {
+#       'somenode' => {
+#         'fileset'  => 'Basic:noHome',
+#         'schedule' => 'Hourly',
+#       },
+#       'node2' => {
+#         'fileset'  => 'Basic:noHome',
+#         'schedule' => 'Hourly',
+#       }
+#     }
 #
 # === Sample Usage
 #
@@ -97,7 +100,7 @@
 #    clients           => $clients,
 #  }
 class bacula(
-    $db_backend              = $bacula::config::db_backend,
+    $db_backend              = 'sqlite',
     $db_user                 = $bacula::config::db_user,
     $db_password             = $bacula::config::db_password,
     $db_host                 = $bacula::config::db_host,

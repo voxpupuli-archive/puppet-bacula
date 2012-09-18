@@ -4,13 +4,14 @@
 # bacula components
 #
 # === Actions:
-#   - Enforce the bacula user and groups exist
-#   - Enforce the +/var/spool/bacula+ is a director and +/var/lib/bacula+
-#     points to it
+# * Enforce the bacula user and groups exist
+# * Enforce the +/var/spool/bacula+ is a director and +/var/lib/bacula+
+#   points to it
 #
 # === Sample Usage:
 #
 #  class { 'bacula::common': }
+#
 class bacula::common(
     $packages         = '',
     $manage_db_tables = true,
