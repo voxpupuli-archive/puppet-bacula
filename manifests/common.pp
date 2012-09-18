@@ -1,6 +1,6 @@
 # Class: bacula::common
-# 
-# This class enforces common resources needed by all 
+#
+# This class enforces common resources needed by all
 # bacula components
 #
 # Actions:
@@ -22,23 +22,30 @@ class bacula::common(
   ) {
 
   if $packages {
-    package { $packages: 
+    $packages_notify = $manage_db_tables ? {
+      true    => Exec['make_db_tables'],
+      default => undef,
+    }
+    package { $packages:
       ensure => installed,
-      notify => $manage_db_tables ? {
-        true  => Exec['make_db_tables'],
-        false => undef,
-      }
+      notify => $packages_notify,
     }
   }
 
   $db_parameters = $db_backend ? {
-    'sqlite' => '',
-    'mysql'  => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
+    'mysql'   => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
+    default   => '',
   }
 
   if $manage_db_tables {
+    $make_db_tables_command = $::operatingsystem ? {
+      /(Ubuntu|Debian)/ => '/usr/lib/bacula/make_bacula_tables',
+      /(RedHat|CentOS)/ => '/usr/libexec/bacula/make_mysql_tables',
+      default           => '/usr/libexec/bacula/make_mysql_tables',
+    }
+
     exec { 'make_db_tables':
-      command     => "/usr/lib/bacula/make_bacula_tables ${db_parameters}",
+      command     => "${make_db_tables_command} ${db_parameters}",
       refreshonly => true,
     }
   }
@@ -46,24 +53,26 @@ class bacula::common(
   if $manage_db {
     case $db_backend {
       'mysql': {
+        $db_notify = $manage_db_tables ? {
+          true    => Exec['make_db_tables'],
+          default => undef,
+        }
+        $db_require = defined(Class['mysql::server']) ? {
+          true    => Class['mysql::server'],
+          default => undef,
+        }
         mysql::db { $db_database:
-          user     => $db_user,
-          password => $db_password,
-          host     => $db_host,
-          notify   => $manage_db_tables ? {
-            true  => Exec['make_db_tables'],
-            false => undef,
-          },
-          require => defined(Class['mysql::server']) ? {
-            true  => Class['mysql::server'],
-            false => undef,
-          },
+          user      => $db_user,
+          password  => $db_password,
+          host      => $db_host,
+          notify    => $db_notify,
+          require   => $db_require,
         }
       }
 
       'sqlite': {
         sqlite::db { $db_database:
-          location => "/var/lib/bacula/${db_database}.db", 
+          location => "/var/lib/bacula/${db_database}.db",
           owner    => 'bacula',
           group    => 'bacula',
           ensure   => present,
