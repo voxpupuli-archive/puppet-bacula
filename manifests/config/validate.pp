@@ -45,14 +45,14 @@ class bacula::config::validate(
   if $is_director {
     validate_re($mail_to, '^[\w-]+@([\w-]+\.)+[\w-]+$')
   }
-  
+
   #Validate the director and storage servers given are fully qualified domain names
   validate_re($director_server, '^[a-z0-9_-]+(\.[a-z0-9_-]+){2,}$')
   validate_re($storage_server, '^[a-z0-9_-]+(\.[a-z0-9_-]+){2,}$')
 
   #Validate server values aren't empty
   if empty($director_server) {
-    failse '$director_server cannot be empty'
+    fail '$director_server cannot be empty'
   }
   if empty($storage_server) {
     fail '$storage_server cannot be empty'
