@@ -1,24 +1,25 @@
-# Class: bacula::common
+# == Class: bacula::common
 #
 # This class enforces common resources needed by all
 # bacula components
 #
-# Actions:
+# === Actions:
 #   - Enforce the bacula user and groups exist
-#   - Enforce the /var/spool/bacula is a director and /var/lib/bacula points to it
+#   - Enforce the +/var/spool/bacula+ is a director and +/var/lib/bacula+
+#     points to it
 #
-# Sample Usage:
+# === Sample Usage:
 #
-# class { 'bacula::common': }
+#  class { 'bacula::common': }
 class bacula::common(
-    $packages = '',
-    $manage_db_tables,
-    $db_backend,
-    $db_user,
-    $db_database,
-    $db_password,
-    $db_port,
-    $db_host
+    $packages         = '',
+    $manage_db_tables = true,
+    $db_backend       = 'sqlite',
+    $db_user          = '',
+    $db_database      = 'bacula',
+    $db_password      = '',
+    $db_port          = '3306',
+    $db_host          = 'localhost'
   ) {
 
   if $packages {
@@ -50,7 +51,7 @@ class bacula::common(
     }
   }
 
-  if $manage_db {
+  if $manage_db_tables   {
     case $db_backend {
       'mysql': {
         $db_notify = $manage_db_tables ? {
@@ -72,10 +73,10 @@ class bacula::common(
 
       'sqlite': {
         sqlite::db { $db_database:
+          ensure   => present,
           location => "/var/lib/bacula/${db_database}.db",
           owner    => 'bacula',
           group    => 'bacula',
-          ensure   => present,
           require  => File['/var/lib/bacula'],
         }
       }
