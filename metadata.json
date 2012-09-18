@@ -20,7 +20,7 @@
     "manifests/common.pp": "1cd15ab65ba9e6f5c768f35c19d97c5f",
     "manifests/config.pp": "803f781e47e3999999d72d6d124f564a",
     "manifests/config/client.pp": "5d25cbfd94be2829d9d530673cd2307f",
-    "manifests/config/validate.pp": "8a2b7d4e5b92e5342ea5c5f77b9b97d8",
+    "manifests/config/validate.pp": "ce6e3333844cc6035585bb501ae3aa52",
     "manifests/console.pp": "8a622b07385a119a80b6bb46a3ce0068",
     "manifests/director.pp": "3f363be51f9c70a60209155530e4a59f",
     "manifests/init.pp": "d9f8eae8e65229d77310f76385cdba0f",

@@ -1,28 +1,28 @@
-# Class: bacula::config::validate
+# == Class: bacula::config::validate
 #
-# This class takes parameters which values need to be
-# validated in some way
+# This class takes parameters which values need to be validated in some way
+#
 class bacula::config::validate(
-    $db_backend,
-    $db_database,
-    $db_port,
-    $db_host,
-    $db_user,
-    $db_password,
-    $mail_to,
-    $is_director,
-    $is_client,
-    $is_storage,
-    $director_password,
-    $console_password,
-    $director_server,
-    $storage_server,
-    $manage_console,
-    $manage_bat,
-    $console_password,
-    $use_console,
-    $manage_db,
-    $manage_db_tables
+    $db_backend         = undef,
+    $db_database        = undef,
+    $db_port            = undef,
+    $db_host            = undef,
+    $db_user            = undef,
+    $db_password        = undef,
+    $mail_to            = undef,
+    $is_director        = undef,
+    $is_client          = undef,
+    $is_storage         = undef,
+    $director_password  = undef,
+    $console_password   = undef,
+    $director_server    = undef,
+    $storage_server     = undef,
+    $manage_console     = undef,
+    $manage_bat         = undef,
+    $console_password   = undef,
+    $use_console        = undef,
+    $manage_db          = undef,
+    $manage_db_tables   = undef
   ) {
 
   #Validate our booleans
