@@ -69,7 +69,13 @@ class bacula::director(
   # It also searches top scope for variables in the style
   # $bacula_client_mynode with values in format
   # fileset=Basic:noHome,schedule=Hourly
-  generate_clients($clients)
+  # In order to work with Puppet 2.6 where create_resources isn't in core,
+  # we just skip the top-level stuff for now.
+  if versioncmp($puppetversion, '2.7.0') >= 0 {
+    generate_clients($clients)
+  } else {
+    create_resources('bacula::config::client', $clients)
+  }
 
   # Only support mysql or sqlite.
   # The given backend is validated in the bacula::config::validate class

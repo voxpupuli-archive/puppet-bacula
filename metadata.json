@@ -22,7 +22,7 @@
     "manifests/config/client.pp": "5d25cbfd94be2829d9d530673cd2307f",
     "manifests/config/validate.pp": "87acfea69d33200308ec5cbf59fecdbf",
     "manifests/console.pp": "4cf8ac2f96f9268e2a3d70ed777797b7",
-    "manifests/director.pp": "d7d7d4b24cd56176c404034157c68964",
+    "manifests/director.pp": "4cf72b1c2dcfd2c38579d1cf5caa80bf",
     "manifests/init.pp": "b6e18f6139e09d0b9e010d39d9250d90",
     "manifests/storage.pp": "84f4ec1413df4fdec7288c18d6ba2897",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
