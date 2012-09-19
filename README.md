@@ -7,7 +7,6 @@ Copyright (c) 2011, Puppet Labs Inc.
 Author: Russell Harrison <rharrison@fedoraproject.org>
 Copyright (c) 2012, Russell Harrison
 
-
 ABOUT
 =====
 
@@ -34,7 +33,6 @@ REQUIREMENTS
  * Puppetlabs/sqlite module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/sqlite or with the command `puppet-module install puppetlabs/sqlite`
    Declare the mysql::sqlite class so it's available for the bacula class to use.
 
-
 CONFIGURATION
 =============
 
@@ -60,7 +58,6 @@ Steps:
 
 [Grouping and Classifying Nodes](http://docs.puppetlabs.com/pe/2.0/console_classes_groups.html)
 
-
 Using Parameterized Classes
 ---------------------------
 Declaration example:
@@ -84,35 +81,35 @@ Declaration example:
 Parameters
 ----------
 
-The following lists all the class parameters the bacula class accepts as well as their Top Scope equivalent.
+The following lists all the class parameters the bacula class accepts.
 
-    BACULA CLASS PARAMETER        TOP SCOPE EQUIVALENT            DESCRIPTION
-    -------------------------------------------------------------------------
+    BACULA CLASS PARAMETER  DESCRIPTION
+    -----------------------------------
 
     COMMON PARAMETERS:
-    db_backend                    bacula_db_backend               Which database backend system you want to use to store the catalog data
-    mail_to                       bacula_mail_to                  Address to email reports to
-    is_director                   bacula_is_director              Whether the node should be a director
-    is_client                     bacula_is_client                Whether the node should be a client
-    is_storage                    bacula_is_storage               Whether the node should be a storage server
-    director_password             bacula_director_password        The director's password
-    console_password              bacula_console_password         The console's password
-    director_server               bacula_director_server          The FQDN of the bacula director
-    storage_server                bacula_storage_server           The FQDN of the storage server
-    manage_console                bacula_manage_console           Whether the bconsole should be managed on the node
-    manage_bat                    bacula_manage_bat               Whether the bat should be managed on the node
-    clients                       *See Adding Clients section*    
+    db_backend              Which database backend system you want to use to store the catalog data
+    mail_to                 Address to email reports to
+    is_director             Whether the node should be a director
+    is_client               Whether the node should be a client
+    is_storage              Whether the node should be a storage server
+    director_password       The director's password
+    console_password        The console's password
+    director_server         The FQDN of the bacula director
+    storage_server          The FQDN of the storage server
+    manage_console          Whether the bconsole should be managed on the node
+    manage_bat              Whether the bat should be managed on the node
+    clients                 
 
 
     UNCOMMON PARAMETERS:
-    manage_db_tables              bacula_manage_db_tables         Whether to manage the SQL tables in te database specified in db_backend. Defaults to true
-    manage_db                     bacula_manage_db                Whether to manage creation of the database specified by db_database. Default to false. In order
-                                                                  for this to work, you must declare the `mysql::server` class
-    director_template             bacula_director_template        The ERB template to use for configuring the director instead of the one included with the module
-    storage_template              bacula_storage_template         The ERB template to use for configuring the storage daemon instead of the one included with the module
-    console_template              bacula_console_template         The ERB template to use for configuring the bconsole instead of the one included with the module
-    use_console                   bacula_use_console              Whether to configure a console resource on the director
-    console_password              bacula_console_password         The password to use for the console resource on the director
+    manage_db_tables        Whether to manage the SQL tables in te database specified in db_backend. Defaults to true
+    manage_db               Whether to manage creation of the database specified by db_database. Default to false. In order
+                            for this to work, you must declare the `mysql::server` class
+    director_template       The ERB template to use for configuring the director instead of the one included with the module
+    storage_template        The ERB template to use for configuring the storage daemon instead of the one included with the module
+    console_template        The ERB template to use for configuring the bconsole instead of the one included with the module
+    use_console             Whether to configure a console resource on the director
+    console_password        The password to use for the console resource on the director
 
 CLIENTS
 =======
@@ -156,17 +153,6 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
     clients           => $clients,
   }
 ```
-
-Using Top Scope (Dashboard)
----------------------------
-
-The bacula module will look for parameters of a certain format to build its clients list. For each client, make a parmaeter of this
-format:
-  bacula_client_client1.domain.com 
-with value:
-  fileset=MyFileSet,schedule=MySchedule
-
-
 Included FileSets
 =================
 
@@ -275,4 +261,3 @@ TODO
 
  * Add ability to set custom Filesets for clients.
  * PostgreSQL support
-
