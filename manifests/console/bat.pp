@@ -1,4 +1,4 @@
-# == Class: bacula::bat
+# == Class: bacula::console::bat
 #
 # This class installs the BAT (Bacula Admin Tool) application for QT supported
 # systems
@@ -9,9 +9,9 @@
 #
 # === Sample Usage:
 #
-#  class { 'bacula::bat': }
+#  class { 'bacula::console::bat': }
 #
-class bacula::bat inherits bacula::console {
+class bacula::console::bat inherits bacula::console {
 
   include bacula::params
 

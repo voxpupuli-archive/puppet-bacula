@@ -105,7 +105,7 @@ class bacula(
     $use_console        = false,
     $clients            = {},
     $packages           = undef
-  ) inherits bacula::config {
+  ) {
 
   include bacula::params
 
@@ -206,7 +206,7 @@ class bacula(
   }
 
   if $manage_bat {
-    class { 'bacula::bat':
+    class { 'bacula::console::bat':
       require => Class['bacula::common'],
     }
   }
