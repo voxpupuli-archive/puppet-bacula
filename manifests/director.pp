@@ -124,8 +124,8 @@ class bacula::director(
   # Register the Service so we can manage it through Puppet
 
   service { $bacula::params::director_service:
-    enable      => true,
     ensure      => running,
+    enable      => true,
     hasstatus   => true,
     hasrestart  => true,
     require     => Package[$db_package],

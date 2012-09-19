@@ -160,7 +160,7 @@ class bacula(
   if $is_director {
     class { 'bacula::director':
       db_backend       => $db_backend,
-      server           => $director_server_real,
+      director_server  => $director_server_real,
       storage_server   => $storage_server_real,
       password         => $director_password,
       mail_to          => $mail_to_real,
