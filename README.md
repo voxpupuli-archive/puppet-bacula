@@ -37,26 +37,7 @@ CONFIGURATION
 =============
 
 There is one class (bacula) that needs to be declared on all nodes managing any component of bacula.
-These nodes are configured using one of two methods.
-
- 1. Using Top Scope (e.g. Dashboard) parameters 
- 2. Declare the bacula class on node definitions in your manifest.
-
-NOTE: The two methods can be mixed and matched, but take care not to create the same Top Scope parameter and class parameter simultaneously (See below for class parameters and their matching Top Scope parameter) as you may get unexpected results.
-Order of parameter precendence:
-
- * Class Parameter
- * Top Scope Parameter
- * Hard Coded value
-
-Using Top Scope (Dashboard)
----------------------------
-Steps:
-
- 1. Add the `bacula` class to the nodes or groups you want to manage any bacula component on.
- 2. Add the parameters (See below) to the nodes or groups to configure the bacula class
-
-[Grouping and Classifying Nodes](http://docs.puppetlabs.com/pe/2.0/console_classes_groups.html)
+These nodes are configured using the parameters of this class.
 
 Using Parameterized Classes
 ---------------------------
