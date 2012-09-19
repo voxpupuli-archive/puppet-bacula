@@ -123,7 +123,7 @@ class bacula(
   }
   #Validate our parameters
   #It's ugly to do it in the parent class
-  class { 'bacula::config::validate':
+  class { 'bacula::params::validate':
     db_backend        => $db_backend,
     mail_to           => $mail_to_real,
     is_director       => $is_director,

@@ -1,10 +1,10 @@
-# == Class: bacula::config::validate
+# == Class: bacula::params::validate
 #
 # This class takes parameters which values need to be validated in some way.
 # Because the class should only be called from the main +bacula+ class the
 # default values are intended to fail.
 #
-class bacula::config::validate(
+class bacula::params::validate(
     $db_backend         = '',
     $db_database        = '',
     $db_port            = '',
