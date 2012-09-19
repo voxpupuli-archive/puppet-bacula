@@ -3,7 +3,7 @@
 # This class manages the bacula director component
 #
 # Parameters:
-# [*server*]
+# [*director_server*]
 #   The FQDN of the bacula director
 # [*password*]
 #   The password of the director
@@ -12,13 +12,7 @@
 #   and +mysql+)
 # [*storage_server*]
 #   The FQDN of the storage daemon server
-# [*director_package*]
-#   The name of the package that installs the director (Optional)
-# [*mysql_package*]
-#   The name of the package that installs the MySQL support for the director
-# [*sqlite_package*]
-#   The name of the package that installs the SQLite support for the director
-# [*template*]
+# [*dir_template*]
 #   The ERB template to us to generate the +bacula-dir.conf+ file
 #   * Default: +'bacula/bacula-dir.conf.erb'+
 # [*use_console*]
@@ -29,7 +23,7 @@
 # === Sample Usage:
 #
 #  class { 'bacula::director':
-#    server           => 'bacula.domain.com',
+#    director_server  => 'bacula.domain.com',
 #    password         => 'XXXXXXXXX',
 #    db_backend       => 'sqlite',
 #    storage_server   => 'bacula.domain.com',
@@ -39,28 +33,37 @@
 #  }
 #
 class bacula::director(
-    $server,
-    $password,
-    $db_backend,
-    $db_user,
-    $db_password,
-    $db_host,
-    $db_database,
-    $db_port,
-    $storage_server,
-    $director_package = '',
-    $mysql_package,
-    $mail_to,
-    $sqlite_package,
-    $template = 'bacula/bacula-dir.conf.erb',
-    $use_console,
-    $console_password,
+    $director_server  = undef,
+    $password         = '',
+    $db_backend       = 'sqlite',
+    $db_user          = '',
+    $db_password      = '',
+    $db_host          = 'localhost',
+    $db_database      = 'bacula',
+    $db_port          = '3306',
+    $storage_server   = undef,
+    $mail_to          = undef,
+    $dir_template     = 'bacula/bacula-dir.conf.erb',
+    $use_console      = false,
+    $console_password = '',
     $clients = {}
   ) {
+  include bacula::params
 
-
-  $storage_name_array = split($storage_server, '[.]')
-  $director_name_array = split($server, '[.]')
+  $director_server_real = $director_server ? {
+    undef   => $bacula::params::director_server_default,
+    default => $director_server,
+  }
+  $storage_server_real = $storage_server ? {
+    undef   => $bacula::params::storage_server_default,
+    default => $storage_server,
+  }
+  $mail_to_real = $mail_to ? {
+    undef   => $bacula::params::mail_to_default,
+    default => $mail_to,
+  }
+  $storage_name_array = split($storage_server_real, '[.]')
+  $director_name_array = split($director_server_real, '[.]')
   $storage_name = $storage_name_array[0]
   $director_name = $director_name_array[0]
 
@@ -69,84 +72,62 @@ class bacula::director(
   # and generates a bacula::client resource for each
   #
   # It also searches top scope for variables in the style
-  # $bacula_client_mynode with values in format
+  # $::bacula_client_mynode with values in format
   # fileset=Basic:noHome,schedule=Hourly
   # In order to work with Puppet 2.6 where create_resources isn't in core,
   # we just skip the top-level stuff for now.
-  if versioncmp($puppetversion, '2.7.0') >= 0 {
+  if versioncmp($::puppetversion, '2.7.0') >= 0 {
     generate_clients($clients)
   } else {
     create_resources('bacula::config::client', $clients)
   }
 
-  # Only support mysql or sqlite.
-  # The given backend is validated in the bacula::config::validate class
-  # before this code is reached.
+#TODO add postgresql support
   $db_package = $db_backend ? {
-    'mysql'  => $mysql_package,
-    'sqlite' => $sqlite_package,
+    'mysql'       => $bacula::params::director_mysql_package,
+    'postgresql'  => $bacula::params::director_postgresql_package,
+    default       => $bacula::params::director_sqlite_package,
   }
 
-  if $director_package {
-    package { $director_package:
-      ensure => installed,
-    }
-    File['/etc/bacula/bacula-dir.conf'] {
-      require +> Package[$director_pacakge],
-    }
+  package { $db_package:
+    ensure => present,
   }
 
-  if $db_package {
-    package { $db_package:
-      ensure => installed,
-    }
-  }
+# Create the configuration for the Director and make sure the directory for
+# the per-Client configuration is created before we run the realization for
+# the exported files below
 
-  # Create the configuration for the Director and make sure the directory for
-  # the per-Client configuration is created before we run the realization for
-  # the exported files below
+#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
-    content => template($template),
-    notify  => Service['bacula-director'],
-    require => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
+    content => template($dir_template),
+    require => Package[$db_package],
+    notify  => Service[$bacula::params::director_service],
   }
 
+#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.d':
     ensure => directory,
     owner  => 'bacula',
     group  => 'bacula',
-    before => Service['bacula-director'],
+    before => Service[$bacula::params::director_service],
   }
 
+#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.d/empty.conf':
     ensure => file,
-    before => Service['bacula-director'],
+    before => Service[$bacula::params::director_service],
   }
 
   # Register the Service so we can manage it through Puppet
-  $director_service_name = $::operatingsystem ? {
-    /(CentOS|Redhat)/ => 'bacula-dir',
-    /(Debian|Ubuntu)/ => 'bacula-director',
-    default           => 'bacula-dir',
-  }
 
-  $director_service_require = $db_package ? {
-    ''      => undef,
-    default => Package[$db_package],
-  }
-
-  service { 'bacula-director':
-    name        => $director_service_name,
+  service { $bacula::params::director_service:
     enable      => true,
     ensure      => running,
     hasstatus   => true,
     hasrestart  => true,
-    require     => $director_service_require,
+    require     => Package[$db_package],
   }
 }

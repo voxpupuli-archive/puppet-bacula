@@ -2,10 +2,10 @@
 #
 # Bacula Console Configuration
 #   for <%= fqdn %>
-#    to <%= director_name -%>:director (<%= director_server -%>)
+#    to <%= director_name -%>:director (<%= director_server_real -%>)
 
 Director {
   Name = "<%= director_name -%>:monitor:director"
-  Address = <%= director_server %>
+  Address = <%= director_server_real %>
   Password = "<%= director_password -%>"
 }

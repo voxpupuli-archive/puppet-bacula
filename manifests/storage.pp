@@ -12,12 +12,6 @@
 #   The director's password
 # [*storage_server*]
 #   The FQDN of the storage daemon server
-# [*storage_package*]
-#   The package name to install the storage daemon (Optional)
-# [*mysql_package*]
-#   The package name to install the storage daemon MySQL component
-# [*sqlite_package*]
-#   The package name to install the storage daemon SQLite component
 # [*console_password*]
 #   The password for the Console component of the Director service
 # [*template*]
@@ -33,33 +27,34 @@
 #
 # === Sample Usage:
 #
-#  class { 'bacula::client':
+#  class { 'bacula::storage':
+#    db_backend        => 'mysql',
 #    director_server   => 'bacula.domain.com',
 #    director_password => 'XXXXXXXXXX',
-#    client_package    => 'bacula-client',
 #  }
 #
 class bacula::storage(
-    $db_backend,
-    $director_server,
-    $director_password,
-    $storage_server,
-    $storage_package = '',
-    $mysql_package,
-    $sqlite_package,
-    $console_password,
-    $template = 'bacula/bacula-sd.conf.erb'
+    $db_backend         = 'sqlite',
+    $director_server    = undef,
+    $director_password  = '',
+    $storage_server     = undef,
+    $console_password   = '',
+    $storage_template   = 'bacula/bacula-sd.conf.erb'
   ) {
+  include bacula::params
 
-  $storage_name_array = split($storage_server, '[.]')
-  $director_name_array = split($director_server, '[.]')
+  $director_server_real = $director_server ? {
+    undef   => $bacula::params::director_server_default,
+    default => $director_server,
+  }
+  $storage_server_real = $storage_server ? {
+    undef   => $bacula::params::storage_server_default,
+    default => $storage_server,
+  }
+  $storage_name_array = split($storage_server_real, '[.]')
+  $director_name_array = split($director_server_real, '[.]')
   $storage_name = $storage_name_array[0]
   $director_name = $director_name_array[0]
-
-  $db_package = $db_backend ? {
-    'mysql'  => $mysql_package,
-    'sqlite' => $sqlite_package,
-  }
 
   # This is necessary because the bacula-common package will
   # install the bacula-storage-mysql package regardless of
@@ -70,34 +65,23 @@ class bacula::storage(
   # However, if we install only the db compoenent package,
   # it will install the bacula-common package without
   # necessarily installing the bacula-storage-mysql package
-  if $storage_package {
-    package { $storage_package:
-      ensure => installed,
-    }
-    File['/etc/bacula/bacula-sd.conf'] {
-      require +> Package[$storage_package],
-    }
-    Service['bacula-sd'] {
-      require +> Package[$storage_package],
-    }
+  $db_package = $db_backend ? {
+    'mysql'       => $bacula::params::storage_mysql_package,
+    'postgresql'  => $bacula::params::storage_postgresql_package,
+    default       => $bacula::params::storage_sqlite_package,
   }
 
-  if $db_package {
-    package { $db_package:
-      ensure => installed,
-    }
+  package { $db_package:
+    ensure => present,
   }
 
   file { '/etc/bacula/bacula-sd.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
-    content => template($template),
+    content => template($storage_template),
+    require => Package[$db_package],
     notify  => Service['bacula-sd'],
-    require => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:
@@ -105,29 +89,29 @@ class bacula::storage(
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0750',
+    require => Package[$db_package],
   }
 
   file { '/etc/bacula/bacula-sd.d':
-    ensure => directory,
-    owner  => 'bacula',
-    group  => 'bacula',
-    before => Service['bacula-sd'],
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
+    require => Package[$db_package],
+    before  => Service['bacula-sd'],
   }
 
   file { '/etc/bacula/bacula-sd.d/empty.conf':
-    ensure => file,
-    before => Service['bacula-sd'],
+    ensure  => file,
+    require => Package[$db_package],
+    before  => Service['bacula-sd'],
   }
 
   # Register the Service so we can manage it through Puppet
   service { 'bacula-sd':
-    enable     => true,
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
+    require    => Package[$db_package],
   }
 }

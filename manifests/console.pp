@@ -7,7 +7,7 @@
 #   The FQDN of the director
 # [*director_password*]
 #   The password of the director
-# [*template*]
+# [*console_template*]
 #   The template to use to generate the bconsole.conf file (Optional)
 #   * Default: +'bacula/bconsole.conf.erb'+
 #
@@ -19,29 +19,30 @@
 #  }
 #
 class bacula::console(
-    $director_server,
-    $director_password,
-    $console_package,
-    $template = 'bacula/bconsole.conf.erb'
+    $director_server    = undef,
+    $director_password  = '',
+    $console_template   = 'bacula/bconsole.conf.erb'
   ) {
 
-  $director_name_array = split($server, '[.]')
+  include bacula::params
+
+  $director_server_real = $director_server ? {
+    undef   => $bacula::params::director_server_default,
+    default => $director_server,
+  }
+  $director_name_array = split($director_server_real, '[.]')
   $director_name = $director_name_array[0]
 
-  if $console_package {
-    package { $console_package:
-      ensure => 'latest';
-    }
+
+  package { $bacula::params::console_package:
+    ensure => present,
   }
 
   file { '/etc/bacula/bconsole.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
-    content => template($template),
-    require => $console_package ? {
-      ''      => undef,
-      default => Package['bacula-console'],
-    }
+    content => template($console_template),
+    require => Package[bacula::params::console_package],
   }
 }

@@ -13,7 +13,7 @@
 #  class { 'bacula::common': }
 #
 class bacula::common(
-    $packages         = '',
+    $packages         = undef,
     $manage_db_tables = true,
     $db_backend       = 'sqlite',
     $db_user          = '',

@@ -31,8 +31,8 @@ Messages {
   Name = "<%= director_name -%>:messages:standard"
   Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula %t %e (for %c)\" %r"
   Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
-  Mail = <%= mail_to -%> = all, !skipped
-  Operator = <%= mail_to -%> = mount
+  Mail = <%= mail_to_real -%> = all, !skipped
+  Operator = <%= mail_to_real -%> = mount
   Console = all, !skipped, !saved
   # WARNING! the following will create a file that you must cycle from
   #          time to time as it will grow indefinitely. However, it will
@@ -45,7 +45,7 @@ Messages {
 Messages {
   Name = "<%= director_name -%>:messages:daemon"
   Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Notice (from Director %d)\" %r"
-  Mail = <%= mail_to -%> = all, !skipped
+  Mail = <%= mail_to_real -%> = all, !skipped
   Console = all, !skipped, !saved
   Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
 }
@@ -93,7 +93,7 @@ Pool {
   Name = "<%= storage_name -%>:pool:catalog"
   # All Volumes will have the format director.catalog.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
-  Label Format = "<%= director_name -%>.catalog.${Counter<%= server.capitalize -%>Catalog+:p/3/0/r}"
+  Label Format = "<%= director_name -%>.catalog.${Counter<%= director_server_real.capitalize -%>Catalog+:p/3/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
@@ -108,7 +108,7 @@ Pool {
 
 # Create a Counter which will be used to label the catalog volumes on the sytem
 Counter {
-  Name    = "Counter<%= server.capitalize -%>Catalog"
+  Name    = "Counter<%= director_server_real.capitalize -%>Catalog"
   Minimum = 1
   Catalog = "<%= director_name -%>:<%= db_backend %>"
 }

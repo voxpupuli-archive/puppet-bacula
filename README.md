@@ -108,13 +108,6 @@ The following lists all the class parameters the bacula class accepts as well as
     manage_db_tables              bacula_manage_db_tables         Whether to manage the SQL tables in te database specified in db_backend. Defaults to true
     manage_db                     bacula_manage_db                Whether to manage creation of the database specified by db_database. Default to false. In order
                                                                   for this to work, you must declare the `mysql::server` class
-    director_package              bacula_director_package         The name of the package to install the director
-    storage_package               bacula_storage_package          The name of the package to install the storage
-    client_package                bacula_client_package           The name of the package to install the client
-    director_sqlite_package       bacula_director_sqlite_package  The name of the package to install the director's sqlite functionality
-    storage_sqlite_package        bacula_storage_sqlite_package   The name of the package to install the storage daemon's sqlite functionality
-    director_mysql_package        bacula_director_mysql_package   The name of the package to install the director's mysql functionality
-    storage_mysql_package         bacula_storage_mysql_package    The name of the package to install the storage's sqlite functionality
     director_template             bacula_director_template        The ERB template to use for configuring the director instead of the one included with the module
     storage_template              bacula_storage_template         The ERB template to use for configuring the storage daemon instead of the one included with the module
     console_template              bacula_console_template         The ERB template to use for configuring the bconsole instead of the one included with the module
@@ -281,4 +274,5 @@ TODO
 ====
 
  * Add ability to set custom Filesets for clients.
+ * PostgreSQL support
 

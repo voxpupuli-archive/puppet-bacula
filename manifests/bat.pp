@@ -13,13 +13,9 @@
 #
 class bacula::bat inherits bacula::console {
 
-  $bat_console_package = $::operatingsystem ? {
-    /(Redhat|CentOS)/ => 'bacula-console-bat',
-    /(Debian|Ubuntu)/ => 'bacula-console-qt',
-    default           => 'bacula-console-bat',
-  }
+  include bacula::params
 
-  package { $bat_console_package:
+  package { $bacula::params::bat_console_package:
     ensure  => present,
   }
 
@@ -27,7 +23,7 @@ class bacula::bat inherits bacula::console {
     ensure  => 'symlink',
     target  => 'bconsole.conf',
     require => [
-      Package[$bat_console_package],
+      Package[$bacula::params::bat_console_package],
       File['/etc/bacula/bconsole.conf'],
     ],
   }
