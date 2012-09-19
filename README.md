@@ -115,10 +115,10 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
 
 ```puppet
   $clients = {
-    'node1.domain.com' = {
+    'node1.domain.com' => {
       'fileset'  => 'Basic:noHome',
-      'schedule' => 'Weekly'
-    }
+      'schedule' => 'Weekly',
+    },
   }
 
   class { 'bacula':

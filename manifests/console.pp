@@ -43,6 +43,6 @@ class bacula::console(
     owner   => 'bacula',
     group   => 'bacula',
     content => template($console_template),
-    require => Package[bacula::params::console_package],
+    require => Package[$bacula::params::console_package],
   }
 }
