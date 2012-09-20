@@ -15,7 +15,7 @@
     "bin/update-modulepath.sh": "7d7b9e78fcb8ee336a26cb1f0dcffcb7",
     "lib/puppet/parser/functions/generate_clients.rb": "e09d77f88d18ec3e59bbe7bae4a48036",
     "manifests/client.pp": "06bf9dcf8bce86375e0b5685ddf5ec1d",
-    "manifests/common.pp": "d193572af3ba8cff08727c219d721aa7",
+    "manifests/common.pp": "5b62f4fb250af328e4e0fc3f3006f424",
     "manifests/config.pp": "8e00713329499d024f2e7406a7df59df",
     "manifests/config/client.pp": "3f3f818e961267c5ba81358d435443ea",
     "manifests/console.pp": "13defd1afee82fb9e5cf59c02467723d",

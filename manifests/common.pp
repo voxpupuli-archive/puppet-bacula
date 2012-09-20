@@ -59,23 +59,19 @@ class bacula::common(
     Group['bacula'] {
       requires  +> Package['bacula-client'],
     }
-  }
-  if $is_director {
+  } elsif $is_director {
     Group['bacula'] {
       requires  +> Package[$bacula::director::db_package],
     }
-  }
-  if $is_storage {
+  } elsif $is_storage {
     Group['bacula'] {
       requires  +> Package[$bacula::storage::db_package],
     }
-  }
-  if $manage_console {
+  } elsif $manage_console {
     Group['bacula'] {
       requires  +> Package[$bacula::params::console_package],
     }
-  }
-  if $manage_bat {
+  } elsif $manage_bat {
     Group['bacula'] {
       requires  +> Package[$bacula::params::bat_console_package],
     }
