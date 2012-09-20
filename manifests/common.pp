@@ -57,23 +57,23 @@ class bacula::common(
 # yum we add requires for the packages we already have to the group resource.
   if $is_client {
     Group['bacula'] {
-      requires  +> Package['bacula-client'],
+      require +> Package['bacula-client'],
     }
   } elsif $is_director {
     Group['bacula'] {
-      requires  +> Package[$bacula::director::db_package],
+      require +> Package[$bacula::director::db_package],
     }
   } elsif $is_storage {
     Group['bacula'] {
-      requires  +> Package[$bacula::storage::db_package],
+      require +> Package[$bacula::storage::db_package],
     }
   } elsif $manage_console {
     Group['bacula'] {
-      requires  +> Package[$bacula::params::console_package],
+      require +> Package[$bacula::params::console_package],
     }
   } elsif $manage_bat {
     Group['bacula'] {
-      requires  +> Package[$bacula::params::bat_console_package],
+      require +> Package[$bacula::params::bat_console_package],
     }
   }
 
