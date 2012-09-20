@@ -20,7 +20,7 @@
     "manifests/config/client.pp": "3f3f818e961267c5ba81358d435443ea",
     "manifests/console.pp": "13defd1afee82fb9e5cf59c02467723d",
     "manifests/console/bat.pp": "da422acf612fdf2726a6945b9d215727",
-    "manifests/director.pp": "0f0532b6be8322c2118639773856cc74",
+    "manifests/director.pp": "fe74848986046332b73c51f29f9d3650",
     "manifests/init.pp": "47432332a14d222d82bd8e301fc68d6e",
     "manifests/params.pp": "de22f2d9be348075a8d3d8168f64a7a1",
     "manifests/params/validate.pp": "1653e7627f5287783cfa7b5f613d0524",
