@@ -56,25 +56,19 @@ class bacula::common(
 # To work around the issue where every package resource is a separate run of
 # yum we add requires for the packages we already have to the group resource.
   if $is_client {
-    Group['bacula'] {
-      require +> Package['bacula-client'],
-    }
+    $require_package = 'bacula-client'
   } elsif $is_director {
-    Group['bacula'] {
-      require +> Package[$bacula::director::db_package],
-    }
+    $require_package = $bacula::director::db_package
   } elsif $is_storage {
-    Group['bacula'] {
-      require +> Package[$bacula::storage::db_package],
-    }
+    $require_package = $bacula::storage::db_package
   } elsif $manage_console {
-    Group['bacula'] {
-      require +> Package[$bacula::params::console_package],
-    }
+    $require_package =$bacula::params::console_package
   } elsif $manage_bat {
-    Group['bacula'] {
-      require +> Package[$bacula::params::bat_console_package],
-    }
+    $require_package = $bacula::params::bat_console_package
+  }
+
+  Group['bacula'] {
+    require +> Package[$require_package],
   }
 
   $db_parameters = $db_backend ? {
@@ -137,15 +131,17 @@ class bacula::common(
   }
 
   file { '/var/lib/bacula':
-    ensure => directory,
-    owner  => 'bacula',
-    group  => 'bacula',
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
+    require => Package[$require_package],
   }
 
   file { '/var/spool/bacula':
-    ensure => directory,
-    owner  => 'bacula',
-    group  => 'bacula',
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
+    require => Package[$require_package],
   }
 
   file { '/var/log/bacula':
@@ -153,11 +149,13 @@ class bacula::common(
     owner   => 'bacula',
     group   => 'bacula',
     recurse => true,
+    require => Package[$require_package],
   }
 
   file { '/var/run/bacula':
-    ensure => directory,
-    owner  => 'bacula',
-    group  => 'bacula',
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
+    require => Package[$require_package],
   }
 }

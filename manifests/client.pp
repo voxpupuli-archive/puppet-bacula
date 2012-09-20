@@ -41,16 +41,16 @@ class bacula::client(
   file { '/etc/bacula/bacula-fd.conf':
     ensure  => file,
     content => template('bacula/bacula-fd.conf.erb'),
-    require => Package['bacula-client'],
+    require => [
+      Package['bacula-client'],
+      File['/var/lib/bacula'],
+    ],
     notify  => Service['bacula-fd'],
   }
 
   service { 'bacula-fd':
     ensure  => running,
     enable  => true,
-    require => [
-      Package['bacula-client'],
-      File['/etc/bacula/bacula-fd.conf'],
-    ],
+    require => File['/etc/bacula/bacula-fd.conf'],
   }
 }

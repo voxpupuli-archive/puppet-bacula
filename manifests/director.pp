@@ -10,6 +10,16 @@
 # [*db_backend*]
 #   The DB backend to store the catalogs in. (Currently only support +sqlite+
 #   and +mysql+)
+# [*db_user*]
+#   The user to authenticate to +$db_db+ with.
+# [*db_password*]
+#   The password to authenticate +$db_user+ with
+# [*db_host*]
+#   The db server host to connect to
+# [*db_database*]
+#   The db database to connect to on +$db_host+
+# [*manage_db_tables*]
+#   Whether to create the DB tables during install
 # [*storage_server*]
 #   The FQDN of the storage daemon server
 # [*dir_template*]
@@ -19,6 +29,21 @@
 #   Whether to manage the Console resource in the director
 # [*console_password*]
 #   If $use_console is true, then use this value for the password
+# [*clients*]
+#   For directors, +$clients+ is a hash of clients.  The keys are the clients
+#   while the value is a hash of parameters The parameters accepted are
+#   +fileset+ and +schedule+.
+#   Example clients hash:
+#     $clients = {
+#       'somenode' => {
+#         'fileset'  => 'Basic:noHome',
+#         'schedule' => 'Hourly',
+#       },
+#       'node2' => {
+#         'fileset'  => 'Basic:noHome',
+#         'schedule' => 'Hourly',
+#       }
+#     }
 #
 # === Sample Usage:
 #
@@ -41,6 +66,7 @@ class bacula::director(
     $db_host          = 'localhost',
     $db_database      = 'bacula',
     $db_port          = '3306',
+    $manage_db_tables = true,
     $storage_server   = undef,
     $mail_to          = undef,
     $dir_template     = 'bacula/bacula-dir.conf.erb',
@@ -98,36 +124,59 @@ class bacula::director(
 # the exported files below
 
 #FIXME Need to set file perms
+  file { '/etc/bacula/bacula-dir.d':
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
+    require => Package[$db_package],
+    before  => Service[$bacula::params::director_service],
+  }
+
+#FIXME Need to set file perms
+  file { '/etc/bacula/bacula-dir.d/empty.conf':
+    ensure  => file,
+    owner   => 'bacula',
+    group   => 'bacula',
+    require => Package[$db_package],
+    before  => Service[$bacula::params::director_service],
+  }
+
+#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     content => template($dir_template),
-    require => Package[$db_package],
+    require => File[
+      '/etc/bacula/bacula-dir.d',
+      '/etc/bacula/bacula-dir.d/empty.conf',
+      '/var/lib/bacula',
+      '/var/log/bacula',
+      '/var/spool/bacula',
+      '/var/run/bacula'
+    ],
     notify  => Service[$bacula::params::director_service],
   }
 
-#FIXME Need to set file perms
-  file { '/etc/bacula/bacula-dir.d':
-    ensure => directory,
-    owner  => 'bacula',
-    group  => 'bacula',
-    before => Service[$bacula::params::director_service],
-  }
-
-#FIXME Need to set file perms
-  file { '/etc/bacula/bacula-dir.d/empty.conf':
-    ensure => file,
-    before => Service[$bacula::params::director_service],
-  }
-
-  # Register the Service so we can manage it through Puppet
-
+# Register the Service so we can manage it through Puppet
   service { $bacula::params::director_service:
     ensure      => running,
     enable      => true,
     hasstatus   => true,
     hasrestart  => true,
-    require     => Package[$db_package],
+    require     => File['/etc/bacula/bacula-dir.conf'],
+  }
+
+  if $manage_db_tables {
+    $service_require = $db_backend ? {
+      'mysql'   => [
+        Mysql::Db[$db_database],
+        Exec['make_db_tables'],
+      ],
+      default   => [Sqlite::Db[$db_database]],
+    }
+    Service[$bacula::params::director_service] {
+      require +> $service_require,
+    }
   }
 }

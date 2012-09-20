@@ -177,7 +177,7 @@ class bacula(
       db_host          => $db_host,
       db_port          => $db_port,
       db_database      => $db_database,
-      require          => Class['bacula::common'],
+      manage_db_tables => $manage_db_tables,
     }
   }
 
@@ -189,7 +189,6 @@ class bacula(
       storage_server    => $storage_server_real,
       console_password  => $console_password,
       storage_template  => $storage_template,
-      require           => Class['bacula::common'],
     }
   }
 
@@ -197,7 +196,6 @@ class bacula(
     class { 'bacula::client':
       director_server   => $director_server_real,
       director_password => $director_password,
-      require           => Class['bacula::common'],
     }
   }
 
@@ -206,13 +204,11 @@ class bacula(
       director_server   => $director_server_real,
       director_password => $director_password,
       console_template  => $console_template,
-      require           => Class['bacula::common'],
     }
   }
 
   if $manage_bat {
     class { 'bacula::console::bat':
-      require => Class['bacula::common'],
     }
   }
 }
