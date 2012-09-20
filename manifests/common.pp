@@ -88,10 +88,15 @@ class bacula::common(
       default           => '/usr/libexec/bacula/make_mysql_tables',
     }
 
+    $db_package = $db_backend ? {
+      'mysql'       => $bacula::params::director_mysql_package,
+      'postgresql'  => $bacula::params::director_postgresql_package,
+      default       => $bacula::params::director_sqlite_package,
+    }
     exec { 'make_db_tables':
       command     => "${make_db_tables_command} ${db_parameters}",
       refreshonly => true,
-      require     => Package[$bacula::director::db_package],
+      require     => Package[$db_package],
     }
   }
 
