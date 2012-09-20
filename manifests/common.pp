@@ -13,15 +13,21 @@
 #  class { 'bacula::common': }
 #
 class bacula::common(
-    $packages         = undef,
-    $manage_db_tables = true,
-    $db_backend       = 'sqlite',
-    $db_user          = '',
-    $db_database      = 'bacula',
-    $db_password      = '',
-    $db_port          = '3306',
-    $db_host          = 'localhost'
-  ) {
+  $packages         = undef,
+  $manage_db_tables = true,
+  $db_backend       = 'sqlite',
+  $db_user          = '',
+  $db_database      = 'bacula',
+  $db_password      = '',
+  $db_port          = '3306',
+  $db_host          = 'localhost',
+  $is_client        = true,
+  $is_director      = false,
+  $is_storage       = false,
+  $manage_console   = false,
+  $manage_bat       = false
+) {
+  include bacula::params
 
   if $packages {
     $packages_notify = $manage_db_tables ? {
@@ -34,6 +40,47 @@ class bacula::common(
     }
   }
 
+# Specify the user and group are present before we create files.
+  group { 'bacula':
+    ensure => present,
+  }
+
+  user { 'bacula':
+    ensure  => present,
+    gid     => 'bacula',
+    require => Group['bacula'],
+  }
+
+# The user and group are actually created by installing the bacula-common
+# package which is pulled in when any other bacula package is installed.
+# To work around the issue where every package resource is a separate run of
+# yum we add requires for the packages we already have to the group resource.
+  if $is_client {
+    Group['bacula'] {
+      requires  +> Package['bacula-client'],
+    }
+  }
+  if $is_director {
+    Group['bacula'] {
+      requires  +> Package[$bacula::director::db_package],
+    }
+  }
+  if $is_storage {
+    Group['bacula'] {
+      requires  +> Package[$bacula::storage::db_package],
+    }
+  }
+  if $manage_console {
+    Group['bacula'] {
+      requires  +> Package[$bacula::params::console_package],
+    }
+  }
+  if $manage_bat {
+    Group['bacula'] {
+      requires  +> Package[$bacula::params::bat_console_package],
+    }
+  }
+
   $db_parameters = $db_backend ? {
     'mysql'   => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
     default   => '',
@@ -42,13 +89,13 @@ class bacula::common(
   if $manage_db_tables {
     $make_db_tables_command = $::operatingsystem ? {
       /(Ubuntu|Debian)/ => '/usr/lib/bacula/make_bacula_tables',
-      /(RedHat|CentOS)/ => '/usr/libexec/bacula/make_mysql_tables',
       default           => '/usr/libexec/bacula/make_mysql_tables',
     }
 
     exec { 'make_db_tables':
       command     => "${make_db_tables_command} ${db_parameters}",
       refreshonly => true,
+      require     => Package[$bacula::director::db_package],
     }
   }
 
@@ -88,37 +135,28 @@ class bacula::common(
     }
   }
 
-  user { 'bacula':
-    ensure => present,
-    gid    => 'bacula',
-  }
-
-  group { 'bacula':
-    ensure => present,
-  }
-
   file { '/var/lib/bacula':
     ensure => directory,
-    owner  => bacula,
-    group  => bacula,
+    owner  => 'bacula',
+    group  => 'bacula',
   }
 
   file { '/var/spool/bacula':
     ensure => directory,
-    owner  => bacula,
-    group  => bacula,
+    owner  => 'bacula',
+    group  => 'bacula',
   }
 
   file { '/var/log/bacula':
     ensure  => directory,
-    owner   => bacula,
-    group   => bacula,
+    owner   => 'bacula',
+    group   => 'bacula',
     recurse => true,
   }
 
   file { '/var/run/bacula':
     ensure => directory,
-    owner  => bacula,
-    group  => bacula,
+    owner  => 'bacula',
+    group  => 'bacula',
   }
 }

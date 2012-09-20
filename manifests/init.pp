@@ -81,31 +81,31 @@
 #    clients           => $clients,
 #  }
 class bacula(
-    $db_backend         = 'sqlite',
-    $db_user            = '',
-    $db_password        = '',
-    $db_host            = 'localhost',
-    $db_database        = 'bacula',
-    $db_port            = '3306',
-    $manage_db          = false,
-    $manage_db_tables   = true,
-    $mail_to            = undef,
-    $is_director        = false,
-    $is_client          = true,
-    $is_storage         = false,
-    $director_password  = '',
-    $console_password   = '',
-    $director_server    = undef,
-    $storage_server     = undef,
-    $manage_console     = false,
-    $manage_bat         = false,
-    $director_template  = undef,
-    $storage_template   = undef,
-    $console_template   = undef,
-    $use_console        = false,
-    $clients            = {},
-    $packages           = undef
-  ) {
+  $db_backend         = 'sqlite',
+  $db_user            = '',
+  $db_password        = '',
+  $db_host            = 'localhost',
+  $db_database        = 'bacula',
+  $db_port            = '3306',
+  $manage_db          = false,
+  $manage_db_tables   = true,
+  $mail_to            = undef,
+  $is_client          = true,
+  $is_director        = false,
+  $is_storage         = false,
+  $director_password  = '',
+  $console_password   = '',
+  $director_server    = undef,
+  $storage_server     = undef,
+  $manage_console     = false,
+  $manage_bat         = false,
+  $director_template  = undef,
+  $storage_template   = undef,
+  $console_template   = undef,
+  $use_console        = false,
+  $clients            = {},
+  $packages           = undef
+) {
 
   include bacula::params
 
@@ -126,8 +126,8 @@ class bacula(
   class { 'bacula::params::validate':
     db_backend        => $db_backend,
     mail_to           => $mail_to_real,
-    is_director       => $is_director,
     is_client         => $is_client,
+    is_director       => $is_director,
     is_storage        => $is_storage,
     director_password => $director_password,
     use_console       => $use_console,
@@ -146,14 +146,19 @@ class bacula(
   }
 
   class { 'bacula::common':
-    manage_db_tables => $manage_db_tables,
-    db_backend       => $db_backend,
-    db_user          => $db_user,
-    db_password      => $db_password,
-    db_host          => $db_host,
-    db_database      => $db_database,
-    db_port          => $db_port,
-    packages         => $packages,
+    manage_db_tables  => $manage_db_tables,
+    db_backend        => $db_backend,
+    db_user           => $db_user,
+    db_password       => $db_password,
+    db_host           => $db_host,
+    db_database       => $db_database,
+    db_port           => $db_port,
+    packages          => $packages,
+    is_client         => $is_client,
+    is_director       => $is_director,
+    is_storage        => $is_storage,
+    manage_console    => $manage_console,
+    manage_bat        => $manage_bat,
   }
 
 
