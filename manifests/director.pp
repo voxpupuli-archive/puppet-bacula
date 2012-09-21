@@ -159,12 +159,6 @@ class bacula::director(
   }
 
   if $manage_db_tables   {
-    $db_package = $db_backend ? {
-      'mysql'       => $bacula::params::director_mysql_package,
-      'postgresql'  => $bacula::params::director_postgresql_package,
-      default       => $bacula::params::director_sqlite_package,
-    }
-
     case $db_backend {
       'mysql': {
         class { 'bacula::director::mysql':
