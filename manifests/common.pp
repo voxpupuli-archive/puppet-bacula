@@ -71,65 +71,6 @@ class bacula::common(
     require +> Package[$require_package],
   }
 
-  $db_parameters = $db_backend ? {
-    'mysql'   => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
-    default   => '',
-  }
-
-  if $manage_db_tables {
-    $make_db_tables_command = $::operatingsystem ? {
-      /(Ubuntu|Debian)/ => '/usr/lib/bacula/make_bacula_tables',
-      default           => '/usr/libexec/bacula/make_mysql_tables',
-    }
-
-    $db_package = $db_backend ? {
-      'mysql'       => $bacula::params::director_mysql_package,
-      'postgresql'  => $bacula::params::director_postgresql_package,
-      default       => $bacula::params::director_sqlite_package,
-    }
-    exec { 'make_db_tables':
-      command     => "${make_db_tables_command} ${db_parameters}",
-      refreshonly => true,
-      require     => Package[$db_package],
-    }
-  }
-
-  if $manage_db_tables   {
-    case $db_backend {
-      'mysql': {
-        $db_notify = $manage_db_tables ? {
-          true    => Exec['make_db_tables'],
-          default => undef,
-        }
-        $db_require = defined(Class['mysql::server']) ? {
-          true    => Class['mysql::server'],
-          default => undef,
-        }
-        mysql::db { $db_database:
-          user      => $db_user,
-          password  => $db_password,
-          host      => $db_host,
-          notify    => $db_notify,
-          require   => $db_require,
-        }
-      }
-
-      'sqlite': {
-        sqlite::db { $db_database:
-          ensure   => present,
-          location => "/var/lib/bacula/${db_database}.db",
-          owner    => 'bacula',
-          group    => 'bacula',
-          require  => File['/var/lib/bacula'],
-        }
-      }
-
-      default: {
-        fail "The bacula module does not support managing the ${db_backend} backend database"
-      }
-    }
-  }
-
   file { '/var/lib/bacula':
     ensure  => directory,
     owner   => 'bacula',

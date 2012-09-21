@@ -5,7 +5,7 @@
 # Parameters:
 # [*director_server*]
 #   The FQDN of the bacula director
-# [*password*]
+# [*director_password*]
 #   The password of the director
 # [*db_backend*]
 #   The DB backend to store the catalogs in. (Currently only support +sqlite+
@@ -48,31 +48,31 @@
 # === Sample Usage:
 #
 #  class { 'bacula::director':
-#    director_server  => 'bacula.domain.com',
-#    password         => 'XXXXXXXXX',
-#    db_backend       => 'sqlite',
-#    storage_server   => 'bacula.domain.com',
-#    mail_to          => 'bacula-admin@domain.com',
-#    use_console      => true,
-#    console_password => 'XXXXXX',
+#    director_server    => 'bacula.domain.com',
+#    director_password  => 'XXXXXXXXX',
+#    db_backend         => 'sqlite',
+#    storage_server     => 'bacula.domain.com',
+#    mail_to            => 'bacula-admin@domain.com',
+#    use_console        => true,
+#    console_password   => 'XXXXXX',
 #  }
 #
 class bacula::director(
-    $director_server  = undef,
-    $password         = '',
-    $db_backend       = 'sqlite',
-    $db_user          = '',
-    $db_password      = '',
-    $db_host          = 'localhost',
-    $db_database      = 'bacula',
-    $db_port          = '3306',
-    $manage_db_tables = true,
-    $storage_server   = undef,
-    $mail_to          = undef,
-    $dir_template     = 'bacula/bacula-dir.conf.erb',
-    $use_console      = false,
-    $console_password = '',
-    $clients = {}
+    $director_server    = undef,
+    $director_password  = '',
+    $db_backend         = 'sqlite',
+    $db_user            = '',
+    $db_password        = '',
+    $db_host            = 'localhost',
+    $db_database        = 'bacula',
+    $db_port            = '3306',
+    $manage_db_tables   = true,
+    $storage_server     = undef,
+    $mail_to            = undef,
+    $dir_template       = 'bacula/bacula-dir.conf.erb',
+    $use_console        = false,
+    $console_password   = '',
+    $clients            = {}
   ) {
   include bacula::params
 
@@ -156,6 +156,34 @@ class bacula::director(
       '/var/run/bacula'
     ],
     notify  => Service[$bacula::params::director_service],
+  }
+
+  if $manage_db_tables   {
+    $db_package = $db_backend ? {
+      'mysql'       => $bacula::params::director_mysql_package,
+      'postgresql'  => $bacula::params::director_postgresql_package,
+      default       => $bacula::params::director_sqlite_package,
+    }
+
+    case $db_backend {
+      'mysql': {
+        class { 'bacula::director::mysql':
+          db_database => $db_database,
+          db_user     => $db_user,
+          db_password => $db_password,
+          db_port     => $db_port,
+          db_host     => $db_host,
+        }
+      }
+      'sqlite': {
+        class { 'bacula::director::sqlite':
+          db_database => $db_database,
+        }
+      }
+      default: {
+        fail "The bacula module does not support managing the ${db_backend} backend database"
+      }
+    }
   }
 
 # Register the Service so we can manage it through Puppet

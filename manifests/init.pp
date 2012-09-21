@@ -164,20 +164,20 @@ class bacula(
 
   if $is_director {
     class { 'bacula::director':
-      db_backend       => $db_backend,
-      director_server  => $director_server_real,
-      storage_server   => $storage_server_real,
-      password         => $director_password,
-      mail_to          => $mail_to_real,
-      dir_template     => $director_template,
-      use_console      => $use_console,
-      console_password => $console_password,
-      db_user          => $db_user,
-      db_password      => $db_password,
-      db_host          => $db_host,
-      db_port          => $db_port,
-      db_database      => $db_database,
-      manage_db_tables => $manage_db_tables,
+      db_backend        => $db_backend,
+      director_server   => $director_server_real,
+      storage_server    => $storage_server_real,
+      director_password => $director_password,
+      mail_to           => $mail_to_real,
+      dir_template      => $director_template,
+      use_console       => $use_console,
+      console_password  => $console_password,
+      db_user           => $db_user,
+      db_password       => $db_password,
+      db_host           => $db_host,
+      db_port           => $db_port,
+      db_database       => $db_database,
+      manage_db_tables  => $manage_db_tables,
     }
   }
 

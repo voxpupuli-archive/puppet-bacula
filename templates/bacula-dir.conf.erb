@@ -11,7 +11,7 @@ Director {
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 5
-  Password = "<%= password -%>"
+  Password = "<%= director_password -%>"
   Messages = "<%= director_name -%>:messages:daemon"
 }
 
@@ -68,7 +68,7 @@ Console {
 Storage {
   Name = "<%= storage_name -%>:storage:default"
   Address = <%= storage_name %>
-  Password = "<%= password -%>"
+  Password = "<%= director_password -%>"
   Device = "FileStorage"
   Media Type = File
 }

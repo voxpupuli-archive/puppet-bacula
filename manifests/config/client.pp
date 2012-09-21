@@ -15,6 +15,7 @@ define bacula::config::client (
     owner   => 'bacula',
     group   => 'bacula',
     content => template('bacula/client_config.erb'),
+    require => File['/etc/bacula/bacula-dir.conf'],
     before  => Service[$bacula::params::director_service],
     notify  => Service[$bacula::params::director_service],
   }
