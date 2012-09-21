@@ -1,6 +1,6 @@
 define bacula::config::client (
-  $fileset  = 'Basic:noHome',
-  $schedule = 'WeeklyCycle'
+  $fileset          = 'Basic:noHome',
+  $client_schedule  = 'WeeklyCycle'
 ) {
 
   if ! is_domain_name($name) {
@@ -12,7 +12,10 @@ define bacula::config::client (
 
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
     ensure  => file,
+    owner   => 'bacula',
+    group   => 'bacula',
     content => template('bacula/client_config.erb'),
-    notify  => Service['bacula-director'],
+    before  => Service[$bacula::params::director_service],
+    notify  => Service[$bacula::params::director_service],
   }
 }

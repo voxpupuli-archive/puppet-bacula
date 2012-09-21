@@ -4,7 +4,7 @@ module Puppet::Parser::Functions
 
     # This searches top scope for variables in the style
     # $bacula_client_mynode with values in format
-    # fileset=Basic:noHome,schedule=Hourly
+    # fileset=Basic:noHome,client_schedule=Hourly
     self.to_hash.each do |variable,value|
       if variable =~ /^bacula_client_.*$/
         client = variable[14..-1]

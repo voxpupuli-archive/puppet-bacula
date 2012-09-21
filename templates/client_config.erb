@@ -14,7 +14,7 @@ Job {
   Type     = Backup
   FileSet  = "<%= fileset %>"
   Storage  = "<%= scope.lookupvar('bacula::director::storage_name') %>:storage:default"
-  Schedule = "<%= schedule %>"
+  Schedule = "<%= client_schedule %>"
   Pool     = "<%= scope.lookupvar('bacula::director::storage_name') %>:pool:default"
   Messages = "<%= director_name %>:messages:standard"
 }

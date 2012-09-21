@@ -32,16 +32,16 @@
 # [*clients*]
 #   For directors, +$clients+ is a hash of clients.  The keys are the clients
 #   while the value is a hash of parameters The parameters accepted are
-#   +fileset+ and +schedule+.
+#   +fileset+ and +client_schedule+.
 #   Example clients hash:
 #     $clients = {
-#       'somenode' => {
-#         'fileset'  => 'Basic:noHome',
-#         'schedule' => 'Hourly',
+#       'somenode.example.com'  => {
+#         'fileset'         => 'Basic:noHome',
+#         'client_schedule' => 'Hourly',
 #       },
-#       'node2' => {
-#         'fileset'  => 'Basic:noHome',
-#         'schedule' => 'Hourly',
+#       'node2.example.com'     => {
+#         'fileset'         => 'Basic:noHome',
+#         'client_schedule' => 'Hourly',
 #       }
 #     }
 #
@@ -99,7 +99,7 @@ class bacula::director(
   #
   # It also searches top scope for variables in the style
   # $::bacula_client_mynode with values in format
-  # fileset=Basic:noHome,schedule=Hourly
+  # fileset=Basic:noHome,client_schedule=Hourly
   # In order to work with Puppet 2.6 where create_resources isn't in core,
   # we just skip the top-level stuff for now.
   if versioncmp($::puppetversion, '2.7.0') >= 0 {

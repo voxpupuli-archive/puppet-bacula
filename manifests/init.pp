@@ -53,16 +53,16 @@
 # [*clients*]
 #   For directors, +$clients+ is a hash of clients.  The keys are the clients
 #   while the value is a hash of parameters The parameters accepted are
-#   +fileset+ and +schedule+.
+#   +fileset+ and +client_schedule+.
 #   Example clients hash:
 #     $clients = {
-#       'somenode' => {
-#         'fileset'  => 'Basic:noHome',
-#         'schedule' => 'Hourly',
+#       'somenode.example.com'  => {
+#         'fileset'         => 'Basic:noHome',
+#         'client_schedule' => 'Hourly',
 #       },
-#       'node2' => {
-#         'fileset'  => 'Basic:noHome',
-#         'schedule' => 'Hourly',
+#       'node2.example.com'     => {
+#         'fileset'         => 'Basic:noHome',
+#         'client_schedule' => 'Hourly',
 #       }
 #     }
 #
