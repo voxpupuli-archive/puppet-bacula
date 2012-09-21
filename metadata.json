@@ -33,7 +33,7 @@
     "templates/bacula-fd.conf.erb": "3a506251bc807e051143d93efcffec9f",
     "templates/bacula-sd.conf.erb": "df7987695bf1dd18bb789a2673b2cd95",
     "templates/bconsole.conf.erb": "5752d70c9a8d8a2f82f21e26f7cbaaa2",
-    "templates/client_config.erb": "207316eea5ea7c1369d6cfe4a1c6f1d1",
+    "templates/client_config.erb": "b5b5e85673c1cd183adba533448d18f7",
     "templates/make_sqlite3_tables.sh.erb": "480b86d36d88539f5f94dfe44f6a172d",
     "tests/init.pp": "b95d199119d5e592df7e1580bf23fe06"
   },
