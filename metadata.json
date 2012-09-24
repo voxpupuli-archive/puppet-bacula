@@ -21,7 +21,7 @@
     "manifests/console.pp": "13defd1afee82fb9e5cf59c02467723d",
     "manifests/console/bat.pp": "da422acf612fdf2726a6945b9d215727",
     "manifests/director.pp": "93601f71d7955e5e72aeeb717bf016cc",
-    "manifests/director/mysql.pp": "31aa7235365334e0fb2d81eddc9a1255",
+    "manifests/director/mysql.pp": "edf824e4fb6745d96cd0d0add6403d43",
     "manifests/director/sqlite.pp": "22e714645c902d4c7f8b66157319562e",
     "manifests/init.pp": "4f7a28f1b3bc325768101e7a2b125f3f",
     "manifests/params.pp": "de22f2d9be348075a8d3d8168f64a7a1",

@@ -58,12 +58,8 @@ class bacula::director::mysql (
 
   exec { 'make_db_tables':
     command     => "${make_db_tables_command} ${db_parameters}",
-    user        => 'bacula',
-    group       => 'bacula',
     refreshonly => true,
-    require     => [
-      Package[$bacula::params::director_mysql_package],
-      Mysql::Db[$db_database],
-    ],
+    logoutput   => on_failure,
+    require     => $exec_require,
   }
 }
