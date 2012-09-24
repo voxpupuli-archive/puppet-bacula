@@ -38,7 +38,7 @@ class bacula::director::mysql (
     }
 
     $db_user_host_real = $db_user_host ? {
-      undef   => $db_host,
+      undef   => $::fqdn,
       default => $db_user_host,
     }
 
@@ -46,6 +46,7 @@ class bacula::director::mysql (
       user      => $db_user,
       password  => $db_password,
       host      => $db_user_host,
+      grant     => ['all'],
       require   => $db_require,
       notify    => Exec['make_db_tables'],
     }
@@ -67,7 +68,7 @@ class bacula::director::mysql (
   exec { 'make_db_tables':
     command     => "${make_db_tables_command} ${db_parameters}",
     refreshonly => true,
-    logoutput   => on_failure,
+    logoutput   => true,
     require     => $exec_require,
   }
 }
