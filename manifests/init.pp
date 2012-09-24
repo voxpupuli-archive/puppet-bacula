@@ -43,6 +43,8 @@
 #   The password to authenticate +$db_user+ with
 # [*db_host*]
 #   The db server host to connect to
+# [*db_user_host*]
+#   The host string used by MySQL to allow connections from
 # [*db_database*]
 #   The db database to connect to on +$db_host+
 # [*manage_db_tables*]
@@ -80,11 +82,12 @@
 #    storage_server    => 'bacula.domain.com',
 #    clients           => $clients,
 #  }
-class bacula(
+class bacula (
   $db_backend         = 'sqlite',
   $db_user            = '',
   $db_password        = '',
   $db_host            = 'localhost',
+  $db_user_host       = undef,
   $db_database        = 'bacula',
   $db_port            = '3306',
   $manage_db          = false,
@@ -177,6 +180,7 @@ class bacula(
       db_host           => $db_host,
       db_port           => $db_port,
       db_database       => $db_database,
+      manage_db         => $manage_db,
       manage_db_tables  => $manage_db_tables,
     }
   }

@@ -3,14 +3,15 @@
 # This class enforces common resources needed by all
 # bacula components
 #
+# === Parameters
+#
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
+#
 # === Actions:
 # * Enforce the bacula user and groups exist
 # * Enforce the +/var/spool/bacula+ is a director and +/var/lib/bacula+
 #   points to it
-#
-# === Sample Usage:
-#
-#  class { 'bacula::common': }
 #
 class bacula::common(
   $packages         = undef,

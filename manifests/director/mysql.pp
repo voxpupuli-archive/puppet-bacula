@@ -1,20 +1,11 @@
 # == Class: bacula::director::mysql
 #
-# Full description of class example_class here.
+# Manage MySQL resources for the Bacula director.
 #
 # === Parameters
 #
-# Document parameters here.
-#
-# [*bacula::director::mysql_servers*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Examples
-#
-#  class { 'bacula::director::mysql':
-#    bacula::director::mysql_servers => [ 'bacula::director::mysql1.example.org', 'bacula::director::mysql2.example.com' ]
-#  }
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
 # === Copyright
 #
@@ -26,20 +17,37 @@ class bacula::director::mysql (
   $db_database  = 'bacula',
   $db_password  = '',
   $db_port      = '3306',
-  $db_host      = 'localhost'
+  $db_host      = 'localhost',
+  $db_user_host = undef,
+  $manage_db    = false
 ){
   include bacula::params
 
-  $db_require = defined(Class['mysql::server']) ? {
-    true    => Class['mysql::server'],
-    default => undef,
-  }
-  mysql::db { $db_database:
-    user      => $db_user,
-    password  => $db_password,
-    host      => $db_host,
-    require   => $db_require,
-    notify    => Exec['make_db_tables'],
+  if $manage_db {
+    $db_require = defined(Class['mysql::server']) ? {
+      true    => Class['mysql::server'],
+      default => undef,
+    }
+
+    $db_user_host_real = $db_user_host ? {
+      undef   => $db_host,
+      default => $db_user_host,
+    }
+
+    mysql::db { $db_database:
+      user      => $db_user,
+      password  => $db_password,
+      host      => $db_user_host,
+      require   => $db_require,
+      notify    => Exec['make_db_tables'],
+    }
+
+    $exec_require = [
+      Package[$bacula::params::director_mysql_package],
+      Mysql::Db[$db_database],
+    ]
+  } else {
+    $exec_require = Package[$bacula::params::director_mysql_package]
   }
 
   $make_db_tables_command = $::operatingsystem ? {

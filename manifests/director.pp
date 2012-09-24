@@ -1,61 +1,11 @@
-# Class: bacula::director
+# == Class: bacula::director
 #
-# This class manages the bacula director component
+# This class manages the Bacula director component
 #
-# Parameters:
-# [*director_server*]
-#   The FQDN of the bacula director
-# [*director_password*]
-#   The password of the director
-# [*db_backend*]
-#   The DB backend to store the catalogs in. (Currently only support +sqlite+
-#   and +mysql+)
-# [*db_user*]
-#   The user to authenticate to +$db_db+ with.
-# [*db_password*]
-#   The password to authenticate +$db_user+ with
-# [*db_host*]
-#   The db server host to connect to
-# [*db_database*]
-#   The db database to connect to on +$db_host+
-# [*manage_db_tables*]
-#   Whether to create the DB tables during install
-# [*storage_server*]
-#   The FQDN of the storage daemon server
-# [*dir_template*]
-#   The ERB template to us to generate the +bacula-dir.conf+ file
-#   * Default: +'bacula/bacula-dir.conf.erb'+
-# [*use_console*]
-#   Whether to manage the Console resource in the director
-# [*console_password*]
-#   If $use_console is true, then use this value for the password
-# [*clients*]
-#   For directors, +$clients+ is a hash of clients.  The keys are the clients
-#   while the value is a hash of parameters The parameters accepted are
-#   +fileset+ and +client_schedule+.
-#   Example clients hash:
-#     $clients = {
-#       'somenode.example.com'  => {
-#         'fileset'         => 'Basic:noHome',
-#         'client_schedule' => 'Hourly',
-#       },
-#       'node2.example.com'     => {
-#         'fileset'         => 'Basic:noHome',
-#         'client_schedule' => 'Hourly',
-#       }
-#     }
+# === Parameters
 #
-# === Sample Usage:
-#
-#  class { 'bacula::director':
-#    director_server    => 'bacula.domain.com',
-#    director_password  => 'XXXXXXXXX',
-#    db_backend         => 'sqlite',
-#    storage_server     => 'bacula.domain.com',
-#    mail_to            => 'bacula-admin@domain.com',
-#    use_console        => true,
-#    console_password   => 'XXXXXX',
-#  }
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
 class bacula::director(
     $director_server    = undef,
@@ -64,8 +14,10 @@ class bacula::director(
     $db_user            = '',
     $db_password        = '',
     $db_host            = 'localhost',
+    $db_user_host       = undef,
     $db_database        = 'bacula',
     $db_port            = '3306',
+    $manage_db          = false,
     $manage_db_tables   = true,
     $storage_server     = undef,
     $mail_to            = undef,
@@ -162,11 +114,13 @@ class bacula::director(
     case $db_backend {
       'mysql': {
         class { 'bacula::director::mysql':
-          db_database => $db_database,
-          db_user     => $db_user,
-          db_password => $db_password,
-          db_port     => $db_port,
-          db_host     => $db_host,
+          db_database   => $db_database,
+          db_user       => $db_user,
+          db_password   => $db_password,
+          db_port       => $db_port,
+          db_host       => $db_host,
+          db_user_host  => $db_user_host,
+          manage_db     => $manage_db,
         }
       }
       'sqlite': {
