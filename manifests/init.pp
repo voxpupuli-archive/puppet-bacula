@@ -183,6 +183,7 @@ class bacula (
       db_database       => $db_database,
       manage_db         => $manage_db,
       manage_db_tables  => $manage_db_tables,
+      clients           => $clients,
     }
   }
 
