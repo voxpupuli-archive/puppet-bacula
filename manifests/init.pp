@@ -178,6 +178,7 @@ class bacula (
       db_user           => $db_user,
       db_password       => $db_password,
       db_host           => $db_host,
+      db_user_host      => $db_user_host,
       db_port           => $db_port,
       db_database       => $db_database,
       manage_db         => $manage_db,

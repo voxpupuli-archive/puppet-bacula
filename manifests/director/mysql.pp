@@ -24,9 +24,17 @@ class bacula::director::mysql (
   include bacula::params
 
   if $manage_db {
-    $db_require = defined(Class['mysql::server']) ? {
-      true    => Class['mysql::server'],
-      default => undef,
+    if defined(Class['mysql::server']) {
+      if defined(Class['mysql::config']) {
+        $db_require = [
+          Class['mysql::server'],
+          Class['mysql::config'],
+        ]
+      } else {
+        $db_require = Class['mysql::server']
+      }
+    } else {
+      $db_require = undef
     }
 
     $db_user_host_real = $db_user_host ? {
