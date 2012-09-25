@@ -7,10 +7,6 @@
 # All +bacula+ classes are called from the main +::bacula+ class.  Parameters
 # are documented there.
 #
-# === Copyright
-#
-# Copyright 2012 Red Hat, Inc., All rights reserved.
-#
 class bacula::director::mysql (
   $db_database  = 'bacula',
   $db_user      = '',
@@ -50,13 +46,6 @@ class bacula::director::mysql (
       require   => $db_require,
       notify    => Exec['make_db_tables'],
     }
-
-    $exec_require = [
-      Package[$bacula::params::director_mysql_package],
-      Mysql::Db[$db_database],
-    ]
-  } else {
-    $exec_require = Package[$bacula::params::director_mysql_package]
   }
 
   $make_db_tables_command = $::operatingsystem ? {
@@ -69,6 +58,7 @@ class bacula::director::mysql (
     command     => "${make_db_tables_command} ${db_parameters}",
     refreshonly => true,
     logoutput   => true,
-    require     => $exec_require,
+    require     => Package[$bacula::params::director_mysql_package],
+    notify      => Service[$bacula::params::director_service],
   }
 }

@@ -1,24 +1,11 @@
 # == Class: bacula::director::sqlite
 #
-# Full description of class example_class here.
+# Manage SQLite resources for the Bacula director
 #
 # === Parameters
 #
-# Document parameters here.
-#
-# [*bacula::director::sqlite_servers*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Examples
-#
-#  class { 'bacula::director::sqlite':
-#    bacula::director::sqlite_servers => [ 'bacula::director::sqlite1.example.org', 'bacula::director::sqlite2.example.com' ]
-#  }
-#
-# === Copyright
-#
-# Copyright 2012 Red Hat, Inc., All rights reserved.
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
 class bacula::director::sqlite (
   $db_database  = 'bacula'
@@ -45,11 +32,9 @@ class bacula::director::sqlite (
     group   => 'root',
     mode    => '0755',
     content => template('bacula/make_sqlite3_tables.sh.erb'),
-    require => [
-      File['/var/lib/bacula'],
-      Sqlite::Db[$db_database],
-    ],
+    require => Package[$bacula::params::director_sqlite_package],
   }
+
   $make_db_tables_command = $::operatingsystem ? {
     /(Ubuntu|Debian)/ => '/usr/lib/bacula/make_bacula_tables',
     default           => '/usr/local/libexec/bacula/make_sqlite3_tables.sh',
@@ -59,5 +44,6 @@ class bacula::director::sqlite (
     command     => $make_db_tables_command,
     refreshonly => true,
     require     => File['/usr/local/libexec/bacula/make_sqlite3_tables.sh'],
+    notify      => Service[$bacula::params::director_service],
   }
 }

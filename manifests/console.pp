@@ -2,26 +2,15 @@
 #
 # This class manages the bconsole application
 #
-# === Parameters:
-# [*director_server*]
-#   The FQDN of the director
-# [*director_password*]
-#   The password of the director
-# [*console_template*]
-#   The template to use to generate the bconsole.conf file (Optional)
-#   * Default: +'bacula/bconsole.conf.erb'+
+# === Parameters
 #
-# === Sample Usage:
-#
-#  class { 'bacula::console':
-#    director_server   => 'bacula.domain.com',
-#    director_password => 'XXXXXXXX',
-#  }
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
 class bacula::console(
-    $director_server    = undef,
-    $director_password  = '',
-    $console_template   = 'bacula/bconsole.conf.erb'
+  $director_server    = undef,
+  $director_password  = '',
+  $console_template   = 'bacula/bconsole.conf.erb'
   ) {
 
   include bacula::params
@@ -42,6 +31,7 @@ class bacula::console(
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0640',
     content => template($console_template),
     require => Package[$bacula::params::console_package],
   }

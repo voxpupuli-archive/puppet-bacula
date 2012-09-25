@@ -2,23 +2,15 @@
 #
 # This class manages the bacula client (bacula-fd)
 #
-# === Parameters:
-# [*director_server*]
-#   The FQDN of the bacula director
-# [*director_password*]
-#   The director's password
+# === Parameters
+#
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
 # === Actions:
 # * Enforce the client package package be installed
 # * Manage the +/etc/bacula/bacula-fd.conf+ file
 # * Enforce the +bacula-fd+ service to be running
-#
-# === Sample Usage:
-#
-#  class { 'bacula::client':
-#    director_server   => 'bacula.example.com',
-#    director_password => 'XXXXXXXXXX',
-#  }
 #
 class bacula::client(
     $director_server    = undef,
@@ -40,10 +32,13 @@ class bacula::client(
 
   file { '/etc/bacula/bacula-fd.conf':
     ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
     content => template('bacula/bacula-fd.conf.erb'),
     require => [
       Package['bacula-client'],
-      File['/var/lib/bacula'],
+      File['/var/lib/bacula', '/var/run/bacula'],
     ],
     notify  => Service['bacula-fd'],
   }
@@ -51,6 +46,5 @@ class bacula::client(
   service { 'bacula-fd':
     ensure  => running,
     enable  => true,
-    require => File['/etc/bacula/bacula-fd.conf'],
   }
 }

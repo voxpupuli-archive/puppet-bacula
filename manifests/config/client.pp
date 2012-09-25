@@ -1,3 +1,22 @@
+# == Define: bacula::config::client
+#
+# Install a config file describing a +bacula-fd+ client on the director.
+#
+# === Parameters
+#
+# [*fileset*]
+#   The file set used by the client for backups
+#
+# [*client_schedule*]
+#   The schedule for backups to be performed.
+#
+# === Examples
+#
+#   bacula::config::client { 'client1.example.com' :
+#     fileset         => 'Basic:noHome',
+#     client_schedule => 'WeeklyCycle',
+#   }
+#
 define bacula::config::client (
   $fileset          = 'Basic:noHome',
   $client_schedule  = 'WeeklyCycle'
@@ -14,9 +33,9 @@ define bacula::config::client (
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0640',
     content => template('bacula/client_config.erb'),
     require => File['/etc/bacula/bacula-dir.conf'],
-    before  => Service[$bacula::params::director_service],
     notify  => Service[$bacula::params::director_service],
   }
 }

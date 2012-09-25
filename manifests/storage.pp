@@ -2,21 +2,10 @@
 #
 # This class manages the bacula storage daemon (bacula-sd)
 #
-# === Parameters:
-# [*db_backend*]
-#   The database backend to use.
-#   (Currently only supports +'sqlite'+ and +'mysql'+)
-# [*director_server*]
-#   The FQDN of the bacula director
-# [*director_password*]
-#   The director's password
-# [*storage_server*]
-#   The FQDN of the storage daemon server
-# [*console_password*]
-#   The password for the Console component of the Director service
-# [*template*]
-#   The template to use for generating the +bacula-sd.conf+ file
-#   * Default: +'bacula/bacula-sd.conf.erb'+
+# === Parameters
+#
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
 # === Actions:
 # * Enforce the DB component package package be installed
@@ -24,14 +13,6 @@
 # * Manage the +/mnt/bacula+ and +/mnt/bacula/default+ directories
 # * Manage the +/etc/bacula/bacula-sd.conf+ file
 # * Enforce the +bacula-sd+ service to be running
-#
-# === Sample Usage:
-#
-#  class { 'bacula::storage':
-#    db_backend        => 'mysql',
-#    director_server   => 'bacula.domain.com',
-#    director_password => 'XXXXXXXXXX',
-#  }
 #
 class bacula::storage(
     $db_backend         = 'sqlite',
@@ -87,6 +68,7 @@ class bacula::storage(
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0750',
     require => Package[$db_package],
   }
 
@@ -94,16 +76,16 @@ class bacula::storage(
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
-    require => Package[$db_package],
+    mode    => '0640',
   }
 
   file { '/etc/bacula/bacula-sd.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0640',
     content => template($storage_template),
     require => File[
-      '/etc/bacula/bacula-sd.d',
       '/etc/bacula/bacula-sd.d/empty.conf',
       '/mnt/bacula/default',
       '/var/lib/bacula',
@@ -118,6 +100,5 @@ class bacula::storage(
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => File['/etc/bacula/bacula-sd.conf'],
   }
 }

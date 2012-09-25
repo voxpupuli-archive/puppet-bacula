@@ -3,6 +3,10 @@
 # This class installs the BAT (Bacula Admin Tool) application for QT supported
 # systems
 #
+# === Parameters
+#
+# None
+#
 # === Actions:
 # * Enforce the BAT system package is installed
 # * Enforce +/etc/bacula/bat.conf+ points to +/etc/bacula/bconsole.conf+
@@ -11,8 +15,8 @@
 #
 #  class { 'bacula::console::bat': }
 #
-class bacula::console::bat inherits bacula::console {
-
+class bacula::console::bat {
+  Class['bacula::console'] -> Class['bacula::console::bat']
   include bacula::params
 
   package { $bacula::params::bat_console_package:

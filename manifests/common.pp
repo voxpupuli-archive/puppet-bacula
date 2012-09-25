@@ -41,17 +41,6 @@ class bacula::common(
     }
   }
 
-# Specify the user and group are present before we create files.
-  group { 'bacula':
-    ensure => present,
-  }
-
-  user { 'bacula':
-    ensure  => present,
-    gid     => 'bacula',
-    require => Group['bacula'],
-  }
-
 # The user and group are actually created by installing the bacula-common
 # package which is pulled in when any other bacula package is installed.
 # To work around the issue where every package resource is a separate run of
@@ -68,14 +57,23 @@ class bacula::common(
     $require_package = $bacula::params::bat_console_package
   }
 
-  Group['bacula'] {
-    require +> Package[$require_package],
+# Specify the user and group are present before we create files.
+  group { 'bacula':
+    ensure  => present,
+    require => Package[$require_package],
+  }
+
+  user { 'bacula':
+    ensure  => present,
+    gid     => 'bacula',
+    require => Group['bacula'],
   }
 
   file { '/var/lib/bacula':
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0750',
     require => Package[$require_package],
   }
 
@@ -83,14 +81,16 @@ class bacula::common(
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0750',
     require => Package[$require_package],
   }
 
   file { '/var/log/bacula':
     ensure  => directory,
+    recurse => true,
     owner   => 'bacula',
     group   => 'bacula',
-    recurse => true,
+    mode    => '0750',
     require => Package[$require_package],
   }
 
@@ -98,6 +98,7 @@ class bacula::common(
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0755',
     require => Package[$require_package],
   }
 }

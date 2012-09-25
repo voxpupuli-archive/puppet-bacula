@@ -75,32 +75,28 @@ class bacula::director(
 # the per-Client configuration is created before we run the realization for
 # the exported files below
 
-#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.d':
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0750',
     require => Package[$db_package],
-    before  => Service[$bacula::params::director_service],
   }
 
-#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.d/empty.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
-    require => Package[$db_package],
-    before  => Service[$bacula::params::director_service],
+    mode    => '0640',
   }
 
-#FIXME Need to set file perms
   file { '/etc/bacula/bacula-dir.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
+    mode    => '0640',
     content => template($dir_template),
     require => File[
-      '/etc/bacula/bacula-dir.d',
       '/etc/bacula/bacula-dir.d/empty.conf',
       '/var/lib/bacula',
       '/var/log/bacula',
@@ -140,7 +136,6 @@ class bacula::director(
       'mysql'   => [
         File['/etc/bacula/bacula-dir.conf'],
         Mysql::Db[$db_database],
-        Exec['make_db_tables'],
       ],
       default   => [
         File['/etc/bacula/bacula-dir.conf'],
