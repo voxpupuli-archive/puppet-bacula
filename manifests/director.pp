@@ -132,18 +132,9 @@ class bacula::director(
 
 # Register the Service so we can manage it through Puppet
   if $manage_db_tables {
-    $service_require = $db_backend ? {
-      'mysql'   => [
-        File['/etc/bacula/bacula-dir.conf'],
-        Mysql::Db[$db_database],
-      ],
-      default   => [
-        File['/etc/bacula/bacula-dir.conf'],
-        Sqlite::Db[$db_database],
-      ],
-    }
+    $service_require = Exec['make_db_tables']
   } else {
-    $service_require = File['/etc/bacula/bacula-dir.conf']
+    $service_require = undef
   }
 
   service { $bacula::params::director_service:

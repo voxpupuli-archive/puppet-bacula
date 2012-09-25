@@ -20,7 +20,7 @@
     "manifests/config/client.pp": "58f5e96b1a75b6132fa061dd9a640e88",
     "manifests/console.pp": "11f68ae65d76309384227e001111451a",
     "manifests/console/bat.pp": "b60cbcbcaaa2d06f60b83896612dacdf",
-    "manifests/director.pp": "92bc94bf2b392323ebae819ee84791f7",
+    "manifests/director.pp": "d48c22cfaa2246a67d63b71e084a12bd",
     "manifests/director/mysql.pp": "1b3347fb4042abfe90b888328ab5fe7a",
     "manifests/director/sqlite.pp": "2578da388f1e5acdb264321b93819d15",
     "manifests/init.pp": "2e012dcf4fcdd3fbc676272bfb1a56c6",
