@@ -12,7 +12,6 @@
     "LICENSE": "5bba9c4ae34d6b59726431d6616e3275",
     "Modulefile": "8192f7a6b8973ab8bb6b5a70a2a91c7d",
     "README.md": "752118ffab96d9104536d0635e297a22",
-    "bin/update-modulepath.sh": "7d7b9e78fcb8ee336a26cb1f0dcffcb7",
     "lib/puppet/parser/functions/generate_clients.rb": "8530308cedc17ea44a92e7aa3f2f6535",
     "manifests/client.pp": "48878ec42b62e54302dbfc34117160f3",
     "manifests/common.pp": "b623bfde8179a5e04dbc0b6183612034",
