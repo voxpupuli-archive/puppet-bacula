@@ -4,11 +4,11 @@
 #
 # === Parameters
 #
-# [*fileset*]
-#   The file set used by the client for backups
-#
 # [*client_schedule*]
 #   The schedule for backups to be performed.
+#
+# [*fileset*]
+#   The file set used by the client for backups
 #
 # === Examples
 #
@@ -36,6 +36,6 @@ define bacula::config::client (
     mode    => '0640',
     content => template('bacula/client_config.erb'),
     require => File['/etc/bacula/bacula-dir.conf'],
-    notify  => Service[$bacula::params::director_service],
+    notify  => Service['bacula-dir'],
   }
 }

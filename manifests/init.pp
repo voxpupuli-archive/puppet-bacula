@@ -6,12 +6,10 @@
 # === Parameters:
 # [*db_backend*]
 #   The database backend to use
-# [*mail_to*]
-#   Address to email reports to
-# [*is_director*]
-#   Whether the node should be a director
 # [*is_client*]
 #   Whether the node should be a client
+# [*is_director*]
+#   Whether the node should be a director
 # [*is_storage*]
 #   Whether the node should be a storage server
 # [*director_password*]
@@ -22,6 +20,8 @@
 #   The FQDN of the bacula director
 # [*storage_server*]
 #   The FQDN of the storage server
+# [*mail_to*]
+#   Address to email reports to
 # [*manage_console*]
 #   Whether the bconsole should be managed on the node
 # [*manage_bat*]

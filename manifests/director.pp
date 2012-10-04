@@ -103,7 +103,7 @@ class bacula::director(
       '/var/spool/bacula',
       '/var/run/bacula'
     ],
-    notify  => Service[$bacula::params::director_service],
+    notify  => Service['bacula-dir'],
   }
 
   if $manage_db_tables   {
@@ -137,8 +137,9 @@ class bacula::director(
     $service_require = undef
   }
 
-  service { $bacula::params::director_service:
+  service { 'bacula-dir':
     ensure      => running,
+    name        => $bacula::params::director_service,
     enable      => true,
     hasstatus   => true,
     hasrestart  => true,
