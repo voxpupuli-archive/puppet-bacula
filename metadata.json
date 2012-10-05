@@ -1,12 +1,29 @@
 {
   "name": "rharrison-bacula",
-  "author": "Puppet Labs and Russell Harrison",
-  "description": "This module manages Bacula, a complete backup solution.\nIt is a fork of the Puppet Labs module found at http://forge.puppetlabs.com/puppetlabs/bacula",
-  "license": "ASL 2.0",
-  "project_page": "http://github.com/rharrison10/rharrison-bacula",
-  "source": "http://github.com/rharrison10/rharrison-bacula",
-  "summary": "This module manages a bacula infrastructure",
   "version": "0.0.3",
+  "source": "http://github.com/rharrison10/rharrison-bacula",
+  "author": "Puppet Labs and Russell Harrison",
+  "license": "ASL 2.0",
+  "summary": "This module manages a bacula infrastructure",
+  "description": "This module manages Bacula, a complete backup solution.\nIt is a fork of the Puppet Labs module found at http://forge.puppetlabs.com/puppetlabs/bacula",
+  "project_page": "http://github.com/rharrison10/rharrison-bacula",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=2.2.0"
+    },
+    {
+      "name": "puppetlabs/mysql",
+      "version_requirement": ">=0.0.1"
+    },
+    {
+      "name": "puppetlabs/sqlite",
+      "version_requirement": ">=0.0.1"
+    }
+  ],
+  "types": [
+
+  ],
   "checksums": {
     "CHANGELOG": "11ced458d3eacc898961a858f278d99c",
     "LICENSE": "5bba9c4ae34d6b59726431d6616e3275",
@@ -15,16 +32,16 @@
     "lib/puppet/parser/functions/generate_clients.rb": "8530308cedc17ea44a92e7aa3f2f6535",
     "manifests/client.pp": "48878ec42b62e54302dbfc34117160f3",
     "manifests/common.pp": "b623bfde8179a5e04dbc0b6183612034",
-    "manifests/config.pp": "9b9c9320629b83ad3c7e3c51a92a8dd0",
     "manifests/config/client.pp": "fe0b244e60a5602fdbf0b19b09dd4398",
-    "manifests/console.pp": "11f68ae65d76309384227e001111451a",
+    "manifests/config.pp": "9b9c9320629b83ad3c7e3c51a92a8dd0",
     "manifests/console/bat.pp": "b60cbcbcaaa2d06f60b83896612dacdf",
-    "manifests/director.pp": "adf69fd239af9df6e55ad339dc604077",
-    "manifests/director/mysql.pp": "414416fcf2503402993605e1dccf9583",
+    "manifests/console.pp": "11f68ae65d76309384227e001111451a",
+    "manifests/director/mysql.pp": "7ba0ff22403a2acbeedc8d78dd2e90be",
     "manifests/director/sqlite.pp": "40c5423343c249d1a3bf3222d26b3f3d",
+    "manifests/director.pp": "adf69fd239af9df6e55ad339dc604077",
     "manifests/init.pp": "3ec868990ed9c5a59654ff4cb691cb44",
+    "manifests/params/validate.pp": "22a348e2bfc9cf09596c73a113abd17c",
     "manifests/params.pp": "de22f2d9be348075a8d3d8168f64a7a1",
-    "manifests/params/validate.pp": "1653e7627f5287783cfa7b5f613d0524",
     "manifests/storage.pp": "706ef992b1cd1030c6f733470bc14c04",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
@@ -35,19 +52,5 @@
     "templates/client_config.erb": "b5b5e85673c1cd183adba533448d18f7",
     "templates/make_sqlite3_tables.sh.erb": "480b86d36d88539f5f94dfe44f6a172d",
     "tests/init.pp": "b95d199119d5e592df7e1580bf23fe06"
-  },
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": "\u003e\u003d2.2.0"
-    },
-    {
-      "name": "puppetlabs/mysql",
-      "version_requirement": "\u003e\u003d0.0.1"
-    },
-    {
-      "name": "puppetlabs/sqlite",
-      "version_requirement": "\u003e\u003d0.0.1"
-    }
-  ]
+  }
 }

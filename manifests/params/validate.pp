@@ -21,7 +21,6 @@ class bacula::params::validate(
     $storage_server     = '',
     $manage_console     = '',
     $manage_bat         = '',
-    $console_password   = '',
     $use_console        = '',
     $manage_db          = '',
     $manage_db_tables   = ''
