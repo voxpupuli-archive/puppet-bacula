@@ -188,6 +188,7 @@ class bacula(
       db_port          => $db_port,
       db_database      => $db_database,
       require          => Class['bacula::common'],
+      clients          => $clients,
     }
   }
 
