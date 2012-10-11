@@ -9,10 +9,10 @@
 #
 class bacula::director::mysql (
   $db_database  = 'bacula',
-  $db_user      = '',
+  $db_host      = 'localhost',
   $db_password  = '',
   $db_port      = '3306',
-  $db_host      = 'localhost',
+  $db_user      = '',
   $db_user_host = undef,
   $manage_db    = false
 ){

@@ -8,9 +8,9 @@
 # are documented there.
 #
 class bacula::console(
-  $director_server    = undef,
+  $console_template   = 'bacula/bconsole.conf.erb',
   $director_password  = '',
-  $console_template   = 'bacula/bconsole.conf.erb'
+  $director_server    = undef
   ) {
 
   include bacula::params

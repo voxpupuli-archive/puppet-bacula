@@ -13,8 +13,8 @@
 # * Enforce the +bacula-fd+ service to be running
 #
 class bacula::client(
-    $director_server    = undef,
-    $director_password  = ''
+    $director_password  = '',
+    $director_server    = undef
   ) {
   include bacula::params
 

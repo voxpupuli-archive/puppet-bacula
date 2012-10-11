@@ -5,25 +5,25 @@
 # default values are intended to fail.
 #
 class bacula::params::validate(
+    $console_password   = '',
     $db_backend         = '',
     $db_database        = '',
-    $db_port            = '',
     $db_host            = '',
-    $db_user            = '',
     $db_password        = '',
-    $mail_to            = '',
-    $is_director        = '',
-    $is_client          = '',
-    $is_storage         = '',
+    $db_port            = '',
+    $db_user            = '',
     $director_password  = '',
-    $console_password   = '',
     $director_server    = '',
-    $storage_server     = '',
-    $manage_console     = '',
+    $is_client          = '',
+    $is_director        = '',
+    $is_storage         = '',
+    $mail_to            = '',
     $manage_bat         = '',
-    $use_console        = '',
+    $manage_console     = '',
     $manage_db          = '',
-    $manage_db_tables   = ''
+    $manage_db_tables   = '',
+    $storage_server     = '',
+    $use_console        = '',
   ) {
 
   #Validate our booleans

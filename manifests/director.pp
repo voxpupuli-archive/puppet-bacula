@@ -8,22 +8,22 @@
 # are documented there.
 #
 class bacula::director(
-    $director_server    = undef,
-    $director_password  = '',
+    $console_password   = '',
     $db_backend         = 'sqlite',
-    $db_user            = '',
-    $db_password        = '',
-    $db_host            = 'localhost',
-    $db_user_host       = undef,
     $db_database        = 'bacula',
+    $db_host            = 'localhost',
+    $db_password        = '',
     $db_port            = '3306',
+    $db_user            = '',
+    $db_user_host       = undef,
+    $dir_template       = 'bacula/bacula-dir.conf.erb',
+    $director_password  = '',
+    $director_server    = undef,
+    $mail_to            = undef,
     $manage_db          = false,
     $manage_db_tables   = true,
     $storage_server     = undef,
-    $mail_to            = undef,
-    $dir_template       = 'bacula/bacula-dir.conf.erb',
     $use_console        = false,
-    $console_password   = '',
     $clients            = {}
   ) {
   include bacula::params

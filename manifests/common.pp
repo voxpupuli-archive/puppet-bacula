@@ -14,19 +14,19 @@
 #   points to it
 #
 class bacula::common(
-  $packages         = undef,
-  $manage_db_tables = true,
   $db_backend       = 'sqlite',
-  $db_user          = '',
   $db_database      = 'bacula',
+  $db_host          = 'localhost',
   $db_password      = '',
   $db_port          = '3306',
-  $db_host          = 'localhost',
+  $db_user          = '',
   $is_client        = true,
   $is_director      = false,
   $is_storage       = false,
+  $manage_bat       = false,
   $manage_console   = false,
-  $manage_bat       = false
+  $manage_db_tables = true,
+  $packages         = undef
 ) {
   include bacula::params
 

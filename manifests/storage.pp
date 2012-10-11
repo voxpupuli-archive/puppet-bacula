@@ -15,11 +15,11 @@
 # * Enforce the +bacula-sd+ service to be running
 #
 class bacula::storage(
-    $db_backend         = 'sqlite',
-    $director_server    = undef,
-    $director_password  = '',
-    $storage_server     = undef,
     $console_password   = '',
+    $db_backend         = 'sqlite',
+    $director_password  = '',
+    $director_server    = undef,
+    $storage_server     = undef,
     $storage_template   = 'bacula/bacula-sd.conf.erb'
   ) {
   include bacula::params
