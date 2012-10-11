@@ -47,8 +47,8 @@
     "spec/spec_helper.rb": "e238222912be66314673d545d2f50c49",
     "templates/bacula-dir.conf.erb": "fa8fead654f3c821f88a6c5fad8c33dd",
     "templates/bacula-fd.conf.erb": "a6b55c63558ba365dd57adf28ebec106",
-    "templates/bacula-sd.conf.erb": "7ed0436ba868809e788eb8f58590365a",
-    "templates/bconsole.conf.erb": "5752d70c9a8d8a2f82f21e26f7cbaaa2",
+    "templates/bacula-sd.conf.erb": "2f9adda23cfa52cd8a53576b3e44fbbe",
+    "templates/bconsole.conf.erb": "3cc7a6ec0c73acad6b56bf1743fdc996",
     "templates/client_config.erb": "d4f4bb021b3aa4ff97d0066f831e29c2",
     "templates/make_sqlite3_tables.sh.erb": "480b86d36d88539f5f94dfe44f6a172d",
     "tests/init.pp": "b95d199119d5e592df7e1580bf23fe06"

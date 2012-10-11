@@ -1,11 +1,11 @@
 # DO NOT EDIT - Managed by Puppet
 #
 # Bacula Console Configuration
-#   for <%= fqdn %>
-#    to <%= director_name -%>:director (<%= director_server_real -%>)
+#   for <%= scope.lookupvar('::fqdn') %>
+#    to <%= director_server_real -%>:director (<%= director_server_real -%>)
 
 Director {
-  Name = "<%= director_name -%>:monitor:director"
+  Name = "<%= director_server_real -%>:monitor:director"
   Address = <%= director_server_real %>
   Password = "<%= director_password -%>"
 }
