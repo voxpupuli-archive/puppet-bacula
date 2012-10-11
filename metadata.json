@@ -31,7 +31,7 @@
     "NOTICE": "5bba9c4ae34d6b59726431d6616e3275",
     "README.md": "752118ffab96d9104536d0635e297a22",
     "lib/puppet/parser/functions/generate_clients.rb": "8d19448123e2a8d8a2d2fd7e4f13679a",
-    "manifests/client/config.pp": "67655af9251b9eb10ade9f1962c2a472",
+    "manifests/client/config.pp": "2d7d874ac3f835070b0d8982cb237c55",
     "manifests/client.pp": "09162ee9bbc6cea52f30d49924e5a2d3",
     "manifests/common.pp": "7d29f26b890f789c1289029e4b23a6a7",
     "manifests/console/bat.pp": "f3d4c8bd85cf6758c9d1077dbcc5230c",
@@ -49,7 +49,7 @@
     "templates/bacula-fd.conf.erb": "a6b55c63558ba365dd57adf28ebec106",
     "templates/bacula-sd.conf.erb": "7ed0436ba868809e788eb8f58590365a",
     "templates/bconsole.conf.erb": "5752d70c9a8d8a2f82f21e26f7cbaaa2",
-    "templates/client_config.erb": "f8ca6b16a28ba53d3a49e3bcc69c40a8",
+    "templates/client_config.erb": "d4f4bb021b3aa4ff97d0066f831e29c2",
     "templates/make_sqlite3_tables.sh.erb": "480b86d36d88539f5f94dfe44f6a172d",
     "tests/init.pp": "b95d199119d5e592df7e1580bf23fe06"
   }

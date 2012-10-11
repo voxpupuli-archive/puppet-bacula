@@ -6,19 +6,26 @@
 #
 # [*client_schedule*]
 #   The schedule for backups to be performed.
-#
+# [*db_backend*]
+#   The database backend of the catalog storing information about the backup
 # [*director_password*]
 #   The director's password the client is connecting to.
-#
+# [*director_server*]
+#   The FQDN of the director server the client will connect to.
 # [*fileset*]
 #   The file set used by the client for backups
+# [*storage_server*]
+#   The storage server hosting the pool this client will backup to
 #
 # === Examples
 #
 #   bacula::client::config { 'client1.example.com' :
 #     client_schedule   => 'WeeklyCycle',
+#     db_backend        => 'mysql',
 #     director_password => 'directorpassword',
+#     director_server   => 'bacula.example.com',
 #     fileset           => 'Basic:noHome',
+#     storage_server    => 'bacula.example.com',
 #   }
 #
 # === Copyright
@@ -41,21 +48,35 @@
 #
 define bacula::client::config (
   $client_schedule   = 'WeeklyCycle',
-  $director_password = undef,
+  $db_backend        = undef,
+  $director_password = '',
   $director_server   = undef,
-  $fileset           = 'Basic:noHome'
+  $fileset           = 'Basic:noHome',
+  $storage_server    = undef
 ) {
-  case $director_password {
+  include bacula::params
+
+  if !is_domain_name($name) {
+    fail "Name for client ${name} must be a fully qualified domain name"
+  }
+
+  case $db_backend {
     undef   : {
-      case $bacula::director::director_password {
-        undef, '' : {
-          fail('You must provide a value for director_password or create the',
-            'configs by passing the clients hash to bacula class on the director server'
-          )
-        }
-        default   : {
-          $director_password_real = $bacula::director::director_password
-        }
+      $db_backend_real = $bacula::director::db_backend ? {
+        undef   => 'sqlite',
+        default => $bacula::director::db_backend,
+      }
+    }
+    default : {
+      $db_backend_real = $db_backend
+    }
+  }
+
+  case $director_password {
+    ''      : {
+      $director_password_real = $bacula::director::director_password ? {
+        undef   => '',
+        default => $bacula::director::director_password,
       }
     }
     default : {
@@ -63,12 +84,37 @@ define bacula::client::config (
     }
   }
 
-  if !is_domain_name($name) {
-    fail "Name for client ${name} must be a fully qualified domain name"
+  case $director_server {
+    undef   : {
+      $director_server_real = $bacula::director::director_server ? {
+        undef   => $bacula::params::director_server_default,
+        default => $bacula::director::director_server,
+      }
+    }
+    default : {
+      $director_server_real = $director_server
+    }
   }
 
-  $name_array = split($name, '[.]')
-  $hostname   = $name_array[0]
+  if !is_domain_name($director_server_real) {
+    fail "director_server=${director_server_real} must be a fully qualified domain name"
+  }
+
+  case $storage_server {
+    undef   : {
+      $storage_server_real = $bacula::director::storage_server ? {
+        undef   => $bacula::params::storage_server_default,
+        default => $bacula::director::storage_server,
+      }
+    }
+    default : {
+      $storage_server_real = $storage_server
+    }
+  }
+
+  if !is_domain_name($storage_server_real) {
+    fail "storage_server=${storage_server_real} must be a fully qualified domain name"
+  }
 
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
     ensure  => file,
