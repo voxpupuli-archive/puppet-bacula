@@ -57,7 +57,7 @@ class bacula::director(
 #  if versioncmp($::puppetversion, '2.7.0') >= 0 {
 #    generate_clients($clients)
 #  } else {
-    create_resources('bacula::config::client', $clients)
+    create_resources('bacula::client::config', $clients)
 #  }
 
 #TODO add postgresql support

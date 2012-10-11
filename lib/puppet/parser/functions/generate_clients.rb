@@ -10,9 +10,9 @@ module Puppet::Parser::Functions
         client = variable[14..-1]
 
         begin
-          parameters = Hash[ value.split(',').map do |val| 
+          parameters = Hash[ value.split(',').map do |val|
             val_array = val.split('=',2)
-            if val_array.size != 2 
+            if val_array.size != 2
               raise Puppet::ParseError, 'Could not parse parameters given. Please check your format'
             end
             if [nil,''].include? val_array[0] or [nil,''].include? val_array[1]
@@ -24,12 +24,12 @@ module Puppet::Parser::Functions
           raise Puppet::ParseError, 'Could not parse parameters given. Please check your format'
         end
 
-        function_create_resources('bacula::config::client', {client => parameters})
+        function_create_resources('bacula::client::config', {client => parameters})
       end
     end
 
     begin
-      function_create_resources('bacula::config::client', args[0])
+      function_create_resources('bacula::client::config', args[0])
     rescue => e
       raise Puppet::ParseError, e
     end

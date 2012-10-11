@@ -1,4 +1,4 @@
-# == Define: bacula::config::client
+# == Define: bacula::client::config
 #
 # Install a config file describing a +bacula-fd+ client on the director.
 #
@@ -12,12 +12,12 @@
 #
 # === Examples
 #
-#   bacula::config::client { 'client1.example.com' :
+#   bacula::client::config { 'client1.example.com' :
 #     fileset         => 'Basic:noHome',
 #     client_schedule => 'WeeklyCycle',
 #   }
 #
-define bacula::config::client (
+define bacula::client::config (
   $client_schedule  = 'WeeklyCycle',
   $fileset          = 'Basic:noHome'
 ) {
