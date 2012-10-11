@@ -1,7 +1,7 @@
 Client {
   Name     = "<%= hostname %>"
   Address  = "<%= name %>"
-  Password = "<%= scope.lookupvar('bacula::director::password') %>"
+  Password = "<%= director_password_real %>"
   Catalog  = "<%= scope.lookupvar('bacula::director::director_name') %>:<%= scope.lookupvar('bacula::director::db_backend') %>"
   File Retention = 6 Weeks
   Job Retention  = 1 Year
