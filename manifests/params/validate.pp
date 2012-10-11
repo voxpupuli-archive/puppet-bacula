@@ -41,7 +41,7 @@ class bacula::params::validate(
     $manage_db          = '',
     $manage_db_tables   = '',
     $storage_server     = '',
-    $use_console        = '',
+    $use_console        = ''
   ) {
 
   #Validate our booleans
