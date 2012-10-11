@@ -50,10 +50,6 @@ class bacula::storage(
     undef   => $bacula::params::storage_server_default,
     default => $storage_server,
   }
-  $storage_name_array = split($storage_server_real, '[.]')
-  $director_name_array = split($director_server_real, '[.]')
-  $storage_name = $storage_name_array[0]
-  $director_name = $director_name_array[0]
 
   # This is necessary because the bacula-common package will
   # install the bacula-storage-mysql package regardless of

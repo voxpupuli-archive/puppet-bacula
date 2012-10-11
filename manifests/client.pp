@@ -41,9 +41,6 @@ class bacula::client(
     default => $director_server,
   }
 
-  $director_name_array = split($director_server_real, '[.]')
-  $director_name = $director_name_array[0]
-
   package { 'bacula-client':
     ensure => present,
   }

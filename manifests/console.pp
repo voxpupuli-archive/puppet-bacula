@@ -37,9 +37,6 @@ class bacula::console(
     undef   => $bacula::params::director_server_default,
     default => $director_server,
   }
-  $director_name_array = split($director_server_real, '[.]')
-  $director_name = $director_name_array[0]
-
 
   package { $bacula::params::console_package:
     ensure => present,

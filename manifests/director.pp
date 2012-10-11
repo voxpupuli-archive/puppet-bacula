@@ -58,11 +58,6 @@ class bacula::director(
     undef   => $bacula::params::mail_to_default,
     default => $mail_to,
   }
-  $storage_name_array = split($storage_server_real, '[.]')
-  $director_name_array = split($director_server_real, '[.]')
-  $storage_name = $storage_name_array[0]
-  $director_name = $director_name_array[0]
-
 
   # This function takes each client specified in $clients
   # and generates a bacula::client resource for each
