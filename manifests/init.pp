@@ -5,6 +5,9 @@
 #
 # === Parameters:
 #
+# [*clients*]
+#   For directors, +$clients+ is a hash of clients.  The keys are the clients while the value is a hash of parameters. The
+#   parameters accepted are the same as the +bacula::client::config+ define.
 # [*console_password*]
 #   The console's password
 # [*console_template*]
@@ -55,23 +58,19 @@
 #   one included with the module
 # [*use_console*]
 #   Whether to configure a console resource on the director
-# [*clients*]
-#   For directors, +$clients+ is a hash of clients.  The keys are the clients
-#   while the value is a hash of parameters The parameters accepted are
-#   +fileset+ and +client_schedule+.
-#   Example clients hash:
-#     $clients = {
-#       'somenode.example.com'  => {
-#         'fileset'         => 'Basic:noHome',
-#         'client_schedule' => 'Hourly',
-#       },
-#       'node2.example.com'     => {
-#         'fileset'         => 'Basic:noHome',
-#         'client_schedule' => 'Hourly',
-#       }
-#     }
 #
 # === Sample Usage
+#
+#  $clients = {
+#    'node1.example.com' => {
+#      'fileset'         => 'Basic:noHome',
+#      'client_schedule' => 'Hourly',
+#    },
+#    'node2.example.com' => {
+#      'fileset'         => 'Basic:noHome',
+#      'client_schedule' => 'Hourly',
+#    }
+#  }
 #
 #  class { 'bacula':
 #    is_storage        => true,
