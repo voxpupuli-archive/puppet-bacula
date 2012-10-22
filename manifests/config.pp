@@ -214,4 +214,5 @@ class bacula::config {
   $director_template = $::bacula_director_template
   $storage_template  = $::bacula_storage_template
   $console_template  = $::bacula_console_template
+  $client_template   = $::bacula_client_template
 }

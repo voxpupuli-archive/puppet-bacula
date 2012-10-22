@@ -46,6 +46,8 @@
 #     The ERB template to use for configuring the storage daemon instead of the one included with the module
 #   $console_template
 #     The ERB template to use for configuring the bconsole instead of the one included with the module
+#   $client_template
+#     The ERB template to use for configuring the client instead of the one included with the module
 #   $use_console
 #     Whether to configure a console resource on the director
 #   $console_password
@@ -126,6 +128,7 @@ class bacula(
     $director_template       = $bacula::config::director_template,
     $storage_template        = $bacula::config::storage_template,
     $console_template        = $bacula::config::console_template,
+    $client_template         = $bacula::config::client_template,
     $use_console             = $bacula::config::safe_use_console,
     $console_password        = $bacula::config::console_password,
     $clients                 = {}
@@ -211,6 +214,7 @@ class bacula(
       director_server   => $director_server,
       director_password => $director_password,
       client_package    => $client_package,
+      template          => $client_template,
       require           => Class['bacula::common'],
     }
   }
