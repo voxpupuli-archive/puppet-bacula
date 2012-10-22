@@ -13,6 +13,8 @@
 #     The FQDN of the storage daemon server
 #   $storage_package:
 #     The package name to install the storage daemon (Optional)
+#   $pgsql_package:
+#     The package name to install the storage daemon pgsql component
 #   $mysql_package:
 #     The package name to install the storage daemon mysql component
 #   $sqlite_package:
@@ -43,6 +45,7 @@ class bacula::storage(
     $director_password,
     $storage_server,
     $storage_package = '',
+    $pgsql_package,
     $mysql_package,
     $sqlite_package,
     $console_password,
@@ -55,6 +58,7 @@ class bacula::storage(
   $director_name = $director_name_array[0]
 
   $db_package = $db_backend ? {
+    'pgsql'  => $pgsql_package,
     'mysql'  => $mysql_package,
     'sqlite' => $sqlite_package,
   }

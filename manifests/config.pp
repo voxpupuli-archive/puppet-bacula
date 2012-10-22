@@ -159,6 +159,16 @@ class bacula::config {
     default => $::bacula_storage_mysql_package,
   }
 
+  $director_pgsql_package  = $::bacula_director_pgsql_package ? {
+    undef   => 'bacula-director-pgsql',
+    default => $::bacula_director_pgsql_package,
+  }
+
+  $storage_pgsql_package  = $::bacula_storage_pgsql_package ? {
+    undef   => 'bacula-sd-pgsql',
+    default => $::bacula_storage_pgsql_package,
+  }
+
   $director_sqlite_package = $::bacula_director_sqlite_package ? {
     undef   => 'bacula-director-sqlite3',
     default => $::bacula_director_sqlite_package,
