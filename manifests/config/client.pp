@@ -1,5 +1,6 @@
 define bacula::config::client (
    $fileset  = 'Basic:noHome',
+   $pool     = "$bacula::director::storage_name:pool:default",
    $schedule = 'WeeklyCycle'
  ) {
 
