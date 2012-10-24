@@ -25,13 +25,13 @@
 
   ],
   "checksums": {
-    "CHANGELOG": "11ced458d3eacc898961a858f278d99c",
+    "CHANGELOG.md": "502d7bff9909f27e5b0e0d1d011e73be",
     "LICENSE": "3b83ef96387f14655fc854ddc3c6bd57",
     "Modulefile": "8192f7a6b8973ab8bb6b5a70a2a91c7d",
     "NOTICE": "5bba9c4ae34d6b59726431d6616e3275",
-    "README.md": "27d22266146b0f170dc83b23e58e5c72",
+    "README.md": "6dc94ba72eb97b63a9d33250d4771e3f",
     "lib/puppet/parser/functions/generate_clients.rb": "8d19448123e2a8d8a2d2fd7e4f13679a",
-    "manifests/client/config.pp": "f645c915a3743dd56ee3775865a40b17",
+    "manifests/client/config.pp": "04f89a61ca1e7d751d8f15d545b60c45",
     "manifests/client.pp": "09162ee9bbc6cea52f30d49924e5a2d3",
     "manifests/common.pp": "7d29f26b890f789c1289029e4b23a6a7",
     "manifests/console/bat.pp": "f3d4c8bd85cf6758c9d1077dbcc5230c",

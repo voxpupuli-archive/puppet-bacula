@@ -12,10 +12,10 @@
 #   The director's password the client is connecting to.
 # [*director_server*]
 #   The FQDN of the director server the client will connect to.
-# [*pool*]
-#   The pool used by the client for backups
 # [*fileset*]
 #   The file set used by the client for backups
+# [*pool*]
+#   The pool used by the client for backups
 # [*storage_server*]
 #   The storage server hosting the pool this client will backup to
 #
@@ -26,8 +26,8 @@
 #     db_backend        => 'mysql',
 #     director_password => 'directorpassword',
 #     director_server   => 'bacula.example.com',
-#     pool              => 'otherpool',
 #     fileset           => 'Basic:noHome',
+#     pool              => 'otherpool',
 #     storage_server    => 'bacula.example.com',
 #   }
 #

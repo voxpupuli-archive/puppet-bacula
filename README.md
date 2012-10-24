@@ -196,6 +196,10 @@ The FQDN of the director server the client will connect to.
 
 The file set used by the client for backups
 
+### pool
+
+The pool used by the client for backups
+
 ### storage_server
 
 The storage server hosting the pool this client will backup to
@@ -447,6 +451,7 @@ stored the custom template.
 * Add ability to create custom Filesets.
 * Add ability to create custom schedules.
 * Add ability to configure storage servers external to the director.
+* Add ability to configure multiple pools on a storage server
 * PostgreSQL support
 * [rspec-puppet](http://rspec-puppet.com/) unit tests.
 
