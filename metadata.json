@@ -41,7 +41,7 @@
     "manifests/director.pp": "d206ef270054d4c5bfc3897fd732acfa",
     "manifests/init.pp": "3c3440936c202d35e569fcd6dcc6df15",
     "manifests/params/validate.pp": "62e017dc8721bc0f6444556eace26ec1",
-    "manifests/params.pp": "1e36647c65f3cc80e7ca02125584e161",
+    "manifests/params.pp": "d487210e565227ad512ebd04780f512d",
     "manifests/storage.pp": "52d8a75598f5be9e0426023c108f8c59",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "e238222912be66314673d545d2f50c49",

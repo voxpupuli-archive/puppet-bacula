@@ -29,30 +29,34 @@
 # limitations under the License.
 #
 class bacula::params {
-
-  $bat_console_package = $::operatingsystem ? {
+  $bat_console_package         = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-console-qt',
     default           => 'bacula-console-bat',
   }
-  $console_package = 'bacula-console'
-  $director_mysql_package = 'bacula-director-mysql'
-  $director_postgresql_package = 'bacula-director-pgsql'
-  $director_server_default = "bacula.${::domain}"
-  $director_service = $::operatingsystem ? {
+  $console_package             = 'bacula-console'
+  $director_mysql_package      = 'bacula-director-mysql'
+  $director_postgresql_package = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => 'bacula-director-pgsql',
+    default           => 'bacula-director-postgresql',
+  }
+  $director_server_default     = "bacula.${::domain}"
+  $director_service            = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-director',
     default           => 'bacula-dir',
   }
-  $director_sqlite_package = 'bacula-director-sqlite'
-  $mail_to_default= "root@${::fqdn}"
-
-  $storage_package_prefix = $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => 'bacula-sd',
-    default           => 'bacula-storage',
+  $director_sqlite_package     = 'bacula-director-sqlite'
+  $mail_to_default             = "root@${::fqdn}"
+  $storage_mysql_package       = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => 'bacula-sd-mysql',
+    default           => 'bacula-storage-mysql',
   }
-
-  $storage_mysql_package = "${storage_package_prefix}-mysql"
-  $storage_postgresql_package = "${storage_package_prefix}-pgsql"
-  $storage_server_default = "bacula.${::domain}"
-  $storage_sqlite_package = 'bacula-storage-sqlite'
-
+  $storage_postgresql_package  = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => 'bacula-sd-pgsql',
+    default           => 'bacula-storage-postgresql',
+  }
+  $storage_server_default      = "bacula.${::domain}"
+  $storage_sqlite_package      = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => 'bacula-sd-sqlite',
+    default           => 'bacula-storage-sqlite',
+  }
 }
