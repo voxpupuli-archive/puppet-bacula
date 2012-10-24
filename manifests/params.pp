@@ -45,7 +45,7 @@ class bacula::params {
   $director_sqlite_package = 'bacula-director-sqlite'
   $mail_to_default= "root@${::fqdn}"
  
-  $storage_package_prefix = $::operatingsystem {
+  $storage_package_prefix = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd',
     default           => 'bacula-storage',
   }
