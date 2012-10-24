@@ -96,9 +96,9 @@ class bacula::params::validate(
   }
 
   if $db_backend != 'sqlite' {
-    if $db_backend != 'pgsql' {
+    if $db_backend != 'postgresql' {
       if $db_backend != 'mysql' {
-        fail '$db_backend must be either \'sqlite\', \'pgsql\', or \'mysql\''
+        fail '$db_backend must be either \'sqlite\', \'postgresql\', or \'mysql\''
       }
       if empty($db_host) {
         fail '$db_host cannot be empty'

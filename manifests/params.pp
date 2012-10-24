@@ -36,7 +36,7 @@ class bacula::params {
   }
   $console_package = 'bacula-console'
   $director_mysql_package = 'bacula-director-mysql'
-  $director_pgsql_package = 'bacula-director-pgsql'
+  $director_postgresql_package = 'bacula-director-pgsql'
   $director_server_default = "bacula.${::domain}"
   $director_service = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-director',
@@ -44,14 +44,14 @@ class bacula::params {
   }
   $director_sqlite_package = 'bacula-director-sqlite'
   $mail_to_default= "root@${::fqdn}"
- 
+
   $storage_package_prefix = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd',
     default           => 'bacula-storage',
   }
 
   $storage_mysql_package = "${storage_package_prefix}-mysql"
-  $storage_pgsql_package = "${storage_package_prefix}-pgsql"
+  $storage_postgresql_package = "${storage_package_prefix}-pgsql"
   $storage_server_default = "bacula.${::domain}"
   $storage_sqlite_package = 'bacula-storage-sqlite'
 

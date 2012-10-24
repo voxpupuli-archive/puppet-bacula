@@ -13,6 +13,7 @@
 * Merge [pull request](https://github.com/rharrison10/rharrison-bacula/pull/1)
   from [Erik Smit](https://github.com/erik-smit)
 * Syntax cleanup
+* Move CHANGELOG to Markdown format
 
 ### 2012-10-24  erik-smit <smite@zylon.net>
 * Config default plugin directory for file daemon
