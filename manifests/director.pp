@@ -73,10 +73,10 @@ class bacula::director(
     create_resources('bacula::client::config', $clients)
 #  }
 
-#TODO add postgresql support
+#TODO add pgsql support
   $db_package = $db_backend ? {
     'mysql'       => $bacula::params::director_mysql_package,
-    'postgresql'  => $bacula::params::director_postgresql_package,
+    'pgsql'       => $bacula::params::director_pgsql_package,
     default       => $bacula::params::director_sqlite_package,
   }
 

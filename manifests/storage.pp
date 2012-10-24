@@ -62,7 +62,7 @@ class bacula::storage(
   # necessarily installing the bacula-storage-mysql package
   $db_package = $db_backend ? {
     'mysql'       => $bacula::params::storage_mysql_package,
-    'postgresql'  => $bacula::params::storage_postgresql_package,
+    'pgsql'       => $bacula::params::storage_pgsql_package,
     default       => $bacula::params::storage_sqlite_package,
   }
 

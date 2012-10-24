@@ -96,20 +96,22 @@ class bacula::params::validate(
   }
 
   if $db_backend != 'sqlite' {
-    if $db_backend != 'mysql' {
-      fail '$db_backend must be either \'sqlite\' or \'mysql\''
-    }
-    if empty($db_host) {
-      fail '$db_host cannot be empty'
-    }
-    if empty($db_user) {
-      fail '$db_user cannot be empty'
-    }
-    if ! is_integer($db_port) {
-      fail '$db_port must be a port number'
-    }
-    if empty($db_password) {
-      fail '$db_password cannot be empty'
+    if $db_backend != 'pgsql' {
+      if $db_backend != 'mysql' {
+        fail '$db_backend must be either \'sqlite\', \'pgsql\', or \'mysql\''
+      }
+      if empty($db_host) {
+        fail '$db_host cannot be empty'
+      }
+      if empty($db_user) {
+        fail '$db_user cannot be empty'
+      }
+      if ! is_integer($db_port) {
+        fail '$db_port must be a port number'
+      }
+      if empty($db_password) {
+        fail '$db_password cannot be empty'
+      }
     }
   }
 }
