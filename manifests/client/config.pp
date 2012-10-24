@@ -55,7 +55,7 @@ define bacula::client::config (
   $director_password = '',
   $director_server   = undef,
   $fileset           = 'Basic:noHome',
-  $pool              = undef,
+  $pool              = 'default',
   $storage_server    = undef,
 ) {
   include bacula::params
@@ -118,15 +118,6 @@ define bacula::client::config (
 
   if !is_domain_name($storage_server_real) {
     fail "storage_server=${storage_server_real} must be a fully qualified domain name"
-  }
-
-  case $pool {
-    undef   : { 
-      $pool_real = "${storage_server_real}:pool:default"
-    }
-    default : {
-      $pool_real = $pool
-    }
   }
 
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
