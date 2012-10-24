@@ -31,7 +31,7 @@
     "NOTICE": "5bba9c4ae34d6b59726431d6616e3275",
     "README.md": "27d22266146b0f170dc83b23e58e5c72",
     "lib/puppet/parser/functions/generate_clients.rb": "8d19448123e2a8d8a2d2fd7e4f13679a",
-    "manifests/client/config.pp": "ee23c34b126327f24b2af0afb6d28027",
+    "manifests/client/config.pp": "f645c915a3743dd56ee3775865a40b17",
     "manifests/client.pp": "09162ee9bbc6cea52f30d49924e5a2d3",
     "manifests/common.pp": "7d29f26b890f789c1289029e4b23a6a7",
     "manifests/console/bat.pp": "f3d4c8bd85cf6758c9d1077dbcc5230c",

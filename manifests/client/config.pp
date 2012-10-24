@@ -56,7 +56,7 @@ define bacula::client::config (
   $director_server   = undef,
   $fileset           = 'Basic:noHome',
   $pool              = 'default',
-  $storage_server    = undef,
+  $storage_server    = undef
 ) {
   include bacula::params
 
