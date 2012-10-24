@@ -2,11 +2,11 @@
 #
 # Bacula File Daemon Configuration
 #   for <%= hostname.split('.').first %>
-#   via <%= director_server -%>:director (<%= director_server -%>)
+#   via <%= director_server_real -%>:director (<%= director_server_real -%>)
 
 # Configure the Director which will manage this host's backups
 Director {
-  Name = "<%= director_name -%>:director"
+  Name = "<%= director_server_real -%>:director"
   Password = "<%= director_password -%>"
 }
 
@@ -20,6 +20,6 @@ FileDaemon {
 
 # Finally, set where the messages are going to go
 Messages {
-  Name = "<%= director_name -%>:messages:standard"
-  Director = "<%= director_name -%>:director" = all, !skipped, !restored
+  Name = "<%= director_server_real -%>:messages:standard"
+  Director = "<%= director_server_real -%>:director" = all, !skipped, !restored
 }

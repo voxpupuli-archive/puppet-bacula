@@ -1,50 +1,65 @@
-# Class: bacula::client
+# == Class: bacula::client
 #
 # This class manages the bacula client (bacula-fd)
 #
-# Parameters:
-#   $director_server:
-#       The FQDN of the bacula director
-#   $director_password:
-#       The director's password
-#   $client_package:
-#       The name of the package to install the bacula-fd service.
+# === Parameters
 #
-# Actions:
-#   - Enforce the $client_package package be installed
-#   - Manage the /etc/bacula/bacula-fd.conf file
-#   - Enforce the bacula-fd service to be running
+# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# are documented there.
 #
-# Sample Usage:
-# 
-# class { 'bacula::client':
-#   director_server   => 'bacula.domain.com',
-#   director_password => 'XXXXXXXXXX',
-#   client_package    => 'bacula-client',
-# }
+# === Actions:
+# * Enforce the client package package be installed
+# * Manage the +/etc/bacula/bacula-fd.conf+ file
+# * Enforce the +bacula-fd+ service to be running
+#
+# === Copyright
+#
+# Copyright 2012 Russell Harrison
+#
+# === License
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 class bacula::client(
-    $director_server,
-    $director_password,
-    $client_package
+    $director_password  = '',
+    $director_server    = undef
   ) {
+  include bacula::params
 
-  $director_name_array = split($director_server, '[.]')
-  $director_name = $director_name_array[0]
+  $director_server_real = $director_server ? {
+    undef   => $bacula::params::director_server_default,
+    default => $director_server,
+  }
 
-  package { $client_package:
-    ensure => installed,
+  package { 'bacula-client':
+    ensure => present,
   }
 
   file { '/etc/bacula/bacula-fd.conf':
     ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
     content => template('bacula/bacula-fd.conf.erb'),
+    require => [
+      Package['bacula-client'],
+      File['/var/lib/bacula', '/var/run/bacula'],
+    ],
     notify  => Service['bacula-fd'],
-    require => Package[$client_package],
   }
 
   service { 'bacula-fd':
     ensure  => running,
     enable  => true,
-    require => Package[$client_package],
   }
 }

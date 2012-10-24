@@ -1,0 +1,9 @@
+#!/bin/bash
+package_script=/usr/libexec/bacula/make_sqlite3_tables
+make_script=`mktemp --tmpdir make_sqlite3_tables.XXXXXXXXXX.sh`
+sed -e '/bindir=/a dbdir=/var/lib/bacula' \
+-e 's_/var/spool/bacula_\$dbdir_g' \
+-e 's/db_name=bacula/db_name=<%= db_database -%>/g' $package_script > $make_script
+
+bash $make_script
+rm -r $make_script

@@ -1,24 +1,24 @@
 # DO NOT EDIT - Managed by Puppet
 #
 # Bacula Director Master Configuration
-#   for <%= director_name %>
+#   for <%= director_server_real %>
 
 # Define the name of this director so other clients can
 # connect to it and work with our system
 Director {
-  Name = "<%= director_name -%>:director"
+  Name = "<%= director_server_real -%>:director"
   Query File = "/etc/bacula/scripts/query.sql"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 5
-  Password = "<%= password -%>"
-  Messages = "<%= director_name -%>:messages:daemon"
+  Password = "<%= director_password -%>"
+  Messages = "<%= director_server_real -%>:messages:daemon"
 }
 
 # This is where the catalog information will be stored (basically
 # this should be how to connect to whatever database we're using)
 Catalog {
-  Name = "<%= director_name -%>:<%= db_backend -%>"
+  Name = "<%= director_server_real -%>:<%= db_backend -%>"
   dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
   <% unless db_backend == 'sqlite' -%>
   dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
@@ -28,32 +28,32 @@ Catalog {
 # Configure how the directory will log and/or send messages. This
 # should should be for just about everything.
 Messages {
-  Name = "<%= director_name -%>:messages:standard"
+  Name = "<%= director_server_real -%>:messages:standard"
   Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula %t %e (for %c)\" %r"
   Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
-  Mail = <%= mail_to -%> = all, !skipped
-  Operator = <%= mail_to -%> = mount
+  Mail = <%= mail_to_real -%> = all, !skipped
+  Operator = <%= mail_to_real -%> = mount
   Console = all, !skipped, !saved
   # WARNING! the following will create a file that you must cycle from
   #          time to time as it will grow indefinitely. However, it will
   #          also keep all your messages if they scroll off the console.
-  Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
+  Append = "/var/log/bacula/<%= director_server_real -%>:director.log" = all, !skipped
   Catalog = all
 }
 
 # These are messages directly from the various daemons themselves.
 Messages {
-  Name = "<%= director_name -%>:messages:daemon"
+  Name = "<%= director_server_real -%>:messages:daemon"
   Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Notice (from Director %d)\" %r"
-  Mail = <%= mail_to -%> = all, !skipped
+  Mail = <%= mail_to_real -%> = all, !skipped
   Console = all, !skipped, !saved
-  Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
+  Append = "/var/log/bacula/<%= director_server_real -%>:director.log" = all, !skipped
 }
 
 <% if use_console -%>
 # Restricted console used by tray-monitor to get the status of the director
 Console {
-  Name = "<%= director_name -%>:monitor:director"
+  Name = "<%= director_server_real -%>:monitor:director"
   Password = "<%= console_password -%>"
   CommandACL = status, .status
 }
@@ -61,20 +61,20 @@ Console {
 
 # DEFAULT STORAGE SERVER ------------------------------------------------------
 # All the clients will define their own Storage Daemon configuration as they
-# will connect to a dedicated File device on that director_name (to aid Pool & Volume
+# will connect to a dedicated File device on that director (to aid Pool & Volume
 # management along with concurrent access). This section will define a default
 # Storage Daemon to connect to (using the standard FileStorage device) and a
 # Pool which will be used with that as well.
 Storage {
-  Name = "<%= storage_name -%>:storage:default"
-  Address = <%= storage_name %>
-  Password = "<%= password -%>"
+  Name = "<%= storage_server_real -%>:storage:default"
+  Address = <%= storage_server_real %>
+  Password = "<%= director_password -%>"
   Device = "FileStorage"
   Media Type = File
 }
 
 Pool {
-  Name = "<%= storage_name -%>:pool:default"
+  Name = "<%= storage_server_real -%>:pool:default"
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
@@ -90,10 +90,10 @@ Pool {
 }
 
 Pool {
-  Name = "<%= storage_name -%>:pool:catalog"
+  Name = "<%= storage_server_real -%>:pool:catalog"
   # All Volumes will have the format director.catalog.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
-  Label Format = "<%= director_name -%>.catalog.${Counter<%= server.capitalize -%>Catalog+:p/3/0/r}"
+  Label Format = "<%= director_server_real -%>.catalog.${Counter<%= director_server_real.capitalize -%>Catalog+:p/3/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
@@ -108,9 +108,9 @@ Pool {
 
 # Create a Counter which will be used to label the catalog volumes on the sytem
 Counter {
-  Name    = "Counter<%= server.capitalize -%>Catalog"
+  Name    = "Counter<%= director_server_real.capitalize -%>Catalog"
   Minimum = 1
-  Catalog = "<%= director_name -%>:<%= db_backend %>"
+  Catalog = "<%= director_server_real -%>:<%= db_backend %>"
 }
 
 # FILE SETS -------------------------------------------------------------------
@@ -118,7 +118,7 @@ Counter {
 # what within those should not be). In general, we have two types:
 #
 #   Basic:noHome     This doesn't back up the /home directory as its mounted
-#                    from an NFS director_name on the network (this is the default).
+#                    from an NFS director on the network (this is the default).
 #   Basic:withHome   This one does for servers where we don't mount NFS on it.
 
 FileSet {
@@ -129,7 +129,7 @@ FileSet {
       Compression = GZIP
     }
 
-    # Don't worry about most of the director_name as Puppet manages the
+    # Don't worry about most of the director as Puppet manages the
     # configuration. Ensure that per-machine state files or settings
     # are backed up, along with stuff from /var or /srv which should be
     # most service-related files
@@ -139,7 +139,7 @@ FileSet {
     File = /var
     File = /opt
     File = /srv
-    # /home will not be backed up on any normal director_name as it's managed from
+    # /home will not be backed up on any normal director as it's managed from
     # a central file-server for most servers.
   }
 
@@ -295,11 +295,11 @@ JobDefs {
   Level = Incremental
   FileSet = "Basic:<%= doHome -%>"
   Schedule = "Weekly:on<%= onDay -%>"
-  Messages = "<%= director_name -%>:messages:standard"
+  Messages = "<%= director_server_real -%>:messages:standard"
   # Set the job to work as standard with the default Pool & Storage
   # (this will be overridden by the Job configuration for each Client)
-  Storage = "<%= storage_name -%>:storage:default"
-  Pool = "<%= storage_name -%>:pool:default"
+  Storage = "<%= storage_server_real -%>:storage:default"
+  Pool = "<%= storage_server_real -%>:pool:default"
   Write Bootstrap = "/var/lib/bacula/%c.bsr"
   Priority = 15
   # Define how long any of these jobs are allowed to run for before we should

@@ -1,151 +1,162 @@
-# Class: bacula
+# == Class: bacula
 #
 # This is the main class to manage all the components of a Bacula
 # infrastructure. This is the only class that needs to be declared.
 #
-# Parameters:
-#   $db_backend:
-#     The database backend to use
-#   $mail_to:
-#     Address to email reports to
-#   $is_director:
-#     Whether the node should be a director
-#   $is_client
-#     Whether the node should be a client
-#   $is_storage
-#     Whether the node should be a storage server
-#   $director_password
-#     The director's password
-#   $console_password
-#     The console's password
-#   $director_server
-#     The FQDN of the bacula director
-#   $storage_server
-#     The FQDN of the storage server
-#   $manage_console
-#     Whether the bconsole should be managed on the node
-#   $manage_bat
-#     Whether the bat should be managed on the node
-#   $director_package
-#     The name of the package to install the director
-#   $storage_package
-#     The name of the package to install the storage
-#   $client_package
-#     The name of the package to install the client
-#   $director_sqlite_package
-#     The name of the package to install the director's sqlite functionality
-#   $storage_sqlite_package
-#     The name of the package to install the storage daemon's sqlite functionality
-#   $director_mysql_package
-#     The name of the package to install the director's mysql functionality
-#   $storage_mysql_package
-#     The name of the package to install the storage's sqlite functionality
-#   $director_template
-#     The ERB template to use for configuring the director instead of the one included with the module
-#   $storage_template
-#     The ERB template to use for configuring the storage daemon instead of the one included with the module
-#   $console_template
-#     The ERB template to use for configuring the bconsole instead of the one included with the module
-#   $use_console
-#     Whether to configure a console resource on the director
-#   $console_password
-#     The password to use for the console resource on the director
-#   $db_user
-#     The user to authenticate to $db_db with.
-#   $db_password
-#     The password to authenticate $db_user with
-#   $db_host
-#     The db server host to connect to
-#   $db_database
-#     The db database to connect to on $db_host
-#   $console_package
-#     The package to install the bconsole application
-#   $manage_db_tables
-#     Whether to create the DB tables during install
-#   $manage_db
-#     Whether to manage the existance of the database.  If true, the $db_user must have privileges 
-#     to create databases on $db_host
-#   $clients
-#     For directors, $clients is a hash of clients.  The keys are the clients while the value is a hash of parameters
-#     The parameters accepted are fileset and schedule.
+# === Parameters:
 #
-# Example clients hash
+# [*clients*]
+#   For directors, +$clients+ is a hash of clients.  The keys are the clients while the value is a hash of parameters. The
+#   parameters accepted are the same as the +bacula::client::config+ define.
+# [*console_password*]
+#   The console's password
+# [*console_template*]
+#   The ERB template to use for configuring the bconsole instead of the one
+#   included with the module
+# [*db_backend*]
+#   The database backend to use
+# [*db_database*]
+#   The db database to connect to on +$db_host+
+# [*db_host*]
+#   The db server host to connect to
+# [*db_password*]
+#   The password to authenticate +$db_user+ with
+# [*db_port*]
+#   The port to connect to the database server on
+# [*db_user*]
+#   The user to authenticate to +$db_db+ with.
+# [*db_user_host*]
+#   The host string used by MySQL to allow connections from
+# [*director_password*]
+#   The director's password
+# [*director_server*]
+#   The FQDN of the bacula director
+# [*director_template*]
+#   The ERB template to use for configuring the director instead of the one
+#   included with the module
+# [*is_client*]
+#   Whether the node should be a client
+# [*is_director*]
+#   Whether the node should be a director
+# [*is_storage*]
+#   Whether the node should be a storage server
+# [*mail_to*]
+#   Address to email reports to
+# [*manage_console*]
+#   Whether the bconsole should be managed on the node
+# [*manage_bat*]
+#   Whether the bat should be managed on the node
+# [*manage_db*]
+#   Whether to manage the existence of the database.  If true, the +$db_user+
+#   must have privileges to create databases on +$db_host+
+# [*manage_db_tables*]
+#   Whether to create the DB tables during install
+# [*storage_server*]
+#   The FQDN of the storage server
+# [*storage_template*]
+#   The ERB template to use for configuring the storage daemon instead of the
+#   one included with the module
+# [*use_console*]
+#   Whether to configure a console resource on the director
+#
+# === Sample Usage
+#
 #  $clients = {
-#    'somenode' => {
-#      'fileset'  => 'Basic:noHome',
-#      'schedule' => 'Hourly',
+#    'node1.example.com' => {
+#      'fileset'         => 'Basic:noHome',
+#      'client_schedule' => 'Hourly',
 #    },
-#    'node2' => {
-#      'fileset'  => 'Basic:noHome',
-#      'schedule' => 'Hourly',
+#    'node2.example.com' => {
+#      'fileset'         => 'Basic:noHome',
+#      'client_schedule' => 'Hourly',
 #    }
 #  }
 #
+#  class { 'bacula':
+#    is_storage        => true,
+#    is_director       => true,
+#    is_client         => true,
+#    manage_console    => true,
+#    director_password => 'xxxxxxxxx',
+#    console_password  => 'xxxxxxxxx',
+#    director_server   => 'bacula.domain.com',
+#    mail_to           => 'bacula-admin@domain.com',
+#    storage_server    => 'bacula.domain.com',
+#    clients           => $clients,
+#  }
 #
-# Sample Usage
+# === Copyright
 #
-# class { 'bacula':
-#   is_storage        => true,
-#   is_director       => true,
-#   is_client         => true,
-#   manage_console    => true,
-#   director_password => 'xxxxxxxxx',
-#   console_password  => 'xxxxxxxxx',
-#   director_server   => 'bacula.domain.com',
-#   mail_to           => 'bacula-admin@domain.com',
-#   storage_server    => 'bacula.domain.com',
-#   clients           => $clients,
-# }
-class bacula(
-    $db_backend              = $bacula::config::db_backend,
-    $db_user                 = $bacula::config::db_user,
-    $db_password             = $bacula::config::db_password,
-    $db_host                 = $bacula::config::db_host,
-    $db_database             = $bacula::config::db_database,
-    $db_port                 = $bacula::config::db_port,
-    $manage_db               = $bacula::config::safe_manage_db,
-    $manage_db_tables        = $bacula::config::safe_manage_db_tables,
-    $mail_to                 = $bacula::config::mail_to,
-    $is_director             = $bacula::config::safe_is_director, 
-    $is_client               = $bacula::config::safe_is_client,
-    $is_storage              = $bacula::config::safe_is_storage,
-    $director_password       = $bacula::config::director_password,
-    $console_password        = $bacula::config::console_password,
-    $director_server         = $bacula::config::bacula_director_server,
-    $storage_server          = $bacula::config::bacula_storage_server,
-    $manage_console          = $bacula::config::safe_manage_console,
-    $console_package         = $bacula::config::console_package,
-    $manage_bat              = $bacula::config::safe_manage_bat,
-    $director_package        = $bacula::config::director_package,
-    $storage_package         = $bacula::config::storage_package,
-    $client_package          = $bacula::config::client_package,
-    $director_sqlite_package = $bacula::config::director_sqlite_package,
-    $storage_sqlite_package  = $bacula::config::storage_sqlite_package,
-    $director_mysql_package  = $bacula::config::director_mysql_package,
-    $storage_mysql_package   = $bacula::config::storage_mysql_package,
-    $director_template       = $bacula::config::director_template,
-    $storage_template        = $bacula::config::storage_template,
-    $console_template        = $bacula::config::console_template,
-    $use_console             = $bacula::config::safe_use_console,
-    $console_password        = $bacula::config::console_password,
-    $clients                 = {}
-  ) inherits bacula::config {
-    
+# Copyright 2012 Russell Harrison
+#
+# === License
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+class bacula (
+  $console_password   = '',
+  $console_template   = undef,
+  $db_backend         = 'sqlite',
+  $db_user            = '',
+  $db_password        = '',
+  $db_host            = 'localhost',
+  $db_user_host       = undef,
+  $db_database        = 'bacula',
+  $db_port            = '3306',
+  $director_password  = '',
+  $director_server    = undef,
+  $director_template  = undef,
+  $is_client          = true,
+  $is_director        = false,
+  $is_storage         = false,
+  $mail_to            = undef,
+  $manage_db          = false,
+  $manage_db_tables   = true,
+  $manage_console     = false,
+  $manage_bat         = false,
+  $storage_server     = undef,
+  $storage_template   = undef,
+  $use_console        = false,
+  $clients            = {}
+) {
 
+  include bacula::params
 
+  $director_server_real = $director_server ? {
+    undef   => $bacula::params::director_server_default,
+    default => $director_server,
+  }
+  $storage_server_real = $storage_server ? {
+    undef   => $bacula::params::storage_server_default,
+    default => $storage_server,
+  }
+  $mail_to_real = $mail_to ? {
+    undef   => $bacula::params::mail_to_default,
+    default => $mail_to,
+  }
   #Validate our parameters
   #It's ugly to do it in the parent class
-  class { 'bacula::config::validate':
+  class { 'bacula::params::validate':
     db_backend        => $db_backend,
-    mail_to           => $mail_to,
-    is_director       => $is_director,
+    mail_to           => $mail_to_real,
     is_client         => $is_client,
+    is_director       => $is_director,
     is_storage        => $is_storage,
     director_password => $director_password,
     use_console       => $use_console,
     console_password  => $console_password,
-    director_server   => $director_server,
-    storage_server    => $storage_server,
+    director_server   => $director_server_real,
+    storage_server    => $storage_server_real,
     manage_console    => $manage_console,
     manage_bat        => $manage_bat,
     db_user           => $db_user,
@@ -158,75 +169,71 @@ class bacula(
   }
 
   class { 'bacula::common':
-    manage_db_tables => $manage_db_tables,
-    db_backend       => $db_backend,
-    db_user          => $db_user,
-    db_password      => $db_password,
-    db_host          => $db_host,
-    db_database      => $db_database,
-    db_port          => $db_port,
-    packages         => $packages,
+    manage_db_tables  => $manage_db_tables,
+    db_backend        => $db_backend,
+    db_user           => $db_user,
+    db_password       => $db_password,
+    db_host           => $db_host,
+    db_database       => $db_database,
+    db_port           => $db_port,
+    is_client         => $is_client,
+    is_director       => $is_director,
+    is_storage        => $is_storage,
+    manage_console    => $manage_console,
+    manage_bat        => $manage_bat,
   }
 
-  
+
   if $is_director {
     class { 'bacula::director':
-      db_backend       => $db_backend,
-      server           => $director_server,
-      storage_server   => $storage_server,
-      password         => $director_password,
-      mysql_package    => $director_mysql_package,
-      sqlite_package   => $director_sqlite_package,
-      director_package => $director_package,
-      mail_to          => $mail_to,
-      template         => $director_template,
-      use_console      => $use_console,
-      console_password => $console_password,
-      db_user          => $db_user,
-      db_password      => $db_password,
-      db_host          => $db_host,
-      db_port          => $db_port,
-      db_database      => $db_database,
-      require          => Class['bacula::common'],
+      db_backend        => $db_backend,
+      director_server   => $director_server_real,
+      storage_server    => $storage_server_real,
+      director_password => $director_password,
+      mail_to           => $mail_to_real,
+      dir_template      => $director_template,
+      use_console       => $use_console,
+      console_password  => $console_password,
+      db_user           => $db_user,
+      db_password       => $db_password,
+      db_host           => $db_host,
+      db_user_host      => $db_user_host,
+      db_port           => $db_port,
+      db_database       => $db_database,
+      manage_db         => $manage_db,
+      manage_db_tables  => $manage_db_tables,
+      clients           => $clients,
     }
   }
 
   if $is_storage {
     class { 'bacula::storage':
       db_backend        => $db_backend,
-      director_server   => $director_server,
+      director_server   => $director_server_real,
       director_password => $director_password,
-      storage_server    => $storage_server,
-      mysql_package     => $storage_mysql_package,
-      sqlite_package    => $storage_sqlite_package,
-      storage_package   => $storage_package,
+      storage_server    => $storage_server_real,
       console_password  => $console_password,
-      template          => $storage_template,
-      require           => Class['bacula::common'],
+      storage_template  => $storage_template,
     }
   }
 
   if $is_client {
-    class { 'bacula::client': 
-      director_server   => $director_server,
+    class { 'bacula::client':
+      director_server   => $director_server_real,
       director_password => $director_password,
-      client_package    => $client_package,
-      require           => Class['bacula::common'],
     }
   }
 
   if $manage_console {
     class { 'bacula::console':
-      director_server   => $director_server,
+      director_server   => $director_server_real,
       director_password => $director_password,
-      console_package   => $console_package,
-      require           => Class['bacula::common'],
+      console_template  => $console_template,
     }
   }
 
   if $manage_bat {
-    class { 'bacula::bat': 
-      require => Class['bacula::common'],
+    class { 'bacula::console::bat':
     }
   }
 }
