@@ -20,7 +20,7 @@ Director {
 Catalog {
   Name = "<%= director_server_real -%>:<%= db_backend -%>"
   dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
-  <% unless db_backend == 'sqlite' -%>
+  <% if db_backend == 'mysql' # postgres and sqlite don't require these settings -%>
   dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
   <% end %>
 }
