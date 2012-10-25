@@ -120,6 +120,14 @@ define bacula::client::config (
     fail "storage_server=${storage_server_real} must be a fully qualified domain name"
   }
 
+  $plugin_dir = $::operatingsystem ? {
+    /(?i:RedHat|CentOS|Scientific/ => $::architecture ? {
+      x86_64  => '/usr/lib64/bacula',
+      default => '/usr/lib/bacula',
+    },
+    default => '/usr/lib/bacula'
+  }
+ 
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
     ensure  => file,
     owner   => 'bacula',
