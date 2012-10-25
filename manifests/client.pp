@@ -46,7 +46,7 @@ class bacula::client(
   }
 
   $plugin_dir = $::operatingsystem ? {
-    /(?i:RedHat|CentOS|Scientific/ => $::architecture ? {
+    /(?i:RedHat|CentOS|Scientific)/ => $::architecture ? {
       x86_64  => '/usr/lib64/bacula',
       default => '/usr/lib/bacula',
     },
