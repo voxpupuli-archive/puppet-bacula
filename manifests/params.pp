@@ -59,4 +59,12 @@ class bacula::params {
     /(Debian|Ubuntu)/ => 'bacula-sd-sqlite',
     default           => 'bacula-storage-sqlite',
   }
+  $client_plugin_dir           = $::operatingsystem ? {
+    /(?i:RedHat|CentOS|Scientific)/ => $::architecture ? {
+      x86_64  => '/usr/lib64/bacula',
+      default => '/usr/lib/bacula',
+    },
+    default => '/usr/lib/bacula'
+  }
+
 }

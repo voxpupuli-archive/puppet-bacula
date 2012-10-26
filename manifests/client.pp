@@ -45,14 +45,6 @@ class bacula::client(
     ensure => present,
   }
 
-  $plugin_dir = $::operatingsystem ? {
-    /(?i:RedHat|CentOS|Scientific)/ => $::architecture ? {
-      x86_64  => '/usr/lib64/bacula',
-      default => '/usr/lib/bacula',
-    },
-    default => '/usr/lib/bacula'
-  }
-
   file { '/etc/bacula/bacula-fd.conf':
     ensure  => file,
     owner   => 'root',
