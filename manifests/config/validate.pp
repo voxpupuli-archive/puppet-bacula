@@ -52,7 +52,7 @@ class bacula::config::validate(
 
   #Validate server values aren't empty
   if empty($director_server) {
-    failse '$director_server cannot be empty'
+    fail '$director_server cannot be empty'
   }
   if empty($storage_server) {
     fail '$storage_server cannot be empty'
