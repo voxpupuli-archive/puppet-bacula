@@ -31,7 +31,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class bacula::common(
+class bacula::common (
   $db_backend       = 'sqlite',
   $db_database      = 'bacula',
   $db_host          = 'localhost',
@@ -44,7 +44,9 @@ class bacula::common(
   $manage_bat       = false,
   $manage_console   = false,
   $manage_db_tables = true,
-  $packages         = undef
+  $packages         = undef,
+  $plugin_dir       = undef,
+  $use_plugins      = true,
 ) {
   include bacula::params
 
@@ -53,16 +55,17 @@ class bacula::common(
       true    => Exec['make_db_tables'],
       default => undef,
     }
+
     package { $packages:
       ensure => installed,
       notify => $packages_notify,
     }
   }
 
-# The user and group are actually created by installing the bacula-common
-# package which is pulled in when any other bacula package is installed.
-# To work around the issue where every package resource is a separate run of
-# yum we add requires for the packages we already have to the group resource.
+  # The user and group are actually created by installing the bacula-common
+  # package which is pulled in when any other bacula package is installed.
+  # To work around the issue where every package resource is a separate run of
+  # yum we add requires for the packages we already have to the group resource.
   if $is_client {
     $require_package = 'bacula-client'
   } elsif $is_director {
@@ -70,12 +73,21 @@ class bacula::common(
   } elsif $is_storage {
     $require_package = $bacula::storage::db_package
   } elsif $manage_console {
-    $require_package =$bacula::params::console_package
+    $require_package = $bacula::params::console_package
   } elsif $manage_bat {
     $require_package = $bacula::params::bat_console_package
   }
 
-# Specify the user and group are present before we create files.
+  if $use_plugins {
+    file { $plugin_dir:
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+    }
+  }
+
+  # Specify the user and group are present before we create files.
   group { 'bacula':
     ensure  => present,
     require => Package[$require_package],

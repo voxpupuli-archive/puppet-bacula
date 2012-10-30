@@ -32,21 +32,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class bacula::storage(
-    $console_password   = '',
-    $db_backend         = 'sqlite',
-    $director_password  = '',
-    $director_server    = undef,
-    $storage_server     = undef,
-    $storage_template   = 'bacula/bacula-sd.conf.erb'
-  ) {
+class bacula::storage (
+  $console_password  = '',
+  $db_backend        = 'sqlite',
+  $director_password = '',
+  $director_server   = undef,
+  $plugin_dir        = undef,
+  $storage_server    = undef,
+  $storage_template  = 'bacula/bacula-sd.conf.erb',
+  $use_plugins       = true
+) {
   include bacula::params
 
   $director_server_real = $director_server ? {
     undef   => $bacula::params::director_server_default,
     default => $director_server,
   }
-  $storage_server_real = $storage_server ? {
+  $storage_server_real  = $storage_server ? {
     undef   => $bacula::params::storage_server_default,
     default => $storage_server,
   }
@@ -60,17 +62,17 @@ class bacula::storage(
   # However, if we install only the db compoenent package,
   # it will install the bacula-common package without
   # necessarily installing the bacula-storage-mysql package
-  $db_package = $db_backend ? {
-    'mysql'       => $bacula::params::storage_mysql_package,
-    'postgresql'  => $bacula::params::storage_postgresql_package,
-    default       => $bacula::params::storage_sqlite_package,
+  $db_package           = $db_backend ? {
+    'mysql'      => $bacula::params::storage_mysql_package,
+    'postgresql' => $bacula::params::storage_postgresql_package,
+    default      => $bacula::params::storage_sqlite_package,
   }
 
   package { $db_package:
     ensure => present,
   }
 
-  file { ['/mnt/bacula', '/mnt/bacula/default']:
+  file { [ '/mnt/bacula', '/mnt/bacula/default' ]:
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
@@ -87,10 +89,26 @@ class bacula::storage(
   }
 
   file { '/etc/bacula/bacula-sd.d/empty.conf':
-    ensure  => file,
-    owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0640',
+    ensure => file,
+    owner  => 'bacula',
+    group  => 'bacula',
+    mode   => '0640',
+  }
+
+  $file_requires = $use_plugins ? {
+    false   => File[
+      '/etc/bacula/bacula-sd.d/empty.conf',
+      '/mnt/bacula/default',
+      '/var/lib/bacula',
+      '/var/run/bacula'
+    ],
+    default => File[
+      '/etc/bacula/bacula-sd.d/empty.conf',
+      '/mnt/bacula/default',
+      '/var/lib/bacula',
+      '/var/run/bacula',
+      $plugin_dir
+    ],
   }
 
   file { '/etc/bacula/bacula-sd.conf':
@@ -99,12 +117,7 @@ class bacula::storage(
     group   => 'bacula',
     mode    => '0640',
     content => template($storage_template),
-    require => File[
-      '/etc/bacula/bacula-sd.d/empty.conf',
-      '/mnt/bacula/default',
-      '/var/lib/bacula',
-      '/var/run/bacula'
-    ],
+    require => $file_requires,
     notify  => Service['bacula-sd'],
   }
 

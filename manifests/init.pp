@@ -51,6 +51,11 @@
 #   must have privileges to create databases on +$db_host+
 # [*manage_db_tables*]
 #   Whether to create the DB tables during install
+# [*plugin_dir*]
+#   The directory Bacula plugins are stored in. Use this parameter if you want to override the default plugin
+#   location. If this is anything other than +undef+ it will also configure plugins on older distros were the default
+#   package is too old to support plugins.  Only use if the version in the distro repositories supports plugins or
+#   you have included a respository with a newer Bacula packaged for your distro.
 # [*storage_server*]
 #   The FQDN of the storage server
 # [*storage_template*]
@@ -104,116 +109,135 @@
 # limitations under the License.
 #
 class bacula (
-  $console_password   = '',
-  $console_template   = undef,
-  $db_backend         = 'sqlite',
-  $db_user            = '',
-  $db_password        = '',
-  $db_host            = 'localhost',
-  $db_user_host       = undef,
-  $db_database        = 'bacula',
-  $db_port            = '3306',
-  $director_password  = '',
-  $director_server    = undef,
-  $director_template  = undef,
-  $is_client          = true,
-  $is_director        = false,
-  $is_storage         = false,
-  $mail_to            = undef,
-  $manage_db          = false,
-  $manage_db_tables   = true,
-  $manage_console     = false,
-  $manage_bat         = false,
-  $storage_server     = undef,
-  $storage_template   = undef,
-  $use_console        = false,
-  $clients            = {}
+  $console_password  = '',
+  $console_template  = undef,
+  $db_backend        = 'sqlite',
+  $db_user           = '',
+  $db_password       = '',
+  $db_host           = 'localhost',
+  $db_user_host      = undef,
+  $db_database       = 'bacula',
+  $db_port           = '3306',
+  $director_password = '',
+  $director_server   = undef,
+  $director_template = undef,
+  $is_client         = true,
+  $is_director       = false,
+  $is_storage        = false,
+  $mail_to           = undef,
+  $manage_db         = false,
+  $manage_db_tables  = true,
+  $manage_console    = false,
+  $manage_bat        = false,
+  $plugin_dir        = undef,
+  $storage_server    = undef,
+  $storage_template  = undef,
+  $use_console       = false,
+  $clients           = {}
 ) {
-
   include bacula::params
 
   $director_server_real = $director_server ? {
     undef   => $bacula::params::director_server_default,
     default => $director_server,
   }
-  $storage_server_real = $storage_server ? {
+  $storage_server_real  = $storage_server ? {
     undef   => $bacula::params::storage_server_default,
     default => $storage_server,
   }
-  $mail_to_real = $mail_to ? {
+  $mail_to_real         = $mail_to ? {
     undef   => $bacula::params::mail_to_default,
     default => $mail_to,
   }
-  #Validate our parameters
-  #It's ugly to do it in the parent class
+
+  case $plugin_dir {
+    undef : {
+      $use_plugins     = $bacula::params::use_plugins
+      $plugin_dir_real = $bacula::params::plugin_dir
+    }
+    default : {
+      $use_plugins     = true
+      $plugin_dir_real = $plugin_dir
+    }
+  }
+
+  # Validate our parameters
+  # It's ugly to do it in the parent class
   class { 'bacula::params::validate':
+    console_password  => $console_password,
     db_backend        => $db_backend,
-    mail_to           => $mail_to_real,
+    db_database       => $db_database,
+    db_host           => $db_host,
+    db_password       => $db_password,
+    db_port           => $db_port,
+    db_user           => $db_user,
+    director_password => $director_password,
+    director_server   => $director_server_real,
     is_client         => $is_client,
     is_director       => $is_director,
     is_storage        => $is_storage,
-    director_password => $director_password,
-    use_console       => $use_console,
-    console_password  => $console_password,
-    director_server   => $director_server_real,
-    storage_server    => $storage_server_real,
-    manage_console    => $manage_console,
+    mail_to           => $mail_to_real,
     manage_bat        => $manage_bat,
-    db_user           => $db_user,
-    db_password       => $db_password,
-    db_host           => $db_host,
-    db_database       => $db_database,
-    db_port           => $db_port,
-    manage_db_tables  => $manage_db_tables,
+    manage_console    => $manage_console,
     manage_db         => $manage_db,
+    manage_db_tables  => $manage_db_tables,
+    plugin_dir        => $plugin_dir_real,
+    storage_server    => $storage_server_real,
+    use_console       => $use_console,
+    use_plugins       => $use_plugins,
   }
 
   class { 'bacula::common':
-    manage_db_tables  => $manage_db_tables,
-    db_backend        => $db_backend,
-    db_user           => $db_user,
-    db_password       => $db_password,
-    db_host           => $db_host,
-    db_database       => $db_database,
-    db_port           => $db_port,
-    is_client         => $is_client,
-    is_director       => $is_director,
-    is_storage        => $is_storage,
-    manage_console    => $manage_console,
-    manage_bat        => $manage_bat,
+    db_backend       => $db_backend,
+    db_database      => $db_database,
+    db_host          => $db_host,
+    db_password      => $db_password,
+    db_port          => $db_port,
+    db_user          => $db_user,
+    is_client        => $is_client,
+    is_director      => $is_director,
+    is_storage       => $is_storage,
+    manage_bat       => $manage_bat,
+    manage_console   => $manage_console,
+    manage_db_tables => $manage_db_tables,
+    plugin_dir       => $plugin_dir_real,
+    use_plugins      => $use_plugins,
   }
-
 
   if $is_director {
     class { 'bacula::director':
-      db_backend        => $db_backend,
-      director_server   => $director_server_real,
-      storage_server    => $storage_server_real,
-      director_password => $director_password,
-      mail_to           => $mail_to_real,
-      dir_template      => $director_template,
-      use_console       => $use_console,
+      clients           => $clients,
       console_password  => $console_password,
-      db_user           => $db_user,
-      db_password       => $db_password,
-      db_host           => $db_host,
-      db_user_host      => $db_user_host,
-      db_port           => $db_port,
+      db_backend        => $db_backend,
       db_database       => $db_database,
+      db_host           => $db_host,
+      db_password       => $db_password,
+      db_port           => $db_port,
+      db_user           => $db_user,
+      db_user_host      => $db_user_host,
+      dir_template      => $director_template,
+      director_password => $director_password,
+      director_server   => $director_server_real,
+      mail_to           => $mail_to_real,
       manage_db         => $manage_db,
       manage_db_tables  => $manage_db_tables,
-      clients           => $clients,
+      plugin_dir        => $plugin_dir_real,
+      storage_server    => $storage_server_real,
+      use_console       => $use_console,
+      use_plugins       => $use_plugins,
     }
   }
 
   if $is_storage {
     class { 'bacula::storage':
-      db_backend        => $db_backend,
-      director_server   => $director_server_real,
-      director_password => $director_password,
-      storage_server    => $storage_server_real,
       console_password  => $console_password,
+      db_backend        => $db_backend,
+      director_password => $director_password,
+      director_server   => $director_server_real,
+      plugin_dir        => $plugin_dir_real,
+      storage_server    => $storage_server_real,
       storage_template  => $storage_template,
+      use_plugins       => $use_plugins,
     }
   }
 
@@ -221,14 +245,16 @@ class bacula (
     class { 'bacula::client':
       director_server   => $director_server_real,
       director_password => $director_password,
+      plugin_dir        => $plugin_dir_real,
+      use_plugins       => $use_plugins,
     }
   }
 
   if $manage_console {
     class { 'bacula::console':
-      director_server   => $director_server_real,
-      director_password => $director_password,
       console_template  => $console_template,
+      director_password => $director_password,
+      director_server   => $director_server_real,
     }
   }
 

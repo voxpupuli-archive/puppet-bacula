@@ -150,6 +150,15 @@ to false. In order for this to work, you must declare the `mysql::server` class
 Whether to manage the SQL tables in the database specified by `db_backend`.
 Defaults to `true`.
 
+### plugin_dir
+
+The directory Bacula plugins are stored in. Use this parameter if you want to
+override the default plugin location. If this is anything other than `undef` it
+will also configure plugins on older distros were the default package is too
+old to support plugins.  Only use if the version in the distro repositories
+supports plugins or you have included a respository with a newer Bacula
+packaged for your distro.
+
 ### storage_server
 
 The FQDN of the storage server

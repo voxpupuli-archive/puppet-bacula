@@ -30,10 +30,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class bacula::client(
-    $director_password  = '',
-    $director_server    = undef
-  ) {
+class bacula::client (
+  $director_password = '',
+  $director_server   = undef,
+  $plugin_dir        = undef,
+  $use_plugins       = true
+) {
   include bacula::params
 
   $director_server_real = $director_server ? {
@@ -45,6 +47,11 @@ class bacula::client(
     ensure => present,
   }
 
+  $file_requires = $use_plugins ? {
+    false   => File['/var/lib/bacula', '/var/run/bacula'],
+    default => File['/var/lib/bacula', '/var/run/bacula', $plugin_dir]
+  }
+
   file { '/etc/bacula/bacula-fd.conf':
     ensure  => file,
     owner   => 'root',
@@ -53,13 +60,13 @@ class bacula::client(
     content => template('bacula/bacula-fd.conf.erb'),
     require => [
       Package['bacula-client'],
-      File['/var/lib/bacula', '/var/run/bacula'],
+      $file_requires,
     ],
     notify  => Service['bacula-fd'],
   }
 
   service { 'bacula-fd':
-    ensure  => running,
-    enable  => true,
+    ensure => running,
+    enable => true,
   }
 }

@@ -54,7 +54,7 @@ class bacula::params {
     default           => "/usr/${lib}"
   }
   $mail_to_default             = "root@${::fqdn}"
-  $client_plugin_dir           = "${libdir}/bacula"
+  $plugin_dir           = "${libdir}/bacula"
   $storage_mysql_package       = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-mysql',
     default           => 'bacula-storage-mysql',
@@ -64,8 +64,13 @@ class bacula::params {
     default           => 'bacula-storage-postgresql',
   }
   $storage_server_default      = "bacula.${::domain}"
-  $storage_sqlite_package      = $::operatingsystem ? {
+  $storage_sqlite_package = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-sqlite',
     default           => 'bacula-storage-sqlite',
+  }
+  if $::operatingsystem =~ /(?i:RedHat|CentOS|Scientific)/ and versioncmp($::operatingsystemrelease, '6') < 0 {
+    $use_plugins = false
+  } else {
+    $use_plugins = true
   }
 }

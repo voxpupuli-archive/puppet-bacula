@@ -40,18 +40,21 @@ class bacula::params::validate (
   $manage_console    = '',
   $manage_db         = '',
   $manage_db_tables  = '',
+  $plugin_dir        = '',
   $storage_server    = '',
-  $use_console       = ''
+  $use_console       = '',
+  $use_plugins       = ''
 ) {
   # Validate our booleans
-  validate_bool($manage_console)
-  validate_bool($manage_bat)
+  validate_bool($is_client)
   validate_bool($is_director)
   validate_bool($is_storage)
-  validate_bool($is_client)
-  validate_bool($use_console)
-  validate_bool($manage_db_tables)
+  validate_bool($manage_bat)
+  validate_bool($manage_console)
   validate_bool($manage_db)
+  validate_bool($manage_db_tables)
+  validate_bool($use_console)
+  validate_bool($use_plugins)
 
   if $use_console {
     if empty($console_password) {
@@ -117,5 +120,9 @@ class bacula::params::validate (
     default : {
       fail '$db_backend must be either \'sqlite\', \'postgresql\', or \'mysql\''
     }
+  }
+
+  if $use_plugins {
+    validate_absolute_path($plugin_dir)
   }
 }
