@@ -45,7 +45,16 @@ class bacula::params {
     default           => 'bacula-dir',
   }
   $director_sqlite_package     = 'bacula-director-sqlite'
+  $lib    = $::architecture ? {
+    x86_64  => 'lib64',
+    default => 'lib',
+  }
+  $libdir = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => '/usr/lib',
+    default           => "/usr/${lib}"
+  }
   $mail_to_default             = "root@${::fqdn}"
+  $client_plugin_dir           = "${libdir}/bacula"
   $storage_mysql_package       = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-mysql',
     default           => 'bacula-storage-mysql',
@@ -59,12 +68,4 @@ class bacula::params {
     /(Debian|Ubuntu)/ => 'bacula-sd-sqlite',
     default           => 'bacula-storage-sqlite',
   }
-  $client_plugin_dir           = $::operatingsystem ? {
-    /(?i:RedHat|CentOS|Scientific)/ => $::architecture ? {
-      x86_64  => '/usr/lib64/bacula',
-      default => '/usr/lib/bacula',
-    },
-    default => '/usr/lib/bacula'
-  }
-
 }
