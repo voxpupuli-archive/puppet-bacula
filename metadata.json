@@ -33,7 +33,7 @@
     "lib/puppet/parser/functions/generate_clients.rb": "8d19448123e2a8d8a2d2fd7e4f13679a",
     "manifests/client/config.pp": "04f89a61ca1e7d751d8f15d545b60c45",
     "manifests/client.pp": "3335e6ec752f1a5157d634c505eaed03",
-    "manifests/common.pp": "11bdba77f2164684ddbe9832282fbbde",
+    "manifests/common.pp": "ec78b7669d6f5780b0e8346472ab8abe",
     "manifests/console/bat.pp": "f3d4c8bd85cf6758c9d1077dbcc5230c",
     "manifests/console.pp": "afe70accf6fec59425c4e4a7153f9e69",
     "manifests/director/mysql.pp": "09bbe68d8f5533fac727745afa8a008c",

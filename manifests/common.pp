@@ -46,7 +46,7 @@ class bacula::common (
   $manage_db_tables = true,
   $packages         = undef,
   $plugin_dir       = undef,
-  $use_plugins      = true,
+  $use_plugins      = true
 ) {
   include bacula::params
 
