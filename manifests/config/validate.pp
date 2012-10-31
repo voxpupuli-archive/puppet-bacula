@@ -52,41 +52,41 @@ class bacula::config::validate(
 
   #Validate server values aren't empty
   if empty($director_server) {
-    fail '$director_server cannot be empty'
+    fail "$director_server cannot be empty"
   }
   if empty($storage_server) {
-    fail '$storage_server cannot be empty'
+    fail "$storage_server cannot be empty"
   }
 
   #Validate the passwords aren't empty
   if $is_director {
     if empty($director_password) {
-      fail '$director_password cannot be empty'
+      fail "$director_password cannot be empty"
     }
   }
 
   if $manage_console {
     if empty($console_password) {
-      fail '$console_password cannot be empty'
+      fail "$console_password cannot be empty"
     }
   }
 
   if empty($db_database) {
-    fail '$db_database cannot be empty'
+    fail "$db_database cannot be empty"
   }
 
   if $db_backend != 'sqlite' {
     if empty($db_host) {
-      fail '$db_host cannot be empty'
+      fail "$db_host cannot be empty"
     }
     if empty($db_user) {
-      fail '$db_user cannot be empty'
+      fail "$db_user cannot be empty"
     }
     if ! is_integer($db_port) {
-      fail '$db_port must be a port number'
+      fail "$db_port must be a port number"
     }
     if empty($db_password) {
-      fail '$db_password cannot be empty'
+      fail "$db_password cannot be empty"
     }
   }
 }
