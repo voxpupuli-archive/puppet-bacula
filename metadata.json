@@ -28,7 +28,7 @@
     "manifests/storage.pp": "8b37da1ae1ab64dc4d03650b246e9084",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "e238222912be66314673d545d2f50c49",
-    "templates/bacula-dir.conf.erb": "61a69c1e1112b5c5b756749303fa0564",
+    "templates/bacula-dir.conf.erb": "6aea0aaccfe9107c8a845bde53be00c1",
     "templates/bacula-fd.conf.erb": "ca770781b71b164f34b4dcf33be27176",
     "templates/bacula-sd.conf.erb": "efbbab4979ae7b3aa29f7d9e0d39c6e8",
     "templates/bconsole.conf.erb": "4a46977e8d32810dfd223345cc9f3a4f",

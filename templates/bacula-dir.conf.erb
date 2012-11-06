@@ -318,8 +318,8 @@ Schedule {
 
 # Create a standard profile for all normal servers
 <%
-['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].each do |onDay| -%>
-  ['noHome','withHome'].each do |doHome| -%>
+  ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].each do |onDay|
+    ['noHome','withHome'].each do |doHome| -%>
 JobDefs {
   Name = "Basic:<%= doHome -%>:on<%= onDay -%>"
   Type = Backup
@@ -340,7 +340,7 @@ JobDefs {
   Differential Max Run Time = 6 Hours
   Incremental Max Run Time = 6 Hours
 }
-<%  end -%>
+<%  end
   end -%>
 
 # Finally, bring in all the additional pieces of configuration from the
