@@ -42,8 +42,16 @@ class bacula::params::validate (
   $manage_db_tables  = '',
   $plugin_dir        = '',
   $storage_server    = '',
+  $tls_allowed_cn    = '',
+  $tls_ca_cert       = '',
+  $tls_ca_cert_dir   = '',
+  $tls_cert          = '',
+  $tls_key           = '',
+  $tls_require       = '',
+  $tls_verify_peer   = '',
   $use_console       = '',
-  $use_plugins       = ''
+  $use_plugins       = '',
+  $use_tls           = ''
 ) {
   # Validate our booleans
   validate_bool($is_client)
@@ -55,6 +63,7 @@ class bacula::params::validate (
   validate_bool($manage_db_tables)
   validate_bool($use_console)
   validate_bool($use_plugins)
+  validate_bool($use_tls)
 
   if $use_console {
     if empty($console_password) {
@@ -99,8 +108,9 @@ class bacula::params::validate (
   }
 
   case $db_backend {
-    'sqlite', 'postgresql' : {}
-    'mysql' : {
+    'sqlite', 'postgresql' : {
+    }
+    'mysql'                : {
       if empty($db_host) {
         fail '$db_host cannot be empty'
       }
@@ -117,12 +127,37 @@ class bacula::params::validate (
         fail '$db_password cannot be empty'
       }
     }
-    default : {
+    default                : {
       fail '$db_backend must be either \'sqlite\', \'postgresql\', or \'mysql\''
     }
   }
 
   if $use_plugins {
     validate_absolute_path($plugin_dir)
+  }
+
+  if $use_tls {
+    case $tls_allowed_cn {
+      undef   : { }
+      default : { validate_array($tls_allowed_cn) }
+    }
+
+    if $tls_ca_cert {
+      validate_absolute_path($tls_ca_cert)
+    }
+
+    if $tls_ca_cert_dir {
+      validate_absolute_path($tls_ca_cert_dir)
+    }
+    validate_absolute_path($tls_cert)
+    validate_absolute_path($tls_key)
+
+    if !($tls_require in ['yes', 'no']) {
+      fail '$tls_require must be either \'yes\' or \'no\''
+    }
+
+    if !($tls_verify_peer in ['yes', 'no']) {
+      fail '$tls_verify_peer must be either \'yes\' or \'no\''
+    }
   }
 }

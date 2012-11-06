@@ -18,6 +18,18 @@
 #   The pool used by the client for backups
 # [*storage_server*]
 #   The storage server hosting the pool this client will backup to
+# [*tls_ca_cert*]
+#   The full path and filename specifying a PEM encoded TLS CA certificate(s). Multiple certificates are permitted in
+#   the file. One of +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if
+#   +TLS Verify Peer+ is also specified, and are always required in a client context.
+# [*tls_ca_cert_dir*]
+#   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
+#   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
+#   +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if +TLS Verify Peer+ is
+#   also specified, and are always required in a client context.
+# [*use_tls*]
+#   Whether to use {Bacula TLS - Communications
+#   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
 #
 # === Examples
 #
@@ -56,7 +68,11 @@ define bacula::client::config (
   $director_server   = undef,
   $fileset           = 'Basic:noHome',
   $pool              = 'default',
-  $storage_server    = undef
+  $storage_server    = undef,
+  $tls_ca_cert       = undef,
+  $tls_ca_cert_dir   = undef,
+  $tls_require       = 'yes',
+  $use_tls           = false
 ) {
   include bacula::params
 

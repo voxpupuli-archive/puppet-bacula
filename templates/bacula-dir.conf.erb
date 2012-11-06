@@ -16,6 +16,22 @@ Director {
   Maximum Concurrent Jobs = 5
   Password = "<%= director_password -%>"
   Messages = "<%= director_server_real -%>:messages:daemon"
+<% if use_tls -%>
+  TLS Enable = yes
+  TLS Require = <%= tls_require %>
+  TLS Verify Peer = <%= tls_verify_peer %>
+<% tls_allowed_cn.each do |allowed_cn| -%>
+  TLS Allowed CN = "<%= allowed_cn %>"
+<% end -%>
+<% if tls_ca_cert -%>
+  TLS CA Certificate File = <%= tls_ca_cert %>
+<% end -%>
+<% if tls_ca_cert_dir -%>
+  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+<% end -%>
+  TLS Certificate = <%= tls_cert %>
+  TLS Key = <%= tls_key %>
+<% end -%>
 }
 
 # This is where the catalog information will be stored (basically
@@ -25,7 +41,7 @@ Catalog {
   dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
   <% if db_backend == 'mysql' # postgres and sqlite don't require these settings -%>
   dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
-  <% end %>
+  <% end -%>
 }
 
 # Configure how the directory will log and/or send messages. This
@@ -74,6 +90,18 @@ Storage {
   Password = "<%= director_password -%>"
   Device = "FileStorage"
   Media Type = File
+<% if use_tls -%>
+  TLS Enable = yes
+  TLS Require = <%= tls_require %>
+<% if tls_ca_cert -%>
+  TLS CA Certificate File = <%= tls_ca_cert %>
+<% end -%>
+<% if tls_ca_cert_dir -%>
+  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+<% end -%>
+  TLS Certificate = <%= tls_cert %>
+  TLS Key = <%= tls_key %>
+<% end -%>
 }
 
 Pool {
@@ -128,7 +156,7 @@ FileSet {
   Name = "Basic:noHome"
   Include {
     Options {
-      Signature   = MD5
+      Signature   = SHA1
       Compression = GZIP
     }
 
@@ -290,8 +318,8 @@ Schedule {
 
 # Create a standard profile for all normal servers
 <%
-  ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].each do |onDay|
-    ['noHome','withHome'].each do |doHome| -%>
+['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].each do |onDay| -%>
+  ['noHome','withHome'].each do |doHome| -%>
 JobDefs {
   Name = "Basic:<%= doHome -%>:on<%= onDay -%>"
   Type = Backup
@@ -312,8 +340,8 @@ JobDefs {
   Differential Max Run Time = 6 Hours
   Incremental Max Run Time = 6 Hours
 }
-<%  end
-  end %>
+<%  end -%>
+  end -%>
 
 # Finally, bring in all the additional pieces of configuration from the
 # different servers for which this Director was configured to manage

@@ -9,6 +9,24 @@
 Director {
   Name = "<%= director_server_real -%>:director"
   Password = "<%= director_password -%>"
+<% if use_tls -%>
+  TLS Enable = yes
+  TLS Require = <%= tls_require %>
+  TLS Verify Peer = <%= tls_verify_peer %>
+<% tls_allowed_cn.each do |allowed_cn| -%>
+  TLS Allowed CN = "<%= allowed_cn %>"
+<% end -%>
+<% if tls_ca_cert -%>
+  TLS CA Certificate File = <%= tls_ca_cert %>
+<% end -%>
+<% if tls_ca_cert_dir -%>
+  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+<% end -%>
+  # This is a server certificate, used for incoming
+  # console connections.
+  TLS Certificate = <%= tls_cert %>
+  TLS Key = <%= tls_key %>
+<% end -%>
 }
 
 Messages {
@@ -25,6 +43,25 @@ Storage {
   Plugin Directory = <%= plugin_dir %>
 <% end -%>
   Maximum Concurrent Jobs = 20
+<% if use_tls -%>
+  # These TLS configuration options are used for incoming file daemon
+  # connections. Director TLS settings are handled above.
+  TLS Enable = yes
+  TLS Require = <%= tls_require %>
+  # Peer certificate is not required/requested -- peer validity is verified by
+  # the storage connection cookie provided to the File Daemon by the director.
+  TLS Verify Peer = no
+<% if tls_ca_cert -%>
+  TLS CA Certificate File = <%= tls_ca_cert %>
+<% end -%>
+<% if tls_ca_cert_dir -%>
+  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+<% end -%>
+  # This is a server certificate, used for incoming
+  # console connections.
+  TLS Certificate = <%= tls_cert %>
+  TLS Key = <%= tls_key %>
+<% end -%>
 }
 
 # Also configure access for something to monitor this Storage Daemon

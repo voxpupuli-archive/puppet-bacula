@@ -25,12 +25,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class bacula::console(
-  $console_template   = 'bacula/bconsole.conf.erb',
-  $director_password  = '',
-  $director_server    = undef
-  ) {
-
+class bacula::console (
+  $console_template  = 'bacula/bconsole.conf.erb',
+  $director_password = '',
+  $director_server   = undef,
+  $tls_ca_cert       = undef,
+  $tls_ca_cert_dir   = undef,
+  $tls_cert          = undef,
+  $tls_key           = undef,
+  $tls_require       = 'yes',
+  $tls_verify_peer   = 'yes',
+  $use_tls           = false
+) {
   include bacula::params
 
   $director_server_real = $director_server ? {

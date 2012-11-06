@@ -42,8 +42,16 @@ class bacula::director (
   $manage_db_tables  = true,
   $plugin_dir        = undef,
   $storage_server    = undef,
+  $tls_allowed_cn    = [],
+  $tls_ca_cert       = undef,
+  $tls_ca_cert_dir   = undef,
+  $tls_cert          = undef,
+  $tls_key           = undef,
+  $tls_require       = 'yes',
+  $tls_verify_peer   = 'yes',
   $use_console       = false,
   $use_plugins       = true,
+  $use_tls           = false,
   $clients           = {}
 ) {
   include bacula::params
@@ -135,7 +143,7 @@ class bacula::director (
 
   if $manage_db_tables {
     case $db_backend {
-      'mysql' : {
+      'mysql'  : {
         class { 'bacula::director::mysql':
           db_database  => $db_database,
           db_user      => $db_user,
@@ -151,7 +159,7 @@ class bacula::director (
           db_database => $db_database,
         }
       }
-      default : {
+      default  : {
         fail "The bacula module does not support managing the ${db_backend} backend database"
       }
     }

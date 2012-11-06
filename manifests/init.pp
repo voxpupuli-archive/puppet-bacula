@@ -61,8 +61,41 @@
 # [*storage_template*]
 #   The ERB template to use for configuring the storage daemon instead of the
 #   one included with the module
+# [*tls_allowed_cn*]
+#   Array of common name attribute of allowed peer certificates. If this directive is specified, all server
+#   certificates will be verified against this list. This can be used to ensure that only the CA-approved Director
+#   may connect.
+# [*tls_ca_cert*]
+#   The full path and filename specifying a PEM encoded TLS CA certificate(s). Multiple certificates are permitted in
+#   the file. One of +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if
+#   +TLS Verify Peer+ is also specified, and are always required in a client context.
+# [*tls_ca_cert_dir*]
+#   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
+#   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
+#   +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if +TLS Verify Peer+ is
+#   also specified, and are always required in a client context.
+# [*tls_cert*]
+#   The full path and filename of a PEM encoded TLS certificate. It can be used as either a client or server
+#   certificate. PEM stands for Privacy Enhanced Mail, but in this context refers to how the certificates are
+#   encoded. It is used because PEM files are base64 encoded and hence ASCII text based rather than binary. They may
+#   also contain encrypted information.
+# [*tls_key*]
+#   The full path and filename of a PEM encoded TLS private key. It must correspond to the TLS certificate.
+# [*tls_require*]
+#   Require TLS connections. This directive is ignored unless +TLS Enable+ is set to yes. If TLS is not required,
+#   and TLS is enabled, then Bacula will connect with other daemons either with or without TLS depending on what the
+#   other daemon requests. If TLS is enabled and TLS is required, then Bacula will refuse any connection that does
+#   not use TLS. Valid values are +'yes'+ or +'no'+.
+# [*tls_verify_peer*]
+#   Verify peer certificate. Instructs server to request and verify the client's x509 certificate. Any client
+#   certificate signed by a known-CA will be accepted unless the +TLS Allowed CN+ configuration directive is used, in
+#   which case the client certificate must correspond to the Allowed Common Name specified. Valid values are +'yes'+
+#   or +'no'+.
 # [*use_console*]
 #   Whether to configure a console resource on the director
+# [*use_tls*]
+#   Whether to use {Bacula TLS - Communications
+#   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
 #
 # === Sample Usage
 #
@@ -132,7 +165,15 @@ class bacula (
   $plugin_dir        = undef,
   $storage_server    = undef,
   $storage_template  = undef,
+  $tls_allowed_cn    = [],
+  $tls_ca_cert       = undef,
+  $tls_ca_cert_dir   = undef,
+  $tls_cert          = undef,
+  $tls_key           = undef,
+  $tls_require       = 'yes',
+  $tls_verify_peer   = 'yes',
   $use_console       = false,
+  $use_tls           = false,
   $clients           = {}
 ) {
   include bacula::params
@@ -151,7 +192,7 @@ class bacula (
   }
 
   case $plugin_dir {
-    undef : {
+    undef   : {
       $use_plugins     = $bacula::params::use_plugins
       $plugin_dir_real = $bacula::params::plugin_dir
     }
@@ -183,8 +224,16 @@ class bacula (
     manage_db_tables  => $manage_db_tables,
     plugin_dir        => $plugin_dir_real,
     storage_server    => $storage_server_real,
+    tls_allowed_cn    => $tls_allowed_cn,
+    tls_ca_cert       => $tls_ca_cert,
+    tls_ca_cert_dir   => $tls_ca_cert_dir,
+    tls_cert          => $tls_cert,
+    tls_key           => $tls_key,
+    tls_require       => $tls_require,
+    tls_verify_peer   => $tls_verify_peer,
     use_console       => $use_console,
     use_plugins       => $use_plugins,
+    use_tls           => $use_tls,
   }
 
   class { 'bacula::common':
@@ -223,8 +272,16 @@ class bacula (
       manage_db_tables  => $manage_db_tables,
       plugin_dir        => $plugin_dir_real,
       storage_server    => $storage_server_real,
+      tls_allowed_cn    => $tls_allowed_cn,
+      tls_ca_cert       => $tls_ca_cert,
+      tls_ca_cert_dir   => $tls_ca_cert_dir,
+      tls_cert          => $tls_cert,
+      tls_key           => $tls_key,
+      tls_require       => $tls_require,
+      tls_verify_peer   => $tls_verify_peer,
       use_console       => $use_console,
       use_plugins       => $use_plugins,
+      use_tls           => $use_tls,
     }
   }
 
@@ -237,7 +294,15 @@ class bacula (
       plugin_dir        => $plugin_dir_real,
       storage_server    => $storage_server_real,
       storage_template  => $storage_template,
+      tls_allowed_cn    => $tls_allowed_cn,
+      tls_ca_cert       => $tls_ca_cert,
+      tls_ca_cert_dir   => $tls_ca_cert_dir,
+      tls_cert          => $tls_cert,
+      tls_key           => $tls_key,
+      tls_require       => $tls_require,
+      tls_verify_peer   => $tls_verify_peer,
       use_plugins       => $use_plugins,
+      use_tls           => $use_tls,
     }
   }
 
@@ -246,7 +311,15 @@ class bacula (
       director_server   => $director_server_real,
       director_password => $director_password,
       plugin_dir        => $plugin_dir_real,
+      tls_allowed_cn    => $tls_allowed_cn,
+      tls_ca_cert       => $tls_ca_cert,
+      tls_ca_cert_dir   => $tls_ca_cert_dir,
+      tls_cert          => $tls_cert,
+      tls_key           => $tls_key,
+      tls_require       => $tls_require,
+      tls_verify_peer   => $tls_verify_peer,
       use_plugins       => $use_plugins,
+      use_tls           => $use_tls,
     }
   }
 
@@ -255,6 +328,13 @@ class bacula (
       console_template  => $console_template,
       director_password => $director_password,
       director_server   => $director_server_real,
+      tls_ca_cert       => $tls_ca_cert,
+      tls_ca_cert_dir   => $tls_ca_cert_dir,
+      tls_cert          => $tls_cert,
+      tls_key           => $tls_key,
+      tls_require       => $tls_require,
+      tls_verify_peer   => $tls_verify_peer,
+      use_tls           => $use_tls,
     }
   }
 

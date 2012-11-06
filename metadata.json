@@ -1,56 +1,53 @@
 {
   "name": "rharrison-bacula",
-  "version": "0.0.3",
-  "source": "http://github.com/rharrison10/rharrison-bacula",
   "author": "Puppet Labs and Russell Harrison",
-  "license": "ASL 2.0",
-  "summary": "This module manages a bacula infrastructure",
   "description": "This module manages Bacula, a complete backup solution.\nIt is a fork of the Puppet Labs module found at http://forge.puppetlabs.com/puppetlabs/bacula",
+  "license": "ASL 2.0",
   "project_page": "http://github.com/rharrison10/rharrison-bacula",
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">=2.2.0"
-    },
-    {
-      "name": "puppetlabs/mysql",
-      "version_requirement": ">=0.0.1"
-    },
-    {
-      "name": "puppetlabs/sqlite",
-      "version_requirement": ">=0.0.1"
-    }
-  ],
-  "types": [
-
-  ],
+  "source": "http://github.com/rharrison10/rharrison-bacula",
+  "summary": "This module manages a bacula infrastructure",
+  "version": "0.0.3",
   "checksums": {
     "CHANGELOG.md": "c7fe5197e95b06b16048e97b411589fa",
     "LICENSE": "3b83ef96387f14655fc854ddc3c6bd57",
     "Modulefile": "8192f7a6b8973ab8bb6b5a70a2a91c7d",
     "NOTICE": "5bba9c4ae34d6b59726431d6616e3275",
-    "README.md": "7eb22a6da9a7976c0ff87ecbb809da4f",
+    "README.md": "b853c549d057bc1a53a4d670da220178",
     "lib/puppet/parser/functions/generate_clients.rb": "8d19448123e2a8d8a2d2fd7e4f13679a",
-    "manifests/client/config.pp": "04f89a61ca1e7d751d8f15d545b60c45",
-    "manifests/client.pp": "3335e6ec752f1a5157d634c505eaed03",
+    "manifests/client.pp": "0f2abaf850c1be8a2dbc4b1e8cec3324",
+    "manifests/client/config.pp": "af87a589468a45bd6554291ce8f2231e",
     "manifests/common.pp": "ec78b7669d6f5780b0e8346472ab8abe",
+    "manifests/console.pp": "4e38e64dcebb050121052707b92b4431",
     "manifests/console/bat.pp": "f3d4c8bd85cf6758c9d1077dbcc5230c",
-    "manifests/console.pp": "afe70accf6fec59425c4e4a7153f9e69",
+    "manifests/director.pp": "a910b96c4ca85a0d9fca2ce8424652fb",
     "manifests/director/mysql.pp": "09bbe68d8f5533fac727745afa8a008c",
     "manifests/director/sqlite.pp": "6b28c121fd0751972aca86dd122a1e1d",
-    "manifests/director.pp": "5b5863068ef60af3ea9548d09c2f30cd",
-    "manifests/init.pp": "fdc4dc36e00cc35e06b4f7f5fca15c4f",
-    "manifests/params/validate.pp": "ed1ea661cbe8cd102d123ec91d94af63",
+    "manifests/init.pp": "397a53ca99f35c02f59b1fd839995c84",
     "manifests/params.pp": "d0e96ce9693b4b03e8cbb26a797fc7de",
-    "manifests/storage.pp": "b3544efb8ec76983662e4d325fa1f461",
+    "manifests/params/validate.pp": "a82a82a08d5493cfbb8850173d809513",
+    "manifests/storage.pp": "8b37da1ae1ab64dc4d03650b246e9084",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "e238222912be66314673d545d2f50c49",
-    "templates/bacula-dir.conf.erb": "60115b510e7b124b43c3140043765ea0",
-    "templates/bacula-fd.conf.erb": "37e51b57432592c121202f7db02a39ec",
-    "templates/bacula-sd.conf.erb": "bab900a04c084fd1a6da82ece6efc744",
-    "templates/bconsole.conf.erb": "fbe76b0ab3570d8de94cc88cbe8bdae8",
-    "templates/client_config.erb": "1703b15bad3d54f8e8d4fbd49e4ca708",
+    "templates/bacula-dir.conf.erb": "61a69c1e1112b5c5b756749303fa0564",
+    "templates/bacula-fd.conf.erb": "ca770781b71b164f34b4dcf33be27176",
+    "templates/bacula-sd.conf.erb": "efbbab4979ae7b3aa29f7d9e0d39c6e8",
+    "templates/bconsole.conf.erb": "4a46977e8d32810dfd223345cc9f3a4f",
+    "templates/client_config.erb": "91dd8690acde2a689efd6937447fe0c6",
     "templates/make_sqlite3_tables.sh.erb": "480b86d36d88539f5f94dfe44f6a172d",
     "tests/init.pp": "b95d199119d5e592df7e1580bf23fe06"
-  }
+  },
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": "\u003e\u003d2.2.0"
+    },
+    {
+      "name": "puppetlabs/mysql",
+      "version_requirement": "\u003e\u003d0.0.1"
+    },
+    {
+      "name": "puppetlabs/sqlite",
+      "version_requirement": "\u003e\u003d0.0.1"
+    }
+  ]
 }
