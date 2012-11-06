@@ -9,10 +9,10 @@ Client {
 <% if use_tls -%>
   TLS Enable = yes
   TLS Require = <%= tls_require %>
-<% if tls_ca_cert -%>
+<% if @tls_ca_cert -%>
   TLS CA Certificate File = <%= tls_ca_cert %>
 <% end -%>
-<% if tls_ca_cert_dir -%>
+<% if @tls_ca_cert_dir -%>
   TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
 <% end -%>
 <% end -%>

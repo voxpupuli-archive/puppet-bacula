@@ -16,10 +16,10 @@ Director {
 <% tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
-<% if tls_ca_cert -%>
+<% if @tls_ca_cert -%>
   TLS CA Certificate File = <%= tls_ca_cert %>
 <% end -%>
-<% if tls_ca_cert_dir -%>
+<% if @tls_ca_cert_dir -%>
   TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
 <% end -%>
   # This is a server certificate, used for incoming
@@ -51,10 +51,10 @@ Storage {
   # Peer certificate is not required/requested -- peer validity is verified by
   # the storage connection cookie provided to the File Daemon by the director.
   TLS Verify Peer = no
-<% if tls_ca_cert -%>
+<% if @tls_ca_cert -%>
   TLS CA Certificate File = <%= tls_ca_cert %>
 <% end -%>
-<% if tls_ca_cert_dir -%>
+<% if @tls_ca_cert_dir -%>
   TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
 <% end -%>
   # This is a server certificate, used for incoming
