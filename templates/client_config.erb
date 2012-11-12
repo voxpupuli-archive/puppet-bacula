@@ -23,7 +23,7 @@ Job {
   Client   = "<%= name %>"
   Type     = Backup
   FileSet  = "<%= fileset %>"
-  Storage  = "<%= storage_server_real %>:storage:default"
+  Storage  = "<%= storage_server_real %>:storage:<%= pool %>"
   Schedule = "<%= client_schedule %>"
   Pool     = "<%= storage_server_real %>:pool:<%= pool %>"
   Messages = "<%= director_server_real %>:messages:standard"

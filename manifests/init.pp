@@ -56,6 +56,9 @@
 #   location. If this is anything other than +undef+ it will also configure plugins on older distros were the default
 #   package is too old to support plugins.  Only use if the version in the distro repositories supports plugins or
 #   you have included a respository with a newer Bacula packaged for your distro.
+# [*storage_default_mount*]
+#   Directory where the default disk for file backups is mounted. A subdirectory named +default+ will be created allowing you to
+#   define additional devices in Bacula which use the same disk. Defaults to +'/mnt/bacula'+.
 # [*storage_server*]
 #   The FQDN of the storage server
 # [*storage_template*]
@@ -142,39 +145,40 @@
 # limitations under the License.
 #
 class bacula (
-  $console_password  = '',
-  $console_template  = undef,
-  $db_backend        = 'sqlite',
-  $db_user           = '',
-  $db_password       = '',
-  $db_host           = 'localhost',
-  $db_user_host      = undef,
-  $db_database       = 'bacula',
-  $db_port           = '3306',
-  $director_password = '',
-  $director_server   = undef,
-  $director_template = undef,
-  $is_client         = true,
-  $is_director       = false,
-  $is_storage        = false,
-  $mail_to           = undef,
-  $manage_db         = false,
-  $manage_db_tables  = true,
-  $manage_console    = false,
-  $manage_bat        = false,
-  $plugin_dir        = undef,
-  $storage_server    = undef,
-  $storage_template  = undef,
-  $tls_allowed_cn    = [],
-  $tls_ca_cert       = undef,
-  $tls_ca_cert_dir   = undef,
-  $tls_cert          = undef,
-  $tls_key           = undef,
-  $tls_require       = 'yes',
-  $tls_verify_peer   = 'yes',
-  $use_console       = false,
-  $use_tls           = false,
-  $clients           = {}
+  $console_password      = '',
+  $console_template      = undef,
+  $db_backend            = 'sqlite',
+  $db_user               = '',
+  $db_password           = '',
+  $db_host               = 'localhost',
+  $db_user_host          = undef,
+  $db_database           = 'bacula',
+  $db_port               = '3306',
+  $director_password     = '',
+  $director_server       = undef,
+  $director_template     = undef,
+  $is_client             = true,
+  $is_director           = false,
+  $is_storage            = false,
+  $mail_to               = undef,
+  $manage_db             = false,
+  $manage_db_tables      = true,
+  $manage_console        = false,
+  $manage_bat            = false,
+  $plugin_dir            = undef,
+  $storage_default_mount = '/mnt/bacula',
+  $storage_server        = undef,
+  $storage_template      = undef,
+  $tls_allowed_cn        = [],
+  $tls_ca_cert           = undef,
+  $tls_ca_cert_dir       = undef,
+  $tls_cert              = undef,
+  $tls_key               = undef,
+  $tls_require           = 'yes',
+  $tls_verify_peer       = 'yes',
+  $use_console           = false,
+  $use_tls               = false,
+  $clients               = {}
 ) {
   include bacula::params
 
@@ -287,22 +291,23 @@ class bacula (
 
   if $is_storage {
     class { 'bacula::storage':
-      console_password  => $console_password,
-      db_backend        => $db_backend,
-      director_password => $director_password,
-      director_server   => $director_server_real,
-      plugin_dir        => $plugin_dir_real,
-      storage_server    => $storage_server_real,
-      storage_template  => $storage_template,
-      tls_allowed_cn    => $tls_allowed_cn,
-      tls_ca_cert       => $tls_ca_cert,
-      tls_ca_cert_dir   => $tls_ca_cert_dir,
-      tls_cert          => $tls_cert,
-      tls_key           => $tls_key,
-      tls_require       => $tls_require,
-      tls_verify_peer   => $tls_verify_peer,
-      use_plugins       => $use_plugins,
-      use_tls           => $use_tls,
+      console_password      => $console_password,
+      db_backend            => $db_backend,
+      director_password     => $director_password,
+      director_server       => $director_server_real,
+      plugin_dir            => $plugin_dir_real,
+      storage_default_mount => $storage_default_mount,
+      storage_server        => $storage_server_real,
+      storage_template      => $storage_template,
+      tls_allowed_cn        => $tls_allowed_cn,
+      tls_ca_cert           => $tls_ca_cert,
+      tls_ca_cert_dir       => $tls_ca_cert_dir,
+      tls_cert              => $tls_cert,
+      tls_key               => $tls_key,
+      tls_require           => $tls_require,
+      tls_verify_peer       => $tls_verify_peer,
+      use_plugins           => $use_plugins,
+      use_tls               => $use_tls,
     }
   }
 

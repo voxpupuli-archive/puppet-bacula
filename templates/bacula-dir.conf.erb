@@ -88,7 +88,7 @@ Storage {
   Name = "<%= storage_server_real -%>:storage:default"
   Address = <%= storage_server_real %>
   Password = "<%= director_password -%>"
-  Device = "FileStorage"
+  Device = "DefaultFileStorage"
   Media Type = File
 <% if use_tls -%>
   TLS Enable = yes
@@ -115,7 +115,7 @@ Pool {
   # theory the same time period for weekly backups from the clients)
   Recycle = Yes
   Auto Prune = Yes
-  Volume Retention = 1 Week
+  Volume Retention = 1 Month
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }
@@ -131,8 +131,8 @@ Pool {
   Recycle = Yes
   Auto Prune = Yes
   # We have no limit on the number of volumes, but we will simply set that
-  # we should keep at least three days worth of backups of the database
-  Volume Retention = 3 Days
+  # we should keep at least one weeks worth of backups of the database
+  Volume Retention = 1 Week
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }

@@ -1,4 +1,4 @@
-## 2012-10-24  Russell Harrison <rharrison@fedoraproject.org> - 0.0.4
+## 2012-11-12  Russell Harrison <rharrison@fedoraproject.org> - 0.0.4
 * Fix MySQL database management
 * Specify perms for file resources
 * Clean up resource relationships
@@ -14,6 +14,8 @@
   from [Erik Smit](https://github.com/erik-smit)
 * Syntax cleanup
 * Move CHANGELOG to Markdown format
+* Add Bacula TLS - Communications Encryption management
+* Allow mount path of the default backup device to be changed.
 
 ### 2012-10-24  erik-smit <smite@zylon.net>
 * Config default plugin directory for file daemon

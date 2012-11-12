@@ -33,22 +33,23 @@
 # limitations under the License.
 #
 class bacula::storage (
-  $console_password  = '',
-  $db_backend        = 'sqlite',
-  $director_password = '',
-  $director_server   = undef,
-  $plugin_dir        = undef,
-  $storage_server    = undef,
-  $storage_template  = 'bacula/bacula-sd.conf.erb',
-  $tls_allowed_cn    = [],
-  $tls_ca_cert       = undef,
-  $tls_ca_cert_dir   = undef,
-  $tls_cert          = undef,
-  $tls_key           = undef,
-  $tls_require       = 'yes',
-  $tls_verify_peer   = 'yes',
-  $use_plugins       = true,
-  $use_tls           = false
+  $console_password      = '',
+  $db_backend            = 'sqlite',
+  $director_password     = '',
+  $director_server       = undef,
+  $plugin_dir            = undef,
+  $storage_default_mount = '/mnt/bacula',
+  $storage_server        = undef,
+  $storage_template      = 'bacula/bacula-sd.conf.erb',
+  $tls_allowed_cn        = [],
+  $tls_ca_cert           = undef,
+  $tls_ca_cert_dir       = undef,
+  $tls_cert              = undef,
+  $tls_key               = undef,
+  $tls_require           = 'yes',
+  $tls_verify_peer       = 'yes',
+  $use_plugins           = true,
+  $use_tls               = false
 ) {
   include bacula::params
 
@@ -80,7 +81,7 @@ class bacula::storage (
     ensure => present,
   }
 
-  file { ['/mnt/bacula', '/mnt/bacula/default']:
+  file { [$storage_default_mount, "${storage_default_mount}/default"]:
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
@@ -106,13 +107,13 @@ class bacula::storage (
   $file_requires = $use_plugins ? {
     false   => File[
       '/etc/bacula/bacula-sd.d/empty.conf',
-      '/mnt/bacula/default',
+      "${storage_default_mount}/default",
       '/var/lib/bacula',
       '/var/run/bacula'
     ],
     default => File[
       '/etc/bacula/bacula-sd.d/empty.conf',
-      '/mnt/bacula/default',
+      "${storage_default_mount}/default",
       '/var/lib/bacula',
       '/var/run/bacula',
       $plugin_dir

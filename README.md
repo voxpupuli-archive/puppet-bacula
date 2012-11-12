@@ -159,6 +159,12 @@ old to support plugins.  Only use if the version in the distro repositories
 supports plugins or you have included a respository with a newer Bacula
 packaged for your distro.
 
+### storage_default_mount
+
+Directory where the default disk for file backups is mounted. A subdirectory
+named `default` will be created allowing you to define additional devices in
+Bacula which use the same disk. Defaults to `'/mnt/bacula'`.
+
 ### storage_server
 
 The FQDN of the storage server
