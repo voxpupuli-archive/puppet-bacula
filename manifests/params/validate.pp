@@ -23,35 +23,36 @@
 # limitations under the License.
 #
 class bacula::params::validate (
-  $console_password  = '',
-  $db_backend        = '',
-  $db_database       = '',
-  $db_host           = '',
-  $db_password       = '',
-  $db_port           = '',
-  $db_user           = '',
-  $director_password = '',
-  $director_server   = '',
-  $is_client         = '',
-  $is_director       = '',
-  $is_storage        = '',
-  $mail_to           = '',
-  $manage_bat        = '',
-  $manage_console    = '',
-  $manage_db         = '',
-  $manage_db_tables  = '',
-  $plugin_dir        = '',
-  $storage_server    = '',
-  $tls_allowed_cn    = '',
-  $tls_ca_cert       = '',
-  $tls_ca_cert_dir   = '',
-  $tls_cert          = '',
-  $tls_key           = '',
-  $tls_require       = '',
-  $tls_verify_peer   = '',
-  $use_console       = '',
-  $use_plugins       = '',
-  $use_tls           = ''
+  $console_password      = '',
+  $db_backend            = '',
+  $db_database           = '',
+  $db_host               = '',
+  $db_password           = '',
+  $db_port               = '',
+  $db_user               = '',
+  $director_password     = '',
+  $director_server       = '',
+  $is_client             = '',
+  $is_director           = '',
+  $is_storage            = '',
+  $mail_to               = '',
+  $manage_bat            = '',
+  $manage_console        = '',
+  $manage_db             = '',
+  $manage_db_tables      = '',
+  $plugin_dir            = '',
+  $storage_default_mount = '',
+  $storage_server        = '',
+  $tls_allowed_cn        = '',
+  $tls_ca_cert           = '',
+  $tls_ca_cert_dir       = '',
+  $tls_cert              = '',
+  $tls_key               = '',
+  $tls_require           = '',
+  $tls_verify_peer       = '',
+  $use_console           = '',
+  $use_plugins           = '',
+  $use_tls               = ''
 ) {
   # Validate our booleans
   validate_bool($is_client)
@@ -131,6 +132,8 @@ class bacula::params::validate (
       fail '$db_backend must be either \'sqlite\', \'postgresql\', or \'mysql\''
     }
   }
+
+  validate_absolute_path($storage_default_mount)
 
   if $use_plugins {
     validate_absolute_path($plugin_dir)

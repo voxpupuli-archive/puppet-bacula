@@ -75,7 +75,7 @@ Director {
 Device {
   Name = "DefaultFileStorage"
   Media Type = File
-  Archive Device = /mnt/bacula/default
+  Archive Device = <%= storage_default_mount %>/default
   Label Media = Yes
   Random Access = Yes
   Automatic Mount = Yes

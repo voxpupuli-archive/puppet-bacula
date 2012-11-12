@@ -10,7 +10,7 @@
 # === Actions:
 # * Enforce the DB component package package be installed
 # * Manage the +/etc/bacula/bacula-sd.conf+ file
-# * Manage the +/mnt/bacula+ and +/mnt/bacula/default+ directories
+# * Manage the +${storage_default_mount}+ and +${storage_default_mount}/default+ directories
 # * Manage the +/etc/bacula/bacula-sd.conf+ file
 # * Enforce the +bacula-sd+ service to be running
 #
