@@ -24,7 +24,7 @@
     "manifests/director/fileset.pp": "9a7fa0e6f3e2383d49fe0de0ce9d6b42",
     "manifests/director/mysql.pp": "09bbe68d8f5533fac727745afa8a008c",
     "manifests/director/sqlite.pp": "6b28c121fd0751972aca86dd122a1e1d",
-    "manifests/init.pp": "57aba8fbf0eb3094465439c6b074c3ef",
+    "manifests/init.pp": "75de0433218c746e2e148d0c0af52b70",
     "manifests/params.pp": "d0e96ce9693b4b03e8cbb26a797fc7de",
     "manifests/params/validate.pp": "e84cfee937ef11808e1dff6dfb2232f5",
     "manifests/storage.pp": "1cdf25c01090a9bec753c31d9b664301",
