@@ -6,8 +6,11 @@
 #
 # === Parameters
 #
+# [*ensure*]
+#   Ensure the file is present or absent.  The only valid values are +file+ or
+#   +absent+. Defaults to +file+.
 # [*exclude_files*]
-#   *Required*: An array of strings consisting of one file or directory name per entry. Directory names should be specified without
+#   An array of strings consisting of one file or directory name per entry. Directory names should be specified without
 #   a trailing slash with Unix path notation.
 # [*include_files*]
 #   *Required*: An array of strings consisting of one file or directory name per entry. Directory names should be specified without
@@ -26,14 +29,21 @@
 #   ]
 #
 #   bacula::director::fileset { 'servicename' :
+#     ensure         => file,
 #     include_files => $servicename_include_files,
 #     exclude_files => $servicename_exclude_files,
 #   }
 #
 define bacula::director::fileset (
+  $ensure   = 'file',
   $exclude_files = undef,
   $include_files = undef
 ) {
+
+  if !($ensure in ['file', 'absent']) {
+    fail('The only valid values for the ensure parameter are file or absent')
+  }
+
   file { "/etc/bacula/bacula-dir.d/fileset-${name}.conf":
     ensure  => file,
     owner   => 'root',

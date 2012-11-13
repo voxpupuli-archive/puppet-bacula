@@ -4,8 +4,6 @@
 #
 # === Parameters
 #
-# Document parameters here
-#
 # [*ensure*]
 #   Ensure the file is present or absent.  The only valid values are +file+ or
 #   +absent+. Defaults to +file+.

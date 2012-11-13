@@ -11,9 +11,11 @@ FileSet {
 <% end -%>
   }
 
+<% if @exclude_files -%>
   Exclude {
 <% exclude_files.each do |file_exclude| -%>
     File = <%= file_exclude %>
 <% end -%>
   }
+<% end -%>
 }

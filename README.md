@@ -231,6 +231,49 @@ Whether to configure a console resource on the director
 
 Whether to use [Bacula TLS - Communications Encryption](http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html).
 
+# Custom FileSets
+
+## `bacula::director::fileset` Parameters
+
+### ensure
+
+Ensure the file is present or absent.  The only valid values are `file` or
+`absent`. Defaults to `file`.
+
+### exclude_files
+
+An array of strings consisting of one file or directory name per
+entry. Directory names should be specified without a trailing slash with Unix
+path notation.
+
+### include_files
+
+**Required**: An array of strings consisting of one file or directory name per
+entry. Directory names should be specified without a trailing slash with Unix
+path notation.
+
+# Custom Director configuration
+
+For the highly likely case (given Bacula's complexity) where more complex
+configuration is needed you can include a file of additional configurations
+from your own modules.
+
+## `bacula::director::custom_config` Parameters
+
+### ensure
+
+Ensure the file is present or absent.  The only valid values are `file` or
+`absent`. Defaults to `file`.
+
+### content
+
+String containing the content for the configuration file.  Usually supplied
+with a template.
+
+### source
+
+The source location of the configuration file to deploy in `bacula-dir.d`.
+
 # Clients
 
 To back up clients on your network, you need to tell the director about them.
@@ -424,43 +467,6 @@ node /bacula-dir\d+/ {
   Bacula::Client::Config <<| director_server == $::fqdn |>>
 }
 ```
-# Custom FileSets
-
-## `bacula::director::fileset` Parameters
-
-### exclude_files
-
-**Required**: An array of strings consisting of one file or directory name per
-entry. Directory names should be specified without a trailing slash with Unix
-path notation.
-
-### include_files
-
-**Required**: An array of strings consisting of one file or directory name per
-entry. Directory names should be specified without a trailing slash with Unix
-path notation.
-
-# Custom Director configuration
-
-For the highly likely case (given Bacula's complexity) where more complex
-configuration is needed you can include a file of additional configurations
-from your own modules.
-
-## `bacula::director::custom_config` Parameters
-
-### ensure
-
-Ensure the file is present or absent.  The only valid values are `file` or
-`absent`. Defaults to `file`.
-
-### content
-
-String containing the content for the configuration file.  Usually supplied
-with a template.
-
-### source
-
-The source location of the configuration file to deploy in `bacula-dir.d`.
 
 # Included FileSets
 
