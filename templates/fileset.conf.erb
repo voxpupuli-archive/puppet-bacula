@@ -1,0 +1,19 @@
+FileSet {
+  Name = "<%= name %>"
+  Include {
+    Options {
+      Signature   = SHA1
+      Compression = GZIP
+    }
+
+<% include_files.each do |file_include| -%>
+    File = <%= file_include %>
+<% end -%>
+  }
+
+  Exclude {
+<% exclude_files.each do |file_exclude| -%>
+    File = <%= file_exclude %>
+<% end -%>
+  }
+}

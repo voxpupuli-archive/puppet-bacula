@@ -424,6 +424,21 @@ node /bacula-dir\d+/ {
   Bacula::Client::Config <<| director_server == $::fqdn |>>
 }
 ```
+# Custom FileSets
+
+## `bacula::director::fileset` Parameters
+
+### exclude_files
+
+**Required**: An array of strings consisting of one file or directory name per
+entry. Directory names should be specified without a trailing slash with Unix
+path notation.
+
+### include_files
+
+**Required**: An array of strings consisting of one file or directory name per
+entry. Directory names should be specified without a trailing slash with Unix
+path notation.
 
 # Included FileSets
 
@@ -431,48 +446,50 @@ node /bacula-dir\d+/ {
 
 ### Include
 
-* /boot
-* /etc
-* /usr/local
-* /var
-* /opt
-* /srv
+* `/boot`
+* `/etc`
+* `/usr/local`
+* `/var`
+* `/opt`
+* `/srv`
 
 ### Exclude
 
-* /var/cache
-* /var/tmp
-* /var/lib/apt
-* /var/lib/dpkg
-* /var/lib/puppet
-* /var/lib/mysql
-* /var/lib/postgresql
-* /var/lib/ldap
-* /var/lib/bacula
+* `/var/cache`
+* `/var/tmp`
+* `/var/lib/apt`
+* `/var/lib/dpkg`
+* `/var/lib/puppet`
+* `/var/lib/mysql`
+* `/var/lib/postgresql`
+* `/var/lib/ldap`
+* `/var/lib/bacula`
+* `/var/lib/yum`
 
 ## Basic:withHome
 
 ### Include
 
-* /home
-* /boot
-* /etc
-* /usr/local
-* /var
-* /opt
-* /srv
+* `/home`
+* `/boot`
+* `/etc`
+* `/usr/local`
+* `/var`
+* `/opt`
+* `/srv`
 
 ### Exclude
 
-* /var/cache
-* /var/tmp
-* /var/lib/apt
-* /var/lib/dpkg
-* /var/lib/puppet
-* /var/lib/mysql
-* /var/lib/postgresql
-* /var/lib/ldap
-* /var/lib/bacula
+* `/var/cache`
+* `/var/tmp`
+* `/var/lib/apt`
+* `/var/lib/dpkg`
+* `/var/lib/puppet`
+* `/var/lib/mysql`
+* `/var/lib/postgresql`
+* `/var/lib/ldap`
+* `/var/lib/bacula`
+* `/var/lib/yum`
 
 # Included Schedules
 
