@@ -26,7 +26,7 @@
     "manifests/director/sqlite.pp": "6b28c121fd0751972aca86dd122a1e1d",
     "manifests/init.pp": "57aba8fbf0eb3094465439c6b074c3ef",
     "manifests/params.pp": "d0e96ce9693b4b03e8cbb26a797fc7de",
-    "manifests/params/validate.pp": "a61a75ab281759adf1f1f98975db04d9",
+    "manifests/params/validate.pp": "e84cfee937ef11808e1dff6dfb2232f5",
     "manifests/storage.pp": "1cdf25c01090a9bec753c31d9b664301",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "e238222912be66314673d545d2f50c49",
