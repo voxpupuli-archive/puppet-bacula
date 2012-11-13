@@ -440,6 +440,28 @@ path notation.
 entry. Directory names should be specified without a trailing slash with Unix
 path notation.
 
+# Custom Director configuration
+
+For the highly likely case (given Bacula's complexity) where more complex
+configuration is needed you can include a file of additional configurations
+from your own modules.
+
+## `bacula::director::custom_config` Parameters
+
+### ensure
+
+Ensure the file is present or absent.  The only valid values are `file` or
+`absent`. Defaults to `file`.
+
+### content
+
+String containing the content for the configuration file.  Usually supplied
+with a template.
+
+### source
+
+The source location of the configuration file to deploy in `bacula-dir.d`.
+
 # Included FileSets
 
 ## Basic:noHome

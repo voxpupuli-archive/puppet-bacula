@@ -16,7 +16,8 @@
 * Move CHANGELOG to Markdown format
 * Add Bacula TLS - Communications Encryption management
 * Allow mount path of the default backup device to be changed.
-* Custom FileSet creation
+* Basic custom FileSet creation
+* Include custom config file for the director
 
 ### 2012-10-24  erik-smit <smite@zylon.net>
 * Config default plugin directory for file daemon

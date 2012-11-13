@@ -1,6 +1,6 @@
 # == Define: bacula::director::fileset
 #
-# Configure an additional file set to be used by the Bacula clients. See the {FileSet
+# Configure an additional basic file set to be used by the Bacula clients. See the {FileSet
 # Resource}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#SECTION001870000000000000000] documentation
 # for information on the options.
 #
