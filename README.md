@@ -96,6 +96,7 @@ The following lists all the class parameters the bacula class accepts as well as
     manage_console                bacula_manage_console           Whether the bconsole should be managed on the node
     manage_bat                    bacula_manage_bat               Whether the bat should be managed on the node
     clients                       *See Adding Clients section*    
+    filesets			  *See Adding Filesets section*
 
 
     UNCOMMON PARAMETERS:
@@ -130,6 +131,52 @@ Client Parameters
     fileset      Which FileSet to assign to the client
     schedule     Which schedule to assign to the client
 
+Fileset Parameters
+------------------
+
+    PARAMETERS   DESCRIPTION
+
+    files        Which files to backup
+    excludes     Which files to exclude from being backed up
+    signature    Which signature to create to allow for varification
+    compression  What compression to apply to the backup files
+
+Schedule Parameters
+-------------------
+
+    PARAMETERS   DESCRIPTION
+    run          What level to back up (Full, Differential, Incremental) and which schedule to do this on
+
+Storage Pool Parameters
+-----------------------
+
+    PARAMETERS   DESCRIPTION
+    type         Type of volume pool (Backup, Archive, Cloned, Migration, Copy, Save)
+    recycle      Automatically recycle volumes?
+    prune        Prune Expired Volumes
+    retention    Length of time to retain a volume
+    maxbytes     Maximum Size of a volume
+    maxjobs      Max concurrent jobs on a volume
+    label        Label to give the volumes within the pool
+
+Job Definition Perameters
+-------------------------
+
+    PARAMETERS   DESCRIPTION
+    type	 Which type of job to run (Backup, Verify, Restore, Admin)
+    level	 Which level of job to run (Full, Differential, Incremental)
+    client	 Which client to run the job on - client must already be defined in puppet
+    fileset	 Which fileset defines the files you wish to backup - fileset must already be defined in puppet
+    schedule     Which schedule would you like to run this job according to - schedule must already be defined in puppet
+    storage	 Which storage director would you like to write to
+    pool	 Which volume pool do you want to write to on this director
+    messages	 Where should messages be sent
+    runbefore    What script to run on the bacula server before backup commences
+    runafter     What script to run on the bacula server after backup ceases
+    runclientbefore What script to run on the bacula client before backup commences
+    runclientafter What script to run on the bacula client after backup ceases
+    
+
 Using Parameterized Classes
 ---------------------------
 
@@ -144,6 +191,49 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
     }
   }
 
+  $filesets = { 'test1' => {
+                'files' => ['/etc','/tmp'],
+                'exclude' => ['/etc/steve','/etc/passwd','/etc/shadow'],
+                'compression' => 'GZIP',
+                'signature' => 'MD5',
+           },
+                      'test2' => {
+                'files' => '/tmp/',
+                'exclude' => '/var/tmp',
+           }
+        }
+
+  $schedules = {
+                'WeekleyCycle' => {
+                 'run' => ['Level=Full 1st sun at 02:00', 'Level=Differential 2nd-5th sun at 02:00', 'Level=Incremental mon-sat at 02:00'],
+           },
+        }
+
+  $pools = {
+                'File' => {
+                 'pooltype' => 'Backup',
+                 'retention' => '365 days',
+                 'prune' => 'yes',
+                 'label' => 'File-',
+                 'maxbytes' => '5G',
+                 'maxjobs' => '10',
+                 'recycle' => 'yes',
+                },
+        }
+
+  $jobs = {
+                'test-job' => {
+                 'jobtype' => 'Backup',
+                 'level' => 'Incremental',
+                 'client' => 'bacula-fd',
+                 'fileset' => 'test',
+                 'schedule' => 'WeekleyCycle',
+                 'storage' => 'bacula-sd:storage:default',
+                 'pool' => 'File',
+                 'messages' => 'bacula-dir:messages:standard',
+                },
+        }
+
   class { 'bacula':
     is_storage        => true,
     is_director       => true,
@@ -155,124 +245,37 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
     mail_to           => 'bacula-admin@domain.com',
     storage_server    => 'bacula.domain.com',
     clients           => $clients,
+    filesets          => $filesets,
+    schedules         => $schedules,
+    pools	      => $pools,
+    jobs	      => $jobs,
   }
 ```
 
 Using Top Scope (Dashboard)
 ---------------------------
 
-The bacula module will look for parameters of a certain format to build its clients list. For each client, make a parmaeter of this
+**TOP SCOPE HAS NOT BEEN TESTED WITH CUSTOM FILESETS OR SCHEDULES OR STORAGE POOLS**
+
+The bacula module will look for parameters of a certain format to build its clients listi, filesets, and schedules. For each client, make a parmaeter of this
 format:
   bacula_client_client1.domain.com 
 with value:
   fileset=MyFileSet,schedule=MySchedule
 
+ For each fileset make a parameter of this format:
+  bacula_fileset_name
+with value
+  files=[files],excludes=[excludes],signature=sig_type,compression=compression_type
 
-Included FileSets
-=================
+ For each schedule make a parameter of this format:
+  bacula_schedule_name
+with value
+  run=[level= schedule]
 
- * Basic:noHome:
-   Include:
-    * /boot
-    * /etc
-    * /usr/local
-    * /var
-    * /opt
-    * /srv
-
-   Exclude:
-    * /var/cache
-    * /var/tmp
-    * /var/lib/apt
-    * /var/lib/dpkg
-    * /var/lib/puppet
-    * /var/lib/mysql
-    * /var/lib/postgresql
-    * /var/lib/ldap
-    * /var/lib/bacula
-
- * Basic:withHome
-   Include:
-    * /home
-    * /boot
-    * /etc
-    * /usr/local
-    * /var
-    * /opt
-    * /srv
-
-   Exclude:
-    * /var/cache
-    * /var/tmp
-    * /var/lib/apt
-    * /var/lib/dpkg
-    * /var/lib/puppet
-    * /var/lib/mysql
-    * /var/lib/postgresql
-    * /var/lib/ldap
-    * /var/lib/bacula
-
-Included Schedules
-==================
-
- * WeeklyCycle  
-   * Full First Sun at 23:05
-   * Differential Second-Fifth Sun at 23:05
-   * Incremental Mon-Sat at 23:05
- 
- * WeeklyCycleAfterBackup
-   * Full Mon-Sun at 23:10
-
- * Weekly:onFriday
-   * Full First Fri at 18:30
-   * Differential Second-Fifth Fri at 18:30
-   * Incremental Sat-Thu at 20:00
-
- * Weekly:onSaturday
-   * Full First Sat at 15:30
-   * Differential Second-Fifth Sat at 15:30
-   * Incremental Sun-Fri at 20:00
-
- * Weekly:onSunday
-   * Full First Sun at 15:30
-   * Differential Second-Fifth Sun at 15:30
-   * Incremental Mon-Sat at 20:00
-   
- * Weekly:onMonday
-   * Full First Mon at 18:30 
-   * Differential Second-Fifth Mon at 18:30
-   * Incremental Tue-Sun at 20:00
-
- * Weekly:onTuesday
-   * Full First Tue at 18:30
-   * Differential Second-Fifth Tue at 18:30
-   * Incremental Wed-Mon at 20:00
-
- * Weekly:onWednesday
-   * Full First Wed at 18:30
-   * Differential Second-Fifth Wed at 18:30
-   * Incremental Thu-Tue at 20:00
-
- * Weekly:onThursday
-   * Full First Thu at 18:30
-   * Differential Second-Fifth Thu at 18:30
-   * Incremental Fri-Wed at 20:00
-
- * Hourly
-   * Incremental hourly at 0:30
-
-TEMPLATES
-=========
-
-The Bacula module comes with templates that set default Fileset resources.  To configure different Filesets, copy the
-bacula-dir.conf.erb file out of the bacula/templates directory to another location in your manifests (can be another
-module).  Make the modifications you want and set the director_template parameter (listed above) to point to the path where you have
-stored the custom template.
+ For each storage pool make a parameter of this format:
+  bacula_storagepool_name
+with value
+  pooltype=PoolType,retention=RetentionLength,Prune=Prune,Label=Label,Maxbytes=Maxbytes,Maxjobs=Maxjobs,Recycle=Recycle
 
 [Using Puppet Templates](http://docs.puppetlabs.com/guides/templating.html)
-
-TODO
-====
-
- * Add ability to set custom Filesets for clients.
-

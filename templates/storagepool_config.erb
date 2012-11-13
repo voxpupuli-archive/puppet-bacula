@@ -1,0 +1,17 @@
+Pool {
+  Name = "<%= name %>"
+  <% if ! pooltype.empty? -%>
+  Pool Type = "<%= pooltype %>"
+  <% end %>
+  Recycle = "<%= recycle %>"
+  Autoprune = "<%= prune %>"
+  Volume Retention = <%= retention %>
+  Maximum Volume Bytes = <%= maxbytes %>
+  Maximum Volumes = "<%= maxvolumes %>"
+  <% if ! maxjobs.empty? -%>
+  Maximum Volume Jobs = "<%= maxjobs %>"
+  <% end %>
+  <% if ! label.empty? -%>
+  LabelFormat = "<%= label %>"
+  <% end %>
+}

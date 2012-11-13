@@ -128,7 +128,11 @@ class bacula(
     $console_template        = $bacula::config::console_template,
     $use_console             = $bacula::config::safe_use_console,
     $console_password        = $bacula::config::console_password,
-    $clients                 = {}
+    $filesets		     = {},
+    $clients                 = {},
+    $schedules		     = {},
+    $pools		     = {},
+    $jobs		     = {},
   ) inherits bacula::config {
     
 
@@ -187,6 +191,11 @@ class bacula(
       db_host          => $db_host,
       db_port          => $db_port,
       db_database      => $db_database,
+      clients	       => $clients,
+      filesets	       => $filesets,
+      schedules	       => $schedules,
+      pools            => $pools,
+      jobs	       => $jobs,
       require          => Class['bacula::common'],
     }
   }

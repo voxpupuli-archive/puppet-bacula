@@ -7,14 +7,3 @@ Client {
   Job Retention  = 1 Year
   Auto Prune = Yes
 }
-
-Job {
-  Name     = "<%= hostname %>"
-  Client   = "<%= hostname %>"
-  Type     = Backup
-  FileSet  = "<%= fileset %>"
-  Storage  = "<%= scope.lookupvar('bacula::director::storage_name') %>:storage:default"
-  Schedule = "<%= schedule %>"
-  Pool     = "<%= scope.lookupvar('bacula::director::storage_name') %>:pool:default"
-  Messages = "<%= director_name %>:messages:standard"
-}

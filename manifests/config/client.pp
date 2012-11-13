@@ -9,10 +9,9 @@ define bacula::config::client (
 
  $name_array = split($name, '[.]')
  $hostname   = $name_array[0]
-
  file { "/etc/bacula/bacula-dir.d/${name}.conf":
    ensure  => file,
    content => template('bacula/client_config.erb'),
-   notify  => Service['bacula-director'],
+   notify  => Service['bacula-dir'],
  }
 }

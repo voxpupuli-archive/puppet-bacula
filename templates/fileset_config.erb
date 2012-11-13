@@ -1,0 +1,23 @@
+FileSet {
+  Name = "<%= name %>"
+  Include {
+<% if ! compression.empty? && !signature.empty? -%>
+    Options {
+      <% if ! compression.empty? -%> Signature   = "<%= signature %>" <% end -%>
+
+      <% if ! signature.empty? -%> Compression = "<%= compression %>" <% end -%>
+
+    }
+<% end -%>
+<% files.each do |fileloop| -%>
+    File = "<%= fileloop %>"
+<% end -%>
+	}
+<% if ! exclude.empty? -%>
+  Exclude {
+<% exclude.each do |excludeloop| -%>
+    File = "<%= excludeloop %>"
+<% end -%>
+	}
+<% end -%>
+}
