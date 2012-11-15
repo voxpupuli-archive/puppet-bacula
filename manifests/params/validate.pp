@@ -92,10 +92,11 @@ class bacula::params::validate (
   }
 
   # Validate the passwords aren't empty
+  if empty($director_password) {
+    fail '$director_password cannot be empty'
+  }
+
   if $is_director {
-    if empty($director_password) {
-      fail '$director_password cannot be empty'
-    }
 
     if empty($db_database) {
       fail '$db_database cannot be empty'

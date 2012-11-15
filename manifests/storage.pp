@@ -85,7 +85,7 @@ class bacula::storage (
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
-    mode    => '0750',
+    mode    => '0755',
     require => Package[$db_package],
   }
 

@@ -103,7 +103,7 @@ class bacula::common (
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
-    mode    => '0750',
+    mode    => '0755',
     require => Package[$require_package],
   }
 
@@ -111,7 +111,7 @@ class bacula::common (
     ensure  => directory,
     owner   => 'bacula',
     group   => 'bacula',
-    mode    => '0750',
+    mode    => '0755',
     require => Package[$require_package],
   }
 
@@ -120,7 +120,7 @@ class bacula::common (
     recurse => true,
     owner   => 'bacula',
     group   => 'bacula',
-    mode    => '0750',
+    mode    => '0755',
     require => Package[$require_package],
   }
 
