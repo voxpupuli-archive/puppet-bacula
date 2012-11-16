@@ -19,7 +19,7 @@
     "manifests/common.pp": "4bb32fc1eb2a6f08050963b0b0c3cde0",
     "manifests/console.pp": "4e38e64dcebb050121052707b92b4431",
     "manifests/console/bat.pp": "f3d4c8bd85cf6758c9d1077dbcc5230c",
-    "manifests/director.pp": "a910b96c4ca85a0d9fca2ce8424652fb",
+    "manifests/director.pp": "3642e2b011c8b56124b99252e2ad6b61",
     "manifests/director/custom_config.pp": "f036d660909130ef8867cc0d802cfb08",
     "manifests/director/fileset.pp": "9a7fa0e6f3e2383d49fe0de0ce9d6b42",
     "manifests/director/mysql.pp": "09bbe68d8f5533fac727745afa8a008c",
