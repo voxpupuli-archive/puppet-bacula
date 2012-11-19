@@ -4,13 +4,13 @@
 #
 # === Parameters
 #
-# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# All <tt>bacula+ classes are called from the main <tt>::bacula</tt> class.  Parameters
 # are documented there.
 #
 # === Actions:
 # * Enforce the client package package be installed
-# * Manage the +/etc/bacula/bacula-fd.conf+ file
-# * Enforce the +bacula-fd+ service to be running
+# * Manage the <tt>/etc/bacula/bacula-fd.conf</tt> file
+# * Enforce the <tt>bacula-fd</tt> service to be running
 #
 # === Copyright
 #

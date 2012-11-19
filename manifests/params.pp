@@ -1,6 +1,6 @@
 # == Class: bacula::params
 #
-# Default values for parameters needed to configure the bacula class.
+# Default values for parameters needed to configure the <tt>bacula</tt> class.
 #
 # === Parameters
 #

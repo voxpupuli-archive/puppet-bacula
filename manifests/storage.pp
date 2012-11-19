@@ -4,15 +4,15 @@
 #
 # === Parameters
 #
-# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# All <tt>bacula+ classes are called from the main <tt>::bacula</tt> class.  Parameters
 # are documented there.
 #
 # === Actions:
 # * Enforce the DB component package package be installed
-# * Manage the +/etc/bacula/bacula-sd.conf+ file
-# * Manage the +${storage_default_mount}+ and +${storage_default_mount}/default+ directories
-# * Manage the +/etc/bacula/bacula-sd.conf+ file
-# * Enforce the +bacula-sd+ service to be running
+# * Manage the <tt>/etc/bacula/bacula-sd.conf</tt> file
+# * Manage the <tt>${storage_default_mount}+ and <tt>${storage_default_mount}/default</tt> directories
+# * Manage the <tt>/etc/bacula/bacula-sd.conf</tt> file
+# * Enforce the <tt>bacula-sd</tt> service to be running
 #
 # === Copyright
 #

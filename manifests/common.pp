@@ -5,12 +5,12 @@
 #
 # === Parameters
 #
-# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# All <tt>bacula+ classes are called from the main <tt>::bacula</tt> class.  Parameters
 # are documented there.
 #
 # === Actions:
 # * Enforce the bacula user and groups exist
-# * Enforce the +/var/spool/bacula+ is a director and +/var/lib/bacula+
+# * Enforce the <tt>/var/spool/bacula+ is a director and <tt>/var/lib/bacula</tt>
 #   points to it
 #
 # === Copyright

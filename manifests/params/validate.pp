@@ -1,7 +1,7 @@
 # == Class: bacula::params::validate
 #
 # This class takes parameters which values need to be validated in some way.
-# Because the class should only be called from the main +bacula+ class the
+# Because the class should only be called from the main <tt>bacula</tt> class the
 # default values are intended to fail.
 #
 # === Copyright

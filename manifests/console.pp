@@ -4,7 +4,7 @@
 #
 # === Parameters
 #
-# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# All <tt>bacula+ classes are called from the main <tt>::bacula</tt> class.  Parameters
 # are documented there.
 #
 # === Copyright

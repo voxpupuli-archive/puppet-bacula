@@ -6,8 +6,8 @@
 # === Parameters:
 #
 # [*clients*]
-#   For directors, +$clients+ is a hash of clients.  The keys are the clients while the value is a hash of parameters. The
-#   parameters accepted are the same as the +bacula::client::config+ define.
+#   For directors, <tt>$clients</tt> is a hash of clients.  The keys are the clients while the value is a hash of parameters. The
+#   parameters accepted are the same as the <tt>bacula::client::config</tt> define.
 # [*console_password*]
 #   The console's password
 # [*console_template*]
@@ -16,15 +16,15 @@
 # [*db_backend*]
 #   The database backend to use
 # [*db_database*]
-#   The db database to connect to on +$db_host+
+#   The db database to connect to on <tt>$db_host</tt>
 # [*db_host*]
 #   The db server host to connect to
 # [*db_password*]
-#   The password to authenticate +$db_user+ with
+#   The password to authenticate <tt>$db_user</tt> with
 # [*db_port*]
 #   The port to connect to the database server on
 # [*db_user*]
-#   The user to authenticate to +$db_db+ with.
+#   The user to authenticate to <tt>$db_db</tt> with.
 # [*db_user_host*]
 #   The host string used by MySQL to allow connections from
 # [*director_password*]
@@ -47,18 +47,18 @@
 # [*manage_bat*]
 #   Whether the bat should be managed on the node
 # [*manage_db*]
-#   Whether to manage the existence of the database.  If true, the +$db_user+
-#   must have privileges to create databases on +$db_host+
+#   Whether to manage the existence of the database.  If true, the <tt>$db_user</tt>
+#   must have privileges to create databases on <tt>$db_host</tt>
 # [*manage_db_tables*]
 #   Whether to create the DB tables during install
 # [*plugin_dir*]
 #   The directory Bacula plugins are stored in. Use this parameter if you want to override the default plugin
-#   location. If this is anything other than +undef+ it will also configure plugins on older distros were the default
+#   location. If this is anything other than <tt>undef</tt> it will also configure plugins on older distros were the default
 #   package is too old to support plugins.  Only use if the version in the distro repositories supports plugins or
 #   you have included a respository with a newer Bacula packaged for your distro.
 # [*storage_default_mount*]
-#   Directory where the default disk for file backups is mounted. A subdirectory named +default+ will be created allowing you to
-#   define additional devices in Bacula which use the same disk. Defaults to +'/mnt/bacula'+.
+#   Directory where the default disk for file backups is mounted. A subdirectory named <tt>default</tt> will be created allowing you
+#   to define additional devices in Bacula which use the same disk. Defaults to <tt>'/mnt/bacula'</tt>.
 # [*storage_server*]
 #   The FQDN of the storage server
 # [*storage_template*]
@@ -70,13 +70,13 @@
 #   may connect.
 # [*tls_ca_cert*]
 #   The full path and filename specifying a PEM encoded TLS CA certificate(s). Multiple certificates are permitted in
-#   the file. One of +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if
-#   +TLS Verify Peer+ is also specified, and are always required in a client context.
+#   the file. One of <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if
+#   <tt>TLS Verify Peer</tt> is also specified, and are always required in a client context.
 # [*tls_ca_cert_dir*]
 #   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
 #   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
-#   +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if +TLS Verify Peer+ is
-#   also specified, and are always required in a client context.
+#   <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if <tt>TLS Verify Peer</tt>
+#   is also specified, and are always required in a client context.
 # [*tls_cert*]
 #   The full path and filename of a PEM encoded TLS certificate. It can be used as either a client or server
 #   certificate. PEM stands for Privacy Enhanced Mail, but in this context refers to how the certificates are
@@ -85,15 +85,15 @@
 # [*tls_key*]
 #   The full path and filename of a PEM encoded TLS private key. It must correspond to the TLS certificate.
 # [*tls_require*]
-#   Require TLS connections. This directive is ignored unless +TLS Enable+ is set to yes. If TLS is not required,
+#   Require TLS connections. This directive is ignored unless <tt>TLS Enable</tt> is set to yes. If TLS is not required,
 #   and TLS is enabled, then Bacula will connect with other daemons either with or without TLS depending on what the
 #   other daemon requests. If TLS is enabled and TLS is required, then Bacula will refuse any connection that does
-#   not use TLS. Valid values are +'yes'+ or +'no'+.
+#   not use TLS. Valid values are <tt>'yes'</tt> or <tt>'no'</tt>.
 # [*tls_verify_peer*]
 #   Verify peer certificate. Instructs server to request and verify the client's x509 certificate. Any client
-#   certificate signed by a known-CA will be accepted unless the +TLS Allowed CN+ configuration directive is used, in
-#   which case the client certificate must correspond to the Allowed Common Name specified. Valid values are +'yes'+
-#   or +'no'+.
+#   certificate signed by a known-CA will be accepted unless the <tt>TLS Allowed CN</tt> configuration directive is used, in
+#   which case the client certificate must correspond to the Allowed Common Name specified. Valid values are <tt>'yes'</tt>
+#   or <tt>'no'</tt>.
 # [*use_console*]
 #   Whether to configure a console resource on the director
 # [*use_tls*]
@@ -145,6 +145,7 @@
 # limitations under the License.
 #
 class bacula (
+  $clients               = undef,
   $console_password      = '',
   $console_template      = undef,
   $db_backend            = 'sqlite',
@@ -177,8 +178,7 @@ class bacula (
   $tls_require           = 'yes',
   $tls_verify_peer       = 'yes',
   $use_console           = false,
-  $use_tls               = false,
-  $clients               = {}
+  $use_tls               = false
 ) {
   include bacula::params
 

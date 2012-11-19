@@ -1,17 +1,17 @@
 # == Define: bacula::director::custom_config
 #
-# Include a custom configuration file in +/etc/bacula/bacula-dir.d+.
+# Include a custom configuration file in <tt>/etc/bacula/bacula-dir.d</tt>.
 #
 # === Parameters
 #
 # [*ensure*]
-#   Ensure the file is present or absent.  The only valid values are +file+ or
-#   +absent+. Defaults to +file+.
+#   Ensure the file is present or absent.  The only valid values are <tt>file</tt> or
+#   <tt>absent</tt>. Defaults to <tt>file</tt>.
 # [*content*]
 #   String containing the content for the configuration file.  Usually supplied
 #   with a template.
 # [*source*]
-#   The source location of the configuration file to deploy in +bacula-dir.d+.
+#   The source location of the configuration file to deploy in <tt>bacula-dir.d</tt>.
 #
 # === Examples
 #

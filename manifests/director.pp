@@ -4,7 +4,7 @@
 #
 # === Parameters
 #
-# All +bacula+ classes are called from the main +::bacula+ class.  Parameters
+# All <tt>bacula</tt> classes are called from the main <tt>::bacula</tt> class.  Parameters
 # are documented there.
 #
 # === Copyright
@@ -26,6 +26,7 @@
 # limitations under the License.
 #
 class bacula::director (
+  $clients           = undef,
   $console_password  = '',
   $db_backend        = 'sqlite',
   $db_database       = 'bacula',
@@ -51,8 +52,7 @@ class bacula::director (
   $tls_verify_peer   = 'yes',
   $use_console       = false,
   $use_plugins       = true,
-  $use_tls           = false,
-  $clients           = {}
+  $use_tls           = false
 ) {
   include bacula::params
 
@@ -69,20 +69,11 @@ class bacula::director (
     default => $mail_to,
   }
 
-  # This function takes each client specified in $clients
-  # and generates a bacula::client resource for each
-  #
-  # It also searches top scope for variables in the style
-  # $::bacula_client_mynode with values in format
-  # fileset=Basic:noHome,client_schedule=Hourly
-  # In order to work with Puppet 2.6 where create_resources isn't in core,
-  # we just skip the top-level stuff for now.
-  #  if versioncmp($::puppetversion, '2.7.0') >= 0 {
-  #    generate_clients($clients)
-  #  } else {
-  create_resources('bacula::client::config', $clients)
-  #  }
-  #
+  if $clients != undef {
+    # This function takes each client specified in <tt>$clients</tt>
+    # and generates a <tt>bacula::client</tt> resource for each
+    create_resources('bacula::client::config', $clients)
+  }
   # TODO add postgresql support
   $db_package = $db_backend ? {
     'mysql'      => $bacula::params::director_mysql_package,
@@ -97,7 +88,6 @@ class bacula::director (
   # Create the configuration for the Director and make sure the directory for
   # the per-Client configuration is created before we run the realization for
   # the exported files below
-
   file { '/etc/bacula/bacula-dir.d':
     ensure  => directory,
     owner   => 'bacula',
@@ -181,8 +171,8 @@ class bacula::director (
     require    => $service_require,
   }
 
-  # The bacula-director-common package requires logwatch and installs configs specifically for it.  Since we move the logs we
-  # should probably also update the logwatch configs as well.
+  # The <tt>bacula-director-common</tt> package requires <tt>logwatch</tt> and installs configs specifically for it.  Since we move
+  # the logs we should probably also update the <tt>logwatch</tt> configs as well.
   file_line { 'bacula_logwatch':
     match   => '^LogFile',
     line    => 'LogFile=bacula/*',

@@ -9,7 +9,7 @@
 #
 # === Actions:
 # * Enforce the BAT system package is installed
-# * Enforce +/etc/bacula/bat.conf+ points to +/etc/bacula/bconsole.conf+
+# * Enforce <tt>/etc/bacula/bat.conf</tt> points to <tt>/etc/bacula/bconsole.conf</tt>
 #
 # === Sample Usage:
 #

@@ -7,8 +7,8 @@
 # === Parameters
 #
 # [*ensure*]
-#   Ensure the file is present or absent.  The only valid values are +file+ or
-#   +absent+. Defaults to +file+.
+#   Ensure the file is present or absent.  The only valid values are <tt>file</tt> or
+#   <tt>absent+. Defaults to <tt>file</tt>.
 # [*exclude_files*]
 #   An array of strings consisting of one file or directory name per entry. Directory names should be specified without
 #   a trailing slash with Unix path notation.

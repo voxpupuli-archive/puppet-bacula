@@ -1,6 +1,6 @@
 # == Define: bacula::client::config
 #
-# Install a config file describing a +bacula-fd+ client on the director.
+# Install a config file describing a <tt>bacula-fd</tt> client on the director.
 #
 # === Parameters
 #
@@ -20,13 +20,13 @@
 #   The storage server hosting the pool this client will backup to
 # [*tls_ca_cert*]
 #   The full path and filename specifying a PEM encoded TLS CA certificate(s). Multiple certificates are permitted in
-#   the file. One of +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if
-#   +TLS Verify Peer+ is also specified, and are always required in a client context.
+#   the file. One of <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if
+#   <tt>TLS Verify Peer</tt> is also specified, and are always required in a client context.
 # [*tls_ca_cert_dir*]
 #   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
 #   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
-#   +TLS CA Certificate File+ or +TLS CA Certificate Dir+ are required in a server context if +TLS Verify Peer+ is
-#   also specified, and are always required in a client context.
+#   <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if <tt>TLS Verify Peer</tt>
+#   is also specified, and are always required in a client context.
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
 #   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
