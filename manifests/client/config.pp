@@ -72,7 +72,8 @@ define bacula::client::config (
   $tls_ca_cert       = undef,
   $tls_ca_cert_dir   = undef,
   $tls_require       = 'yes',
-  $use_tls           = false
+  $use_tls           = false,
+  $template          = undef
 ) {
   include bacula::params
 
@@ -136,12 +137,20 @@ define bacula::client::config (
     fail "storage_server=${storage_server_real} must be a fully qualified domain name"
   }
 
+  case $template {
+    undef   : 
+      $template_real = $bacula::params::client_template
+    default : {
+      $template_real = $template
+    }
+  }
+
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0640',
-    content => template('bacula/client_config.erb'),
+    content => template($template_real),
     require => File['/etc/bacula/bacula-dir.conf'],
     notify  => Service['bacula-dir'],
   }
