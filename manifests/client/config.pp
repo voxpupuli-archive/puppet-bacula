@@ -139,9 +139,9 @@ define bacula::client::config (
 
   case $template {
     undef   : 
-      $template_real = $bacula::params::client_template
+      $template_real = $bacula::params::config_template_default;
     default : {
-      $template_real = $template
+      $template_real = $template;
     }
   }
 
