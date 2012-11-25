@@ -238,7 +238,7 @@ class bacula (
     manage_console        => $manage_console,
     manage_db             => $manage_db,
     manage_db_tables      => $manage_db_tables,
-    manage_logwatch       => $manage_logwatch,
+    manage_logwatch       => $manage_logwatch_real,
     plugin_dir            => $plugin_dir_real,
     storage_default_mount => $storage_default_mount,
     storage_server        => $storage_server_real,
