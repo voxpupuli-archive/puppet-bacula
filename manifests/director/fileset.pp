@@ -46,8 +46,8 @@ define bacula::director::fileset (
 
   file { "/etc/bacula/bacula-dir.d/fileset-${name}.conf":
     ensure  => file,
-    owner   => 'root',
-    group   => 'root',
+    owner   => 'bacula',
+    group   => 'bacula',
     mode    => '0640',
     content => template('bacula/fileset.conf.erb'),
     require => File['/etc/bacula/bacula-dir.conf'],
