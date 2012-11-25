@@ -46,6 +46,8 @@
 #   Whether the bconsole should be managed on the node
 # [*manage_bat*]
 #   Whether the bat should be managed on the node
+# [*manage_config_dir*]
+*   Whether to purge all non-managed files from the bacula config directory
 # [*manage_db*]
 #   Whether to manage the existence of the database.  If true, the +$db_user+
 #   must have privileges to create databases on +$db_host+
@@ -163,6 +165,7 @@ class bacula (
   $is_director           = false,
   $is_storage            = false,
   $mail_to               = undef,
+  $manage_config_dir     = false,
   $manage_db             = false,
   $manage_db_tables      = true,
   $manage_logwatch       = undef,
@@ -235,6 +238,7 @@ class bacula (
     is_storage            => $is_storage,
     mail_to               => $mail_to_real,
     manage_bat            => $manage_bat,
+    manage_config_dir     => $manage_config_dir,
     manage_console        => $manage_console,
     manage_db             => $manage_db,
     manage_db_tables      => $manage_db_tables,
@@ -265,6 +269,7 @@ class bacula (
     is_director      => $is_director,
     is_storage       => $is_storage,
     manage_bat       => $manage_bat,
+    manage_config_dir => $manage_config_dir,
     manage_console   => $manage_console,
     manage_db_tables => $manage_db_tables,
     plugin_dir       => $plugin_dir_real,

@@ -43,6 +43,7 @@ class bacula::common (
   $is_storage       = false,
   $manage_bat       = false,
   $manage_console   = false,
+  $manage_config_dir = false,
   $manage_db_tables = true,
   $packages         = undef,
   $plugin_dir       = undef,
@@ -97,6 +98,26 @@ class bacula::common (
     ensure  => present,
     gid     => 'bacula',
     require => Group['bacula'],
+  }
+
+  file { '/etc/bacula':
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
+    mode    => '0750',
+    purge   => $manage_config_dir,
+    force   => $manage_config_dir,
+    recurse => $manage_config_dir,
+    source  => $manage_config_dir ? {
+      true  => 'puppet:///modules/bacula/bacula-empty.dir' }
+    require => Package[$require_package],
+  }
+
+  file { '/etc/bacula/scripts':
+    ensure => directory,
+    owner  => 'bacula',
+    group  => 'bacula',
+    require => Package[$require_package],
   }
 
   file { '/var/lib/bacula':

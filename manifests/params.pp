@@ -78,5 +78,4 @@ class bacula::params {
     /(Debian|Ubuntu)/ => false,
     default           => true,
   } 
-    
 }
