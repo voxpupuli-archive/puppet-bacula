@@ -109,7 +109,7 @@ class bacula::common (
     force   => $manage_config_dir,
     recurse => $manage_config_dir,
     source  => $manage_config_dir ? {
-      true  => 'puppet:///modules/bacula/bacula-empty.dir' }
+      true  => 'puppet:///modules/bacula/bacula-empty.dir' },
     require => Package[$require_package],
   }
 
