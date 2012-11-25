@@ -39,8 +39,8 @@ define bacula::director::custom_config (
 
   file { "/etc/bacula/bacula-dir.d/custom-${name}.conf":
     ensure  => file,
-    owner   => 'root',
-    group   => 'root',
+    owner   => 'bacula',
+    group   => 'bacula',
     mode    => '0640',
     content => $content,
     source  => $source,
