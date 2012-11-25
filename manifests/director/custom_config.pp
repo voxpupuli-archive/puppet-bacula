@@ -7,6 +7,8 @@
 # [*ensure*]
 #   Ensure the file is present or absent.  The only valid values are <tt>file</tt> or
 #   <tt>absent</tt>. Defaults to <tt>file</tt>.
+# [*director_server*]
+#   WHere this config will be deployed, if using stored configs.
 # [*content*]
 #   String containing the content for the configuration file.  Usually supplied
 #   with a template.
@@ -24,6 +26,7 @@
 #
 define bacula::director::custom_config (
   $ensure   = 'file',
+  $director_server = undef,
   $content  = undef,
   $source   = undef
 ) {
