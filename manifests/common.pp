@@ -113,6 +113,7 @@ class bacula::common (
     require => Package[$require_package],
   }
 
+  # This is necessary to prevent the object above from deleting the supplied scripts
   file { '/etc/bacula/scripts':
     ensure => directory,
     owner  => 'bacula',

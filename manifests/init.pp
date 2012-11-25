@@ -47,7 +47,7 @@
 # [*manage_bat*]
 #   Whether the bat should be managed on the node
 # [*manage_config_dir*]
-*   Whether to purge all non-managed files from the bacula config directory
+#   Whether to purge all non-managed files from the bacula config directory
 # [*manage_db*]
 #   Whether to manage the existence of the database.  If true, the +$db_user+
 #   must have privileges to create databases on +$db_host+
