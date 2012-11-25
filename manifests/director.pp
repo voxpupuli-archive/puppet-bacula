@@ -40,6 +40,7 @@ class bacula::director (
   $mail_to           = undef,
   $manage_db         = false,
   $manage_db_tables  = true,
+  $manage_logwatch   = undef,
   $plugin_dir        = undef,
   $storage_server    = undef,
   $tls_allowed_cn    = [],
@@ -181,13 +182,14 @@ class bacula::director (
     require    => $service_require,
   }
 
-  # The bacula-director-common package requires logwatch and installs configs specifically for it.  Since we move the logs we
-  # should probably also update the logwatch configs as well.
-  file_line { 'bacula_logwatch':
-    match   => '^LogFile',
-    line    => 'LogFile=bacula/*',
-    path    => '/etc/logwatch/conf/logfiles/bacula.conf',
-    require => Package[$db_package],
+  if $manage_logwatch {
+    # On RedHat the bacula-director-common package requires logwatch and installs configs specifically for it.  Since we move the logs we
+    # should probably also update the logwatch configs as well.
+    file_line { 'bacula_logwatch':
+      match   => '^LogFile',
+      line    => 'LogFile=bacula/*',
+      path    => '/etc/logwatch/conf/logfiles/bacula.conf',
+      require => Package[$db_package],
+    }
   }
-
 }

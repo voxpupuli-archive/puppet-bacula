@@ -51,6 +51,8 @@
 #   must have privileges to create databases on +$db_host+
 # [*manage_db_tables*]
 #   Whether to create the DB tables during install
+# [*manage_logwatch*]
+#   Whether to configure logwatch on the director
 # [*plugin_dir*]
 #   The directory Bacula plugins are stored in. Use this parameter if you want to override the default plugin
 #   location. If this is anything other than +undef+ it will also configure plugins on older distros were the default
@@ -163,6 +165,7 @@ class bacula (
   $mail_to               = undef,
   $manage_db             = false,
   $manage_db_tables      = true,
+  $manage_logwatch       = undef,
   $manage_console        = false,
   $manage_bat            = false,
   $plugin_dir            = undef,
@@ -206,6 +209,15 @@ class bacula (
     }
   }
 
+  case $manage_logwatch {
+    undef   : { 
+      $manage_logwatch_real = $bacula::params::manage_logwatch 
+    }
+    default : { 
+      $manage_logwatch_real = $manage_logwatch
+    }
+  }
+
   # Validate our parameters
   # It's ugly to do it in the parent class
   class { 'bacula::params::validate':
@@ -226,6 +238,7 @@ class bacula (
     manage_console        => $manage_console,
     manage_db             => $manage_db,
     manage_db_tables      => $manage_db_tables,
+    manage_logwatch       => $manage_logwatch,
     plugin_dir            => $plugin_dir_real,
     storage_default_mount => $storage_default_mount,
     storage_server        => $storage_server_real,
@@ -275,6 +288,7 @@ class bacula (
       mail_to           => $mail_to_real,
       manage_db         => $manage_db,
       manage_db_tables  => $manage_db_tables,
+      manage_logwatch   => $manage_logwatch_real,
       plugin_dir        => $plugin_dir_real,
       storage_server    => $storage_server_real,
       tls_allowed_cn    => $tls_allowed_cn,

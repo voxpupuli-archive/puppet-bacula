@@ -40,6 +40,7 @@ class bacula::params::validate (
   $manage_console        = '',
   $manage_db             = '',
   $manage_db_tables      = '',
+  $manage_logwatch       = '',
   $plugin_dir            = '',
   $storage_default_mount = '',
   $storage_server        = '',
@@ -62,6 +63,7 @@ class bacula::params::validate (
   validate_bool($manage_console)
   validate_bool($manage_db)
   validate_bool($manage_db_tables)
+  validate_bool($manage_logwatch)
   validate_bool($use_console)
   validate_bool($use_plugins)
   validate_bool($use_tls)

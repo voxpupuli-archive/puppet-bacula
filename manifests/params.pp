@@ -74,4 +74,9 @@ class bacula::params {
   } else {
     $use_plugins = true
   }
+  $manage_logwatch = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => false,
+    default           => true,
+  } 
+    
 }
