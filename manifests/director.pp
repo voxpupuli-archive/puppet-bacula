@@ -38,6 +38,7 @@ class bacula::director (
   $director_password = '',
   $director_server   = undef,
   $mail_to           = undef,
+  $manage_config_dir = false,
   $manage_db         = false,
   $manage_db_tables  = true,
   $manage_logwatch   = undef,
@@ -104,26 +105,25 @@ class bacula::director (
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0750',
+    purge   => $manage_config_dir,
+    force   => $manage_config_dir,
+    recurse => $manage_config_dir,
+    source  => $manage_config_dir ? {
+      true  => 'puppet:///modules/bacula/bacula-empty.dir',
+      false => undef },
     require => Package[$db_package],
-  }
-
-  file { '/etc/bacula/bacula-dir.d/empty.conf':
-    ensure => file,
-    owner  => 'bacula',
-    group  => 'bacula',
-    mode   => '0640',
   }
 
   $file_requires = $use_plugins ? {
     false   => File[
-      '/etc/bacula/bacula-dir.d/empty.conf',
+      '/etc/bacula/bacula-dir.d',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
       '/var/run/bacula'
     ],
     default => File[
-      '/etc/bacula/bacula-dir.d/empty.conf',
+      '/etc/bacula/bacula-dir.d',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',

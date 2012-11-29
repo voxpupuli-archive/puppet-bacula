@@ -291,6 +291,7 @@ class bacula (
       director_password => $director_password,
       director_server   => $director_server_real,
       mail_to           => $mail_to_real,
+      manage_config_dir => $manage_config_dir,
       manage_db         => $manage_db,
       manage_db_tables  => $manage_db_tables,
       manage_logwatch   => $manage_logwatch_real,
