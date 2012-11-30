@@ -39,8 +39,10 @@ class bacula::director (
   $director_password = '',
   $director_server   = undef,
   $mail_to           = undef,
+  $manage_config_dir = false,
   $manage_db         = false,
   $manage_db_tables  = true,
+  $manage_logwatch   = undef,
   $plugin_dir        = undef,
   $storage_server    = undef,
   $tls_allowed_cn    = [],
@@ -93,26 +95,26 @@ class bacula::director (
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0750',
+    purge   => $manage_config_dir,
+    force   => $manage_config_dir,
+    recurse => $manage_config_dir,
+    source  => $manage_config_dir ? {
+      true  => 'puppet:///modules/bacula/bacula-empty.dir',
+      false => undef
+    },
     require => Package[$db_package],
-  }
-
-  file { '/etc/bacula/bacula-dir.d/empty.conf':
-    ensure => file,
-    owner  => 'bacula',
-    group  => 'bacula',
-    mode   => '0640',
   }
 
   $file_requires = $use_plugins ? {
     false   => File[
-      '/etc/bacula/bacula-dir.d/empty.conf',
+      '/etc/bacula/bacula-dir.d',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
       '/var/run/bacula'
     ],
     default => File[
-      '/etc/bacula/bacula-dir.d/empty.conf',
+      '/etc/bacula/bacula-dir.d',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
@@ -171,13 +173,14 @@ class bacula::director (
     require    => $service_require,
   }
 
-  # The <tt>bacula-director-common</tt> package requires <tt>logwatch</tt> and installs configs specifically for it.  Since we move
-  # the logs we should probably also update the <tt>logwatch</tt> configs as well.
-  file_line { 'bacula_logwatch':
-    match   => '^LogFile',
-    line    => 'LogFile=bacula/*',
-    path    => '/etc/logwatch/conf/logfiles/bacula.conf',
-    require => Package[$db_package],
+  if $manage_logwatch {
+    # The EPEL <tt>bacula-director-common</tt> package requires <tt>logwatch</tt> and installs configs specifically for it.  Since
+    # we move the logs we should probably also update the <tt>logwatch</tt> configs as well.
+    file_line { 'bacula_logwatch':
+      match   => '^LogFile',
+      line    => 'LogFile=bacula/*',
+      path    => '/etc/logwatch/conf/logfiles/bacula.conf',
+      require => Package[$db_package],
+    }
   }
-
 }

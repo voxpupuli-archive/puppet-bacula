@@ -46,11 +46,15 @@
 #   Whether the bconsole should be managed on the node
 # [*manage_bat*]
 #   Whether the bat should be managed on the node
+# [*manage_config_dir*]
+#   Whether to purge all non-managed files from the bacula config directory
 # [*manage_db*]
 #   Whether to manage the existence of the database.  If true, the <tt>$db_user</tt>
 #   must have privileges to create databases on <tt>$db_host</tt>
 # [*manage_db_tables*]
 #   Whether to create the DB tables during install
+# [*manage_logwatch*]
+#   Whether to configure logwatch on the director
 # [*plugin_dir*]
 #   The directory Bacula plugins are stored in. Use this parameter if you want to override the default plugin
 #   location. If this is anything other than <tt>undef</tt> it will also configure plugins on older distros were the default
@@ -162,8 +166,10 @@ class bacula (
   $is_director           = false,
   $is_storage            = false,
   $mail_to               = undef,
+  $manage_config_dir     = false,
   $manage_db             = false,
   $manage_db_tables      = true,
+  $manage_logwatch       = undef,
   $manage_console        = false,
   $manage_bat            = false,
   $plugin_dir            = undef,
@@ -206,6 +212,15 @@ class bacula (
     }
   }
 
+  case $manage_logwatch {
+    undef   : { 
+      $manage_logwatch_real = $bacula::params::manage_logwatch 
+    }
+    default : { 
+      $manage_logwatch_real = $manage_logwatch
+    }
+  }
+
   # Validate our parameters
   # It's ugly to do it in the parent class
   class { 'bacula::params::validate':
@@ -223,9 +238,11 @@ class bacula (
     is_storage            => $is_storage,
     mail_to               => $mail_to_real,
     manage_bat            => $manage_bat,
+    manage_config_dir     => $manage_config_dir,
     manage_console        => $manage_console,
     manage_db             => $manage_db,
     manage_db_tables      => $manage_db_tables,
+    manage_logwatch       => $manage_logwatch_real,
     plugin_dir            => $plugin_dir_real,
     storage_default_mount => $storage_default_mount,
     storage_server        => $storage_server_real,
@@ -252,6 +269,7 @@ class bacula (
     is_director      => $is_director,
     is_storage       => $is_storage,
     manage_bat       => $manage_bat,
+    manage_config_dir => $manage_config_dir,
     manage_console   => $manage_console,
     manage_db_tables => $manage_db_tables,
     plugin_dir       => $plugin_dir_real,
@@ -273,8 +291,10 @@ class bacula (
       director_password => $director_password,
       director_server   => $director_server_real,
       mail_to           => $mail_to_real,
+      manage_config_dir => $manage_config_dir,
       manage_db         => $manage_db,
       manage_db_tables  => $manage_db_tables,
+      manage_logwatch   => $manage_logwatch_real,
       plugin_dir        => $plugin_dir_real,
       storage_server    => $storage_server_real,
       tls_allowed_cn    => $tls_allowed_cn,

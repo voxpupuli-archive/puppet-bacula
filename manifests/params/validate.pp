@@ -37,9 +37,11 @@ class bacula::params::validate (
   $is_storage            = '',
   $mail_to               = '',
   $manage_bat            = '',
+  $manage_config_dir     = '',
   $manage_console        = '',
   $manage_db             = '',
   $manage_db_tables      = '',
+  $manage_logwatch       = '',
   $plugin_dir            = '',
   $storage_default_mount = '',
   $storage_server        = '',
@@ -59,9 +61,11 @@ class bacula::params::validate (
   validate_bool($is_director)
   validate_bool($is_storage)
   validate_bool($manage_bat)
+  validate_bool($manage_config_dir)
   validate_bool($manage_console)
   validate_bool($manage_db)
   validate_bool($manage_db_tables)
+  validate_bool($manage_logwatch)
   validate_bool($use_console)
   validate_bool($use_plugins)
   validate_bool($use_tls)
