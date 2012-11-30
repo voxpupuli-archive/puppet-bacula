@@ -1,7 +1,6 @@
 # == Class: bacula::common
 #
-# This class enforces common resources needed by all
-# bacula components
+# This class enforces common resources needed by all bacula components
 #
 # === Parameters
 #
@@ -32,22 +31,22 @@
 # limitations under the License.
 #
 class bacula::common (
-  $db_backend       = 'sqlite',
-  $db_database      = 'bacula',
-  $db_host          = 'localhost',
-  $db_password      = '',
-  $db_port          = '3306',
-  $db_user          = '',
-  $is_client        = true,
-  $is_director      = false,
-  $is_storage       = false,
-  $manage_bat       = false,
-  $manage_console   = false,
+  $db_backend        = 'sqlite',
+  $db_database       = 'bacula',
+  $db_host           = 'localhost',
+  $db_password       = '',
+  $db_port           = '3306',
+  $db_user           = '',
+  $is_client         = true,
+  $is_director       = false,
+  $is_storage        = false,
+  $manage_bat        = false,
+  $manage_console    = false,
   $manage_config_dir = false,
-  $manage_db_tables = true,
-  $packages         = undef,
-  $plugin_dir       = undef,
-  $use_plugins      = true
+  $manage_db_tables  = true,
+  $packages          = undef,
+  $plugin_dir        = undef,
+  $use_plugins       = true
 ) {
   include bacula::params
 
@@ -100,6 +99,11 @@ class bacula::common (
     require => Group['bacula'],
   }
 
+  $config_dir_source = $manage_config_dir ? {
+    true    => 'puppet:///modules/bacula/bacula-empty.dir',
+    default => undef,
+  }
+
   file { '/etc/bacula':
     ensure  => directory,
     owner   => 'bacula',
@@ -108,17 +112,15 @@ class bacula::common (
     purge   => $manage_config_dir,
     force   => $manage_config_dir,
     recurse => $manage_config_dir,
-    source  => $manage_config_dir ? {
-      true  => 'puppet:///modules/bacula/bacula-empty.dir',
-      false => undef },
+    source  => $config_dir_source,
     require => Package[$require_package],
   }
 
   # This is necessary to prevent the object above from deleting the supplied scripts
   file { '/etc/bacula/scripts':
-    ensure => directory,
-    owner  => 'bacula',
-    group  => 'bacula',
+    ensure  => directory,
+    owner   => 'bacula',
+    group   => 'bacula',
     require => Package[$require_package],
   }
 

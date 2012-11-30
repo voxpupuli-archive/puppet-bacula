@@ -87,6 +87,11 @@ class bacula::director (
     ensure => present,
   }
 
+  $config_dir_source = $manage_config_dir ? {
+    true    => 'puppet:///modules/bacula/bacula-empty.dir',
+    default => undef,
+  }
+
   # Create the configuration for the Director and make sure the directory for
   # the per-Client configuration is created before we run the realization for
   # the exported files below
@@ -98,10 +103,7 @@ class bacula::director (
     purge   => $manage_config_dir,
     force   => $manage_config_dir,
     recurse => $manage_config_dir,
-    source  => $manage_config_dir ? {
-      true  => 'puppet:///modules/bacula/bacula-empty.dir',
-      false => undef
-    },
+    source  => $config_dir_source,
     require => Package[$db_package],
   }
 
