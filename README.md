@@ -128,6 +128,11 @@ Whether the node should be a director
 
 Whether the node should be a storage server
 
+### logwatch_enabled
+
+If `manage_logwatch` is `true` should the Bacula logwatch configuration be
+enabled or disabled
+
 ### mail_to
 
 Address to email reports to
@@ -135,6 +140,10 @@ Address to email reports to
 ### manage_bat
 
 Whether the bat should be managed on the node
+
+### manage_config_dir
+
+Whether to purge all non-managed files from the bacula config directory
 
 ### manage_console
 
@@ -149,6 +158,10 @@ to false. In order for this to work, you must declare the `mysql::server` class
 
 Whether to manage the SQL tables in the database specified by `db_backend`.
 Defaults to `true`.
+
+### manage_logwatch
+
+Whether to configure [logwatch](http://www.logwatch.org/) on the director
 
 ### plugin_dir
 

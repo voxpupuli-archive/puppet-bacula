@@ -1,4 +1,4 @@
-## 2012-11-12  Russell Harrison <rharrison@fedoraproject.org> - 0.0.4
+## 2012-11-30  Russell Harrison <rharrison@fedoraproject.org> - 0.0.4
 * Fix MySQL database management
 * Specify perms for file resources
 * Clean up resource relationships
@@ -18,6 +18,10 @@
 * Allow mount path of the default backup device to be changed.
 * Basic custom FileSet creation
 * Include custom config file for the director
+* Manage Bacula logwatch configurations
+
+### 2012-11-25  erik-smit <smite@zylon.net>
+* Allow purging unmanaged files (like outdated clients or filesets) from config-dir.
 
 ### 2012-10-24  erik-smit <smite@zylon.net>
 * Config default plugin directory for file daemon
