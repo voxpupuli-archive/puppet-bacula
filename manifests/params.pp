@@ -51,9 +51,13 @@ class bacula::params {
   }
   $libdir = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => '/usr/lib',
-    default           => "/usr/${lib}"
+    default           => "/usr/${lib}",
   }
   $mail_to_default             = "root@${::fqdn}"
+  $manage_logwatch = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => false,
+    default           => true,
+  }
   $plugin_dir           = "${libdir}/bacula"
   $storage_mysql_package       = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-mysql',
@@ -72,9 +76,5 @@ class bacula::params {
     $use_plugins = false
   } else {
     $use_plugins = true
-  }
-  $manage_logwatch = $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => false,
-    default           => true,
   }
 }

@@ -40,21 +40,23 @@
 #   Whether the node should be a director
 # [*is_storage*]
 #   Whether the node should be a storage server
+# [*logwatch_enabled*]
+#   If <tt>manage_logwatch</tt> is <tt>true</tt> should the Bacula logwatch configuration be enabled or disabled
 # [*mail_to*]
 #   Address to email reports to
-# [*manage_console*]
-#   Whether the bconsole should be managed on the node
 # [*manage_bat*]
 #   Whether the bat should be managed on the node
 # [*manage_config_dir*]
 #   Whether to purge all non-managed files from the bacula config directory
+# [*manage_console*]
+#   Whether the bconsole should be managed on the node
 # [*manage_db*]
 #   Whether to manage the existence of the database.  If true, the <tt>$db_user</tt>
 #   must have privileges to create databases on <tt>$db_host</tt>
 # [*manage_db_tables*]
 #   Whether to create the DB tables during install
 # [*manage_logwatch*]
-#   Whether to configure logwatch on the director
+#   Whether to configure {logwatch}[http://www.logwatch.org/] on the director
 # [*plugin_dir*]
 #   The directory Bacula plugins are stored in. Use this parameter if you want to override the default plugin
 #   location. If this is anything other than <tt>undef</tt> it will also configure plugins on older distros were the default
@@ -153,25 +155,26 @@ class bacula (
   $console_password      = '',
   $console_template      = undef,
   $db_backend            = 'sqlite',
-  $db_user               = '',
-  $db_password           = '',
-  $db_host               = 'localhost',
-  $db_user_host          = undef,
   $db_database           = 'bacula',
+  $db_host               = 'localhost',
+  $db_password           = '',
   $db_port               = '3306',
+  $db_user               = '',
+  $db_user_host          = undef,
   $director_password     = '',
   $director_server       = undef,
   $director_template     = undef,
   $is_client             = true,
   $is_director           = false,
   $is_storage            = false,
+  $logwatch_enabled      = true,
   $mail_to               = undef,
+  $manage_bat            = false,
   $manage_config_dir     = false,
+  $manage_console        = false,
   $manage_db             = false,
   $manage_db_tables      = true,
   $manage_logwatch       = undef,
-  $manage_console        = false,
-  $manage_bat            = false,
   $plugin_dir            = undef,
   $storage_default_mount = '/mnt/bacula',
   $storage_server        = undef,
@@ -200,6 +203,10 @@ class bacula (
     undef   => $bacula::params::mail_to_default,
     default => $mail_to,
   }
+  $manage_logwatch_real = $manage_logwatch ? {
+    undef   => $bacula::params::manage_logwatch,
+    default => $manage_logwatch,
+  }
 
   case $plugin_dir {
     undef   : {
@@ -209,15 +216,6 @@ class bacula (
     default : {
       $use_plugins     = true
       $plugin_dir_real = $plugin_dir
-    }
-  }
-
-  case $manage_logwatch {
-    undef   : { 
-      $manage_logwatch_real = $bacula::params::manage_logwatch 
-    }
-    default : { 
-      $manage_logwatch_real = $manage_logwatch
     }
   }
 
@@ -236,6 +234,7 @@ class bacula (
     is_client             => $is_client,
     is_director           => $is_director,
     is_storage            => $is_storage,
+    logwatch_enabled      => $logwatch_enabled,
     mail_to               => $mail_to_real,
     manage_bat            => $manage_bat,
     manage_config_dir     => $manage_config_dir,
@@ -259,21 +258,21 @@ class bacula (
   }
 
   class { 'bacula::common':
-    db_backend       => $db_backend,
-    db_database      => $db_database,
-    db_host          => $db_host,
-    db_password      => $db_password,
-    db_port          => $db_port,
-    db_user          => $db_user,
-    is_client        => $is_client,
-    is_director      => $is_director,
-    is_storage       => $is_storage,
-    manage_bat       => $manage_bat,
+    db_backend        => $db_backend,
+    db_database       => $db_database,
+    db_host           => $db_host,
+    db_password       => $db_password,
+    db_port           => $db_port,
+    db_user           => $db_user,
+    is_client         => $is_client,
+    is_director       => $is_director,
+    is_storage        => $is_storage,
+    manage_bat        => $manage_bat,
     manage_config_dir => $manage_config_dir,
-    manage_console   => $manage_console,
-    manage_db_tables => $manage_db_tables,
-    plugin_dir       => $plugin_dir_real,
-    use_plugins      => $use_plugins,
+    manage_console    => $manage_console,
+    manage_db_tables  => $manage_db_tables,
+    plugin_dir        => $plugin_dir_real,
+    use_plugins       => $use_plugins,
   }
 
   if $is_director {
@@ -307,6 +306,12 @@ class bacula (
       use_console       => $use_console,
       use_plugins       => $use_plugins,
       use_tls           => $use_tls,
+    }
+
+    if $manage_logwatch_real {
+      class { 'bacula::director::logwatch':
+        logwatch_enabled => $logwatch_enabled,
+      }
     }
   }
 

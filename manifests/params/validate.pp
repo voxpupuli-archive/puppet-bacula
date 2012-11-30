@@ -35,6 +35,7 @@ class bacula::params::validate (
   $is_client             = '',
   $is_director           = '',
   $is_storage            = '',
+  $logwatch_enabled      = '',
   $mail_to               = '',
   $manage_bat            = '',
   $manage_config_dir     = '',
@@ -60,6 +61,7 @@ class bacula::params::validate (
   validate_bool($is_client)
   validate_bool($is_director)
   validate_bool($is_storage)
+  validate_bool($logwatch_enabled)
   validate_bool($manage_bat)
   validate_bool($manage_config_dir)
   validate_bool($manage_console)

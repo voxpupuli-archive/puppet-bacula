@@ -172,15 +172,4 @@ class bacula::director (
     hasrestart => true,
     require    => $service_require,
   }
-
-  if $manage_logwatch {
-    # The EPEL <tt>bacula-director-common</tt> package requires <tt>logwatch</tt> and installs configs specifically for it.  Since
-    # we move the logs we should probably also update the <tt>logwatch</tt> configs as well.
-    file_line { 'bacula_logwatch':
-      match   => '^LogFile',
-      line    => 'LogFile=bacula/*',
-      path    => '/etc/logwatch/conf/logfiles/bacula.conf',
-      require => Package[$db_package],
-    }
-  }
 }
