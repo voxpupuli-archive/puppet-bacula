@@ -74,7 +74,9 @@ class bacula::client (
   }
 
   service { 'bacula-fd':
-    ensure => running,
-    enable => true,
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
   }
 }
