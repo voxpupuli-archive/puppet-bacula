@@ -16,6 +16,8 @@
 #   The file set used by the client for backups
 # [*pool*]
 #   The pool used by the client for backups
+# [*restore_where*]
+#   The default path to restore files to defined in the restore job for this client.
 # [*run_scripts*]
 #   An array of hashes containing the parameters for any
 #   {RunScripts}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971] to include in the backup job
@@ -73,6 +75,7 @@ define bacula::client::config (
   $director_server   = undef,
   $fileset           = 'Basic:noHome',
   $pool              = 'default',
+  $restore_where     = '/var/tmp/bacula-restores',
   $run_scripts       = undef,
   $storage_server    = undef,
   $tls_ca_cert       = undef,
@@ -125,6 +128,8 @@ define bacula::client::config (
   if !is_domain_name($director_server_real) {
     fail "director_server=${director_server_real} must be a fully qualified domain name"
   }
+
+  validate_absolute_path($restore_where)
 
   if $run_scripts {
     case type($run_scripts) {

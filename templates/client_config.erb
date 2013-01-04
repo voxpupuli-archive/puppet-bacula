@@ -30,26 +30,37 @@ Job {
 <% if @run_scripts_real -%>
   <%- @run_scripts.each do |runscript| -%>
   RunScript {
-    RunsWhen = <%= runscript['RunsWhen'] %>
+    RunsWhen       = <%= runscript['RunsWhen'] %>
     <%- if runscript['RunsOnSuccess'] -%>
-    RunsOnSuccess = <%= runscript['RunsOnSuccess'] %>
+    RunsOnSuccess  = <%= runscript['RunsOnSuccess'] %>
     <%- end -%>
     <%- if runscript['RunsOnFailure'] -%>
-    RunsOnFailure = <%= runscript['RunsOnFailure'] %>
+    RunsOnFailure  = <%= runscript['RunsOnFailure'] %>
     <%- end -%>
     <%- if runscript['RunsOnClient'] -%>
-    RunsOnClient = <%= runscript['RunsOnClient'] %>
+    RunsOnClient   = <%= runscript['RunsOnClient'] %>
     <%- end -%>
     <%- if runscript['FailJobOnError'] -%>
     FailJobOnError = <%= runscript['FailJobOnError'] %>
     <%- end -%>
     <%- if runscript['Command'] -%>
-    Command = "<%= runscript['Command'] %>"
+    Command        = "<%= runscript['Command'] %>"
     <%- end -%>
     <%- if runscript['Console'] -%>
-    Console = "<%= runscript['Console'] %>"
+    Console        = "<%= runscript['Console'] %>"
     <%- end -%>
   }
   <%- end -%>
 <% end -%>
+}
+
+Job {
+  Name     = "<%= @name %> Restore"
+  Client   = "<%= @name %>"
+  Type     = Restore
+  FileSet  = "<%= @fileset %>"
+  Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
+  Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
+  Messages = "<%= @director_server_real %>:messages:standard"
+  Where    = <%= @restore_where %>
 }
