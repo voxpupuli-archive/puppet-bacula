@@ -1,30 +1,55 @@
 Client {
-  Name     = "<%= name %>"
-  Address  = "<%= name %>"
-  Password = "<%= director_password_real %>"
-  Catalog  = "<%= director_server_real %>:<%= db_backend_real %>"
+  Name     = "<%= @name %>"
+  Address  = "<%= @name %>"
+  Password = "<%= @director_password_real %>"
+  Catalog  = "<%= @director_server_real %>:<%= @db_backend_real %>"
   File Retention = 6 Weeks
   Job Retention  = 1 Year
   Auto Prune = Yes
-<% if use_tls -%>
-  TLS Enable = yes
-  TLS Require = <%= tls_require %>
+<% if @use_tls -%>
+  TLS Enable = Yes
+  TLS Require = <%= @tls_require %>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
 <% end -%>
 }
 
 Job {
-  Name     = "<%= name %>"
-  Client   = "<%= name %>"
+  Name     = "<%= @name %>"
+  Client   = "<%= @name %>"
   Type     = Backup
-  FileSet  = "<%= fileset %>"
-  Storage  = "<%= storage_server_real %>:storage:<%= pool %>"
-  Schedule = "<%= client_schedule %>"
-  Pool     = "<%= storage_server_real %>:pool:<%= pool %>"
-  Messages = "<%= director_server_real %>:messages:standard"
+  FileSet  = "<%= @fileset %>"
+  Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
+  Schedule = "<%= @client_schedule %>"
+  Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
+  Messages = "<%= @director_server_real %>:messages:standard"
+<% if @run_scripts_real -%>
+  <%- @run_scripts.each do |runscript| -%>
+  RunScript {
+    RunsWhen = <%= runscript['RunsWhen'] %>
+    <%- if runscript['RunsOnSuccess'] -%>
+    RunsOnSuccess = <%= runscript['RunsOnSuccess'] %>
+    <%- end -%>
+    <%- if runscript['RunsOnFailure'] -%>
+    RunsOnFailure = <%= runscript['RunsOnFailure'] %>
+    <%- end -%>
+    <%- if runscript['RunsOnClient'] -%>
+    RunsOnClient = <%= runscript['RunsOnClient'] %>
+    <%- end -%>
+    <%- if runscript['FailJobOnError'] -%>
+    FailJobOnError = <%= runscript['FailJobOnError'] %>
+    <%- end -%>
+    <%- if runscript['Command'] -%>
+    Command = "<%= runscript['Command'] %>"
+    <%- end -%>
+    <%- if runscript['Console'] -%>
+    Console = "<%= runscript['Console'] %>"
+    <%- end -%>
+  }
+  <%- end -%>
+<% end -%>
 }

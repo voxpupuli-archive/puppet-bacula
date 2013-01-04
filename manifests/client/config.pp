@@ -16,6 +16,11 @@
 #   The file set used by the client for backups
 # [*pool*]
 #   The pool used by the client for backups
+# [*run_scripts*]
+#   An array of hashes containing the parameters for any
+#   {RunScripts}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971] to include in the backup job
+#   definition. For each hash in the array a <tt>RunScript</tt> directive block will be inserted with the <tt>key = value</tt>
+#   settings from the hash.  Note: The <tt>RunsWhen</tt> key is required.
 # [*storage_server*]
 #   The storage server hosting the pool this client will backup to
 # [*tls_ca_cert*]
@@ -68,6 +73,7 @@ define bacula::client::config (
   $director_server   = undef,
   $fileset           = 'Basic:noHome',
   $pool              = 'default',
+  $run_scripts       = undef,
   $storage_server    = undef,
   $tls_ca_cert       = undef,
   $tls_ca_cert_dir   = undef,
@@ -118,6 +124,21 @@ define bacula::client::config (
 
   if !is_domain_name($director_server_real) {
     fail "director_server=${director_server_real} must be a fully qualified domain name"
+  }
+
+  if $run_scripts {
+    case type($run_scripts) {
+      'array' : {
+        # TODO figure out how to validate each item in the array is a hash.
+        $run_scripts_real = $run_scripts
+      }
+      'hash'  : {
+        $run_scripts_real = [ $run_scripts ]
+      }
+      default : {
+        fail("run_scripts = ${run_scripts} must be an array of hashes or a hash")
+      }
+    }
   }
 
   case $storage_server {
