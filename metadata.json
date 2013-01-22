@@ -38,7 +38,7 @@
     "templates/bacula-fd.conf.erb": "55afeaecbd2c85ff8d390077a92a1c30",
     "templates/bacula-sd.conf.erb": "b008d012a1056be0695eadaf89c1af62",
     "templates/bconsole.conf.erb": "5c8b6df334c21058cc2e19bd0b95c139",
-    "templates/client_config.erb": "ff632719f1b740a99c32b94e1353d5cb",
+    "templates/client_config.erb": "3b16e9ef5c21d6f0ee82b08594635558",
     "templates/fileset.conf.erb": "984f36652a746550ec81436a8ed38f88",
     "templates/logwatch/logfiles.conf.erb": "26eb720f3729eccf2682396cb498ed73",
     "templates/logwatch/services.conf.erb": "35014cb7f7f4ddf39688c51d4b8667fa",

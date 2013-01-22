@@ -28,7 +28,7 @@ Job {
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
   Messages = "<%= @director_server_real %>:messages:standard"
 <% if @run_scripts_real -%>
-  <%- @run_scripts.each do |runscript| -%>
+  <%- @run_scripts_real.each do |runscript| -%>
   RunScript {
     RunsWhen       = <%= runscript['RunsWhen'] %>
     <%- if runscript['RunsOnSuccess'] -%>
