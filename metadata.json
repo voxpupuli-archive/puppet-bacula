@@ -22,7 +22,7 @@
     "manifests/common.pp": "a7facbec71c1897777004b1caa8e0881",
     "manifests/console.pp": "f429b61fa18f3f4d9d98c16e2ff98a75",
     "manifests/console/bat.pp": "dafbf6440746ba6ee53094015754658a",
-    "manifests/director.pp": "fb828d1a438b0685bd1bf4fb0ebee360",
+    "manifests/director.pp": "f24323b557a4110b47284c5784b7d7c5",
     "manifests/director/custom_config.pp": "2fe3921755f845583a554ab32b3c209b",
     "manifests/director/fileset.pp": "94c5801fac6335d9e2098f70b487a233",
     "manifests/director/logwatch.pp": "1d8f5cf1fbe12935277febc1cdd13b56",

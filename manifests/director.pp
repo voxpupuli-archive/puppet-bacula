@@ -107,9 +107,18 @@ class bacula::director (
     require => Package[$db_package],
   }
 
+  file { '/etc/bacula/bacula-dir.d/empty.conf':
+    ensure  => file,
+    owner   => 'bacula',
+    group   => 'bacula',
+    mode    => '0640',
+    content => '',
+  }
+
   $file_requires = $use_plugins ? {
     false   => File[
       '/etc/bacula/bacula-dir.d',
+      '/etc/bacula/bacula-dir.d/empty.conf',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
@@ -117,6 +126,7 @@ class bacula::director (
     ],
     default => File[
       '/etc/bacula/bacula-dir.d',
+      '/etc/bacula/bacula-dir.d/empty.conf',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
