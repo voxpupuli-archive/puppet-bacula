@@ -129,6 +129,7 @@ Client Parameters
 
     fileset      Which FileSet to assign to the client
     schedule     Which schedule to assign to the client
+    template     Which template to use for client config.Default: bacula/client_config.erb
 
 Using Parameterized Classes
 ---------------------------
@@ -138,9 +139,10 @@ the FQDN of the client.  The value of the client needs to be a hash containing t
 
 ```puppet
   $clients = {
-    'node1.domain.com' = {
+    'node1.domain.com' => {
       'fileset'  => 'Basic:noHome',
-      'schedule' => 'Weekly'
+      'schedule' => 'Weekly',
+      'template' => 'bacula/client_config.erb'
     }
   }
 
