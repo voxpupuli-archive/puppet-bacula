@@ -122,12 +122,65 @@ Pool {
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }
+Pool {
+  Name = "<%= storage_server_real -%>:pool:default.full"
+  # All Volumes will have the format standard.date.time to ensure they
+  # are kept unique throughout the operation and also aid quick analysis
+  # We won't use a counter format for this at the moment.
+  Label Format = "${Job}.full.${Year}${Month:p/2/0/r}${Day:p/2/0/r}.${Hour:p/2/0/r}${Minute:p/2/0/r}"
+  Pool Type = Backup
+  # Clean up any we don't need, and keep them for a maximum of a year
+  # Note the files for the old volumes will still remain on the disk but will
+  # be truncated to a zero size.
+  Recycle = No
+  Auto Prune = Yes
+  Action On Purge = Truncate
+  Volume Retention = 1 Year
+  # Don't allow re-use of volumes; one volume per job only
+  Maximum Volume Jobs = 1
+}
+
+Pool {
+  Name = "<%= storage_server_real -%>:pool:default.differential"
+  # All Volumes will have the format standard.date.time to ensure they
+  # are kept unique throughout the operation and also aid quick analysis
+  # We won't use a counter format for this at the moment.
+  Label Format = "${Job}.diff.${Year}${Month:p/2/0/r}${Day:p/2/0/r}.${Hour:p/2/0/r}${Minute:p/2/0/r}"
+  Pool Type = Backup
+  # Clean up any we don't need, and keep them for a maximum of fourty days
+  # Note the files for the old volumes will still remain on the disk but will
+  # be truncated to a zero size.
+  Recycle = No
+  Auto Prune = Yes
+  Action On Purge = Truncate
+  Volume Retention = 40 Days
+  # Don't allow re-use of volumes; one volume per job only
+  Maximum Volume Jobs = 1
+}
+
+Pool {
+  Name = "<%= storage_server_real -%>:pool:default.incremental"
+  # All Volumes will have the format standard.date.time to ensure they
+  # are kept unique throughout the operation and also aid quick analysis
+  # We won't use a counter format for this at the moment.
+  Label Format = "${Job}.inc.${Year}${Month:p/2/0/r}${Day:p/2/0/r}.${Hour:p/2/0/r}${Minute:p/2/0/r}"
+  Pool Type = Backup
+  # Clean up any we don't need, and keep them for a maximum of 40 days
+  # Note the files for the old volumes will still remain on the disk but will
+  # be truncated to a zero size.
+  Recycle = No
+  Auto Prune = Yes
+  Action On Purge = Truncate
+  Volume Retention = 10 Days
+  # Don't allow re-use of volumes; one volume per job only
+  Maximum Volume Jobs = 1
+}
 
 Pool {
   Name = "<%= storage_server_real -%>:pool:catalog"
   # All Volumes will have the format director.catalog.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
-  Label Format = "<%= director_server_real -%>.catalog.${Counter<%= director_server_real.capitalize -%>Catalog+:p/3/0/r}"
+  Label Format = "${Job}.<%= director_server_real -%>.${Counter<%= director_server_real.split('.')[0].capitalize -%>Catalog+:p/3/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
@@ -142,7 +195,7 @@ Pool {
 
 # Create a Counter which will be used to label the catalog volumes on the system
 Counter {
-  Name    = "Counter<%= director_server_real.capitalize -%>Catalog"
+  Name    = "Counter<%= director_server_real.split('.')[0].capitalize -%>Catalog"
   Minimum = 1
   Catalog = "<%= director_server_real -%>:<%= db_backend %>"
 }
@@ -339,6 +392,11 @@ Job {
   Write Bootstrap = "/var/lib/bacula/BackupCatalog.bsr"
   # Run after main backup
   Priority = 50
+  RunScript {
+   RunsWhen=After
+   RunsOnClient=No
+   Console = "purge volume action=all allpools storage=File"
+ }
 }
 <% end -%>
 
