@@ -16,6 +16,15 @@
 #   The file set used by the client for backups
 # [*pool*]
 #   The pool used by the client for backups
+# [*pool_diff*]
+#   The pool to use for differential backups. Setting this to <code>false</code> will prevent configuring a specific pool for
+#   differential backups. Defaults to <code>"${pool}.differential"</code>.
+# [*pool_full*]
+#   The pool to use for full backups. Setting this to <code>false</code> will prevent configuring a specific pool for full backups.
+#   Defaults to <code>"${pool}.full"</code>.
+# [*pool_incremental*]
+#   The pool to use for incremental backups. Setting this to <code>false</code> will prevent configuring a specific pool for
+#   incremental backups. Defaults to <code>"${pool}.incremental"</code>.
 # [*restore_where*]
 #   The default path to restore files to defined in the restore job for this client.
 # [*run_scripts*]
@@ -75,6 +84,9 @@ define bacula::client::config (
   $director_server   = undef,
   $fileset           = 'Basic:noHome',
   $pool              = 'default',
+  $pool_diff         = undef,
+  $pool_full         = undef,
+  $pool_incr         = undef,
   $restore_where     = '/var/tmp/bacula-restores',
   $run_scripts       = undef,
   $storage_server    = undef,
@@ -131,6 +143,21 @@ define bacula::client::config (
 
   validate_absolute_path($restore_where)
 
+  $pool_diff_real = $pool_diff ? {
+    undef   => "${pool}.differential",
+    default => $pool_diff,
+  }
+
+  $pool_full_real = $pool_full ? {
+    undef   => "${pool}.full",
+    default => $pool_full,
+  }
+
+  $pool_incr_real = $pool_incr ? {
+    undef   => "${pool}.incremental",
+    default => $pool_incr,
+  }
+
   if $run_scripts {
     case type($run_scripts) {
       'array' : {
@@ -138,7 +165,7 @@ define bacula::client::config (
         $run_scripts_real = $run_scripts
       }
       'hash'  : {
-        $run_scripts_real = [ $run_scripts ]
+        $run_scripts_real = [$run_scripts]
       }
       default : {
         fail("run_scripts = ${run_scripts} must be an array of hashes or a hash")

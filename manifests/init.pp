@@ -108,6 +108,18 @@
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
 #   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
+# [*volume_retention*]
+#   Length of time to {retain volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention] in
+#   the default pool.
+# [*volume_retention_diff*]
+#   Length of time to {retain volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention] in
+#   the default differential pool.
+# [*volume_retention_full*]
+#   Length of time to {retain volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention] in
+#   the default full pool.
+# [*volume_retention_incr*]
+#   Length of time to {retain volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention] in
+#   the default incremental pool.
 #
 # === Sample Usage
 #
@@ -191,7 +203,11 @@ class bacula (
   $tls_require           = 'yes',
   $tls_verify_peer       = 'yes',
   $use_console           = false,
-  $use_tls               = false
+  $use_tls               = false,
+  $volume_retention      = '1 Year',
+  $volume_retention_diff = '40 Days',
+  $volume_retention_full = '1 Year',
+  $volume_retention_incr = '10 Days'
 ) {
   include bacula::params
 
@@ -282,36 +298,40 @@ class bacula (
 
   if $is_director {
     class { 'bacula::director':
-      backup_catalog    => $backup_catalog,
-      clients           => $clients,
-      console_password  => $console_password,
-      db_backend        => $db_backend,
-      db_database       => $db_database,
-      db_host           => $db_host,
-      db_password       => $db_password,
-      db_port           => $db_port,
-      db_user           => $db_user,
-      db_user_host      => $db_user_host,
-      dir_template      => $director_template,
-      director_password => $director_password,
-      director_server   => $director_server_real,
-      mail_to           => $mail_to_real,
-      manage_config_dir => $manage_config_dir,
-      manage_db         => $manage_db,
-      manage_db_tables  => $manage_db_tables,
-      manage_logwatch   => $manage_logwatch_real,
-      plugin_dir        => $plugin_dir_real,
-      storage_server    => $storage_server_real,
-      tls_allowed_cn    => $tls_allowed_cn,
-      tls_ca_cert       => $tls_ca_cert,
-      tls_ca_cert_dir   => $tls_ca_cert_dir,
-      tls_cert          => $tls_cert,
-      tls_key           => $tls_key,
-      tls_require       => $tls_require,
-      tls_verify_peer   => $tls_verify_peer,
-      use_console       => $use_console,
-      use_plugins       => $use_plugins,
-      use_tls           => $use_tls,
+      backup_catalog        => $backup_catalog,
+      clients               => $clients,
+      console_password      => $console_password,
+      db_backend            => $db_backend,
+      db_database           => $db_database,
+      db_host               => $db_host,
+      db_password           => $db_password,
+      db_port               => $db_port,
+      db_user               => $db_user,
+      db_user_host          => $db_user_host,
+      dir_template          => $director_template,
+      director_password     => $director_password,
+      director_server       => $director_server_real,
+      mail_to               => $mail_to_real,
+      manage_config_dir     => $manage_config_dir,
+      manage_db             => $manage_db,
+      manage_db_tables      => $manage_db_tables,
+      manage_logwatch       => $manage_logwatch_real,
+      plugin_dir            => $plugin_dir_real,
+      storage_server        => $storage_server_real,
+      tls_allowed_cn        => $tls_allowed_cn,
+      tls_ca_cert           => $tls_ca_cert,
+      tls_ca_cert_dir       => $tls_ca_cert_dir,
+      tls_cert              => $tls_cert,
+      tls_key               => $tls_key,
+      tls_require           => $tls_require,
+      tls_verify_peer       => $tls_verify_peer,
+      use_console           => $use_console,
+      use_plugins           => $use_plugins,
+      use_tls               => $use_tls,
+      volume_retention      => $volume_retention,
+      volume_retention_diff => $volume_retention_diff,
+      volume_retention_full => $volume_retention_full,
+      volume_retention_incr => $volume_retention,
     }
 
     if $manage_logwatch_real {

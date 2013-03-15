@@ -26,6 +26,15 @@ Job {
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Schedule = "<%= @client_schedule %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
+  <%- if @pool_full_real -%>
+  Full Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_full_real %>"
+  <%- end -%>
+  <%- if @pool_incr_real -%>
+  Incremental Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_incr_real %>"
+  <%- end -%>
+  <%- if @pool_diff_real -%>
+  Differential Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_diff_real %>"
+  <%- end -%>
   Messages = "<%= @director_server_real %>:messages:standard"
 <% if @run_scripts_real -%>
   <%- @run_scripts_real.each do |runscript| -%>

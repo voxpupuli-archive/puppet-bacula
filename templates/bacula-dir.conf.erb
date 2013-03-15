@@ -118,7 +118,7 @@ Pool {
   Recycle = No
   Auto Prune = Yes
   Action On Purge = Truncate
-  Volume Retention = 1 Month
+  Volume Retention = <%= @volume_retention %>
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }
@@ -135,7 +135,7 @@ Pool {
   Recycle = No
   Auto Prune = Yes
   Action On Purge = Truncate
-  Volume Retention = 1 Year
+  Volume Retention = <%= @volume_retention_full %>
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }
@@ -153,7 +153,7 @@ Pool {
   Recycle = No
   Auto Prune = Yes
   Action On Purge = Truncate
-  Volume Retention = 40 Days
+  Volume Retention = <%= @volume_retention_diff %>
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }
@@ -171,7 +171,7 @@ Pool {
   Recycle = No
   Auto Prune = Yes
   Action On Purge = Truncate
-  Volume Retention = 10 Days
+  Volume Retention = <%= @volume_retention_incr %>
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
 }
