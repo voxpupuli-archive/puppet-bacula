@@ -5,6 +5,9 @@
 #
 # === Parameters:
 #
+# [*backup_catalog*]
+#   Perform a nightly backup of the catalog database from the director server. You may wish to set this to
+#   <code>false</code> if you are maintaining your own database backups.
 # [*clients*]
 #   For directors, <tt>$clients</tt> is a hash of clients.  The keys are the clients while the value is a hash of parameters. The
 #   parameters accepted are the same as the <tt>bacula::client::config</tt> define.
@@ -151,6 +154,7 @@
 # limitations under the License.
 #
 class bacula (
+  $backup_catalog        = true,
   $clients               = undef,
   $console_password      = '',
   $console_template      = undef,
@@ -222,6 +226,7 @@ class bacula (
   # Validate our parameters
   # It's ugly to do it in the parent class
   class { 'bacula::params::validate':
+    backup_catalog        => $backup_catalog,
     console_password      => $console_password,
     db_backend            => $db_backend,
     db_database           => $db_database,
@@ -277,6 +282,7 @@ class bacula (
 
   if $is_director {
     class { 'bacula::director':
+      backup_catalog    => $backup_catalog,
       clients           => $clients,
       console_password  => $console_password,
       db_backend        => $db_backend,

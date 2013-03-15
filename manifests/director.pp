@@ -26,6 +26,7 @@
 # limitations under the License.
 #
 class bacula::director (
+  $backup_catalog    = true,
   $clients           = undef,
   $console_password  = '',
   $db_backend        = 'sqlite',
@@ -143,6 +144,10 @@ class bacula::director (
     content => template($dir_template),
     require => $file_requires,
     notify  => Service['bacula-dir'],
+  }
+
+  if $backup_catalog {
+    File["/etc/bacula/bacula-dir.d/${director_server_real}.conf"] -> File['/etc/bacula/bacula-dir.conf']
   }
 
   if $manage_db_tables {

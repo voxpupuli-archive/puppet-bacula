@@ -113,8 +113,11 @@ Pool {
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
-  Recycle = Yes
+  # Note the files for the old volumes will still remain on the disk but will
+  # be truncated to a zero size.
+  Recycle = No
   Auto Prune = Yes
+  Action On Purge = Truncate
   Volume Retention = 1 Month
   # Don't allow re-use of volumes; one volume per job only
   Maximum Volume Jobs = 1
@@ -137,7 +140,7 @@ Pool {
   Maximum Volume Jobs = 1
 }
 
-# Create a Counter which will be used to label the catalog volumes on the sytem
+# Create a Counter which will be used to label the catalog volumes on the system
 Counter {
   Name    = "Counter<%= director_server_real.capitalize -%>Catalog"
   Minimum = 1
@@ -235,7 +238,7 @@ FileSet {
       Signature   = SHA1
       Compression = GZIP
     }
-    File = "/var/lib/bacula/bacula.sql"
+    File = "/var/spool/bacula/bacula.sql"
   }
 }
 
@@ -317,6 +320,27 @@ Schedule {
 
 # JOB DEFINITIONS -------------------------------------------------------------
 # Create the types of jobs we need to run.
+
+<% if @backup_catalog -%>
+# Backup the catalog database (after the nightly save)
+Job {
+  Name = "BackupCatalog"
+  Type = Backup
+  Client = <%= director_server_real %>
+  FileSet="Catalog"
+  Schedule = "WeeklyCycleAfterBackup"
+  Storage = "<%= storage_server_real -%>:storage:default"
+  Messages = "<%= director_server_real -%>:messages:standard"
+  Pool = "<%= storage_server_real -%>:pool:catalog"
+  # This creates an ASCII copy of the catalog
+  RunBeforeJob = "/usr/libexec/bacula/make_catalog_backup.pl <%= director_server_real -%>:<%= db_backend -%>"
+  # This deletes the copy of the catalog
+  RunAfterJob  = "/usr/libexec/bacula/delete_catalog_backup"
+  Write Bootstrap = "/var/lib/bacula/BackupCatalog.bsr"
+  # Run after main backup
+  Priority = 50
+}
+<% end -%>
 
 # Create a standard profile for all normal servers
 <%

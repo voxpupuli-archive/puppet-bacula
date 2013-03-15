@@ -23,6 +23,7 @@
 # limitations under the License.
 #
 class bacula::params::validate (
+  $backup_catalog        = '',
   $console_password      = '',
   $db_backend            = '',
   $db_database           = '',
@@ -58,6 +59,7 @@ class bacula::params::validate (
   $use_tls               = ''
 ) {
   # Validate our booleans
+  validate_bool($backup_catalog)
   validate_bool($is_client)
   validate_bool($is_director)
   validate_bool($is_storage)
