@@ -168,7 +168,6 @@ define bacula::client::config (
     group   => 'bacula',
     mode    => '0640',
     content => template('bacula/client_config.erb'),
-    require => File['/etc/bacula/bacula-dir.conf'],
     notify  => Service['bacula-dir'],
   }
 }
