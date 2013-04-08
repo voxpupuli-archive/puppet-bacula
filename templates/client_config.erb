@@ -36,6 +36,7 @@ Job {
   Differential Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_diff_real %>"
   <%- end -%>
   Messages = "<%= @director_server_real %>:messages:standard"
+  Rerun Failed Levels = <%= @rerun_failed_levels %>
 <% if @run_scripts_real -%>
   <%- @run_scripts_real.each do |runscript| -%>
   RunScript {

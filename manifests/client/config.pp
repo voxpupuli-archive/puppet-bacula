@@ -1,6 +1,6 @@
 # == Define: bacula::client::config
 #
-# Install a config file describing a <tt>bacula-fd</tt> client on the director.
+# Install a config file describing a <code>bacula-fd</code> client on the director.
 #
 # === Parameters
 #
@@ -25,23 +25,31 @@
 # [*pool_incremental*]
 #   The pool to use for incremental backups. Setting this to <code>false</code> will prevent configuring a specific pool for
 #   incremental backups. Defaults to <code>"${pool}.incremental"</code>.
+# [*rerun_failed_levels*]
+#   If this directive is set to <code>'yes'</code> (default <code>'no'</code>), and Bacula detects that a previous job at a higher
+#   level (i.e. Full or Differential) has failed, the current job level will be upgraded to the higher level. This is particularly
+#   useful for Laptops where they may often be unreachable, and if a prior Full save has failed, you wish the very next backup to be
+#   a Full save rather than whatever level it is started as. There are several points that must be taken into account when using
+#   this directive: first, a failed job is defined as one that has not terminated normally, which includes any running job of the
+#   same name (you need to ensure that two jobs of the same name do not run simultaneously); secondly, the Ignore FileSet Changes
+#   directive is not considered when checking for failed levels, which means that any FileSet change will trigger a rerun.
 # [*restore_where*]
 #   The default path to restore files to defined in the restore job for this client.
 # [*run_scripts*]
 #   An array of hashes containing the parameters for any
 #   {RunScripts}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971] to include in the backup job
-#   definition. For each hash in the array a <tt>RunScript</tt> directive block will be inserted with the <tt>key = value</tt>
-#   settings from the hash.  Note: The <tt>RunsWhen</tt> key is required.
+#   definition. For each hash in the array a <code>RunScript</code> directive block will be inserted with the <code>key = value</code>
+#   settings from the hash.  Note: The <code>RunsWhen</code> key is required.
 # [*storage_server*]
 #   The storage server hosting the pool this client will backup to
 # [*tls_ca_cert*]
 #   The full path and filename specifying a PEM encoded TLS CA certificate(s). Multiple certificates are permitted in
-#   the file. One of <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if
-#   <tt>TLS Verify Peer</tt> is also specified, and are always required in a client context.
+#   the file. One of <code>TLS CA Certificate File</code> or <code>TLS CA Certificate Dir</code> are required in a server context if
+#   <code>TLS Verify Peer</code> is also specified, and are always required in a client context.
 # [*tls_ca_cert_dir*]
 #   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
 #   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
-#   <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if <tt>TLS Verify Peer</tt>
+#   <code>TLS CA Certificate File</code> or <code>TLS CA Certificate Dir</code> are required in a server context if <code>TLS Verify Peer</code>
 #   is also specified, and are always required in a client context.
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
@@ -78,22 +86,23 @@
 # limitations under the License.
 #
 define bacula::client::config (
-  $client_schedule   = 'WeeklyCycle',
-  $db_backend        = undef,
-  $director_password = '',
-  $director_server   = undef,
-  $fileset           = 'Basic:noHome',
-  $pool              = 'default',
-  $pool_diff         = undef,
-  $pool_full         = undef,
-  $pool_incr         = undef,
-  $restore_where     = '/var/tmp/bacula-restores',
-  $run_scripts       = undef,
-  $storage_server    = undef,
-  $tls_ca_cert       = undef,
-  $tls_ca_cert_dir   = undef,
-  $tls_require       = 'yes',
-  $use_tls           = false
+  $client_schedule     = 'WeeklyCycle',
+  $db_backend          = undef,
+  $director_password   = '',
+  $director_server     = undef,
+  $fileset             = 'Basic:noHome',
+  $pool                = 'default',
+  $pool_diff           = undef,
+  $pool_full           = undef,
+  $pool_incr           = undef,
+  $rerun_failed_levels = 'no',
+  $restore_where       = '/var/tmp/bacula-restores',
+  $run_scripts         = undef,
+  $storage_server      = undef,
+  $tls_ca_cert         = undef,
+  $tls_ca_cert_dir     = undef,
+  $tls_require         = 'yes',
+  $use_tls             = false
 ) {
   include bacula::params
 
@@ -156,6 +165,10 @@ define bacula::client::config (
   $pool_incr_real = $pool_incr ? {
     undef   => "${pool}.incremental",
     default => $pool_incr,
+  }
+
+  if !($rerun_failed_levels in ['yes', 'no']) {
+    fail("rerun_failed_levels = ${rerun_failed_levels} must be either 'yes' or 'no'")
   }
 
   if $run_scripts {

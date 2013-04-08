@@ -324,6 +324,49 @@ The file set used by the client for backups
 
 The pool used by the client for backups
 
+### pool_diff
+
+The pool to use for differential backups. Setting this to `false` will prevent
+configuring a specific pool for differential backups. Defaults to
+`"${pool}.differential"`.
+
+### pool_full
+The pool to use for full backups. Setting this to `false` will prevent
+configuring a specific pool for full backups. Defaults to `"${pool}.full"`.
+
+### pool_incremental
+
+The pool to use for incremental backups. Setting this to `false` will prevent
+configuring a specific pool for incremental backups. Defaults to
+`"${pool}.incremental"`.
+
+### rerun_failed_levels
+
+If this directive is set to `'yes'` (default `'no'`), and Bacula detects that a
+previous job at a higher level (i.e. Full or Differential) has failed, the
+current job level will be upgraded to the higher level. This is particularly
+useful for Laptops where they may often be unreachable, and if a prior Full
+save has failed, you wish the very next backup to be a Full save rather than
+whatever level it is started as.
+
+There are several points that must be taken into account when using this
+directive: first, a failed job is defined as one that has not terminated
+normally, which includes any running job of the same name (you need to ensure
+that two jobs of the same name do not run simultaneously); secondly, the
+`Ignore FileSet Changes` directive is not considered when checking for failed
+levels, which means that any FileSet change will trigger a rerun.
+
+### restore_where
+
+The default path to restore files to defined in the restore job for this client.
+
+### run_scripts
+
+An array of hashes containing the parameters for any {RunScripts}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971]
+to include in the backup job definition. For each hash in the array a
+`RunScript` directive block will be inserted with the `key = value` settings
+from the hash.  Note: The `RunsWhen` key is required.
+
 ### storage_server
 
 The storage server hosting the pool this client will backup to
