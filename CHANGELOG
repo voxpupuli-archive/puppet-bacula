@@ -1,4 +1,5 @@
 2013-04-08  Russell Harrison <rharrison@fedoraproject.org> - 0.0.5
+  * Move CHANGELOG to standard location so it can be found by Puppet Forge
   * Fix location of bsmtp utility
 
 2012-11-30  Russell Harrison <rharrison@fedoraproject.org> - 0.0.4

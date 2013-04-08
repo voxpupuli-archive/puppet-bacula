@@ -4,7 +4,7 @@ Author: Carl Caum <carl@puppetlabs.com>
 Copyright (c) 2011, Puppet Labs Inc.
 
 Author: Russell Harrison <rharrison@fedoraproject.org>
-Copyright (c) 2012, Russell Harrison
+Copyright (c) 2012-2013, Russell Harrison
 
 # About
 
