@@ -8,7 +8,7 @@
   "summary": "This module manages a bacula infrastructure",
   "version": "0.0.4",
   "checksums": {
-    "CHANGELOG.md": "d005cea906bf8e1af68b52af4292bcb9",
+    "CHANGELOG": "0f55f34b4ee451b670b2841eb060efa4",
     "LICENSE": "3b83ef96387f14655fc854ddc3c6bd57",
     "Modulefile": "5c4b3a0dc4acb5ee18869ad0600205dd",
     "NOTICE": "5bba9c4ae34d6b59726431d6616e3275",
@@ -34,7 +34,7 @@
     "manifests/storage.pp": "c68ef9bb54b00c095535abdcb4808091",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "e238222912be66314673d545d2f50c49",
-    "templates/bacula-dir.conf.erb": "fd844eb750f6a981e0b5e7ca62e096d9",
+    "templates/bacula-dir.conf.erb": "06c2f4d56875d5d24d6b292f890d72ea",
     "templates/bacula-fd.conf.erb": "55afeaecbd2c85ff8d390077a92a1c30",
     "templates/bacula-sd.conf.erb": "b008d012a1056be0695eadaf89c1af62",
     "templates/bconsole.conf.erb": "5c8b6df334c21058cc2e19bd0b95c139",

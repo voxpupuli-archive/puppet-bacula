@@ -48,8 +48,8 @@ Catalog {
 # should should be for just about everything.
 Messages {
   Name = "<%= director_server_real -%>:messages:standard"
-  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula %t %e (for %c)\" %r"
-  Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
+  Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula %t %e (for %c)\" %r"
+  Operator Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Intervention Required (for %c)\" %r"
   Mail = <%= mail_to_real -%> = all, !skipped
   Operator = <%= mail_to_real -%> = mount
   Console = all, !skipped, !saved
@@ -63,7 +63,7 @@ Messages {
 # These are messages directly from the various daemons themselves.
 Messages {
   Name = "<%= director_server_real -%>:messages:daemon"
-  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Notice (from Director %d)\" %r"
+  Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Notice (from Director %d)\" %r"
   Mail = <%= mail_to_real -%> = all, !skipped
   Console = all, !skipped, !saved
   Append = "/var/log/bacula/<%= director_server_real -%>:director.log" = all, !skipped
