@@ -362,7 +362,7 @@ The default path to restore files to defined in the restore job for this client.
 
 ### run_scripts
 
-An array of hashes containing the parameters for any {RunScripts}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971]
+An array of hashes containing the parameters for any [RunScripts](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971)
 to include in the backup job definition. For each hash in the array a
 `RunScript` directive block will be inserted with the `key = value` settings
 from the hash.  Note: The `RunsWhen` key is required.
