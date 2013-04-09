@@ -334,7 +334,7 @@ configuring a specific pool for differential backups. Defaults to
 The pool to use for full backups. Setting this to `false` will prevent
 configuring a specific pool for full backups. Defaults to `"${pool}.full"`.
 
-### pool_incremental
+### pool_incr
 
 The pool to use for incremental backups. Setting this to `false` will prevent
 configuring a specific pool for incremental backups. Defaults to

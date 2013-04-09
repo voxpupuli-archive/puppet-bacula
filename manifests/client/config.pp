@@ -22,7 +22,7 @@
 # [*pool_full*]
 #   The pool to use for full backups. Setting this to <code>false</code> will prevent configuring a specific pool for full backups.
 #   Defaults to <code>"${pool}.full"</code>.
-# [*pool_incremental*]
+# [*pool_incr*]
 #   The pool to use for incremental backups. Setting this to <code>false</code> will prevent configuring a specific pool for
 #   incremental backups. Defaults to <code>"${pool}.incremental"</code>.
 # [*rerun_failed_levels*]
