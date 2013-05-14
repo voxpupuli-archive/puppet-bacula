@@ -1,3 +1,6 @@
+2013-05-14  Russell Harrison <rharrison@fedoraproject.org> - 0.1.1
+  * Move to absolute qualification of variables and classes to avoid https://projects.puppetlabs.com/issues/17335
+
 2013-04-08  Russell Harrison <rharrison@fedoraproject.org> - 0.1.0
   * Add abbility to configure 'Rerun Failed Levels' directive to client job configuration.
 

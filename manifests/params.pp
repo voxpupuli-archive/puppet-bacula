@@ -8,7 +8,7 @@
 #
 # === Examples
 #
-#  include bacula::params
+#  include ::bacula::params
 #
 # === Copyright
 #

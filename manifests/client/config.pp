@@ -104,7 +104,7 @@ define bacula::client::config (
   $tls_require         = 'yes',
   $use_tls             = false
 ) {
-  include bacula::params
+  include ::bacula::params
 
   if !is_domain_name($name) {
     fail "Name for client ${name} must be a fully qualified domain name"
@@ -112,9 +112,9 @@ define bacula::client::config (
 
   case $db_backend {
     undef   : {
-      $db_backend_real = $bacula::director::db_backend ? {
+      $db_backend_real = $::bacula::director::db_backend ? {
         undef   => 'sqlite',
-        default => $bacula::director::db_backend,
+        default => $::bacula::director::db_backend,
       }
     }
     default : {
@@ -124,9 +124,9 @@ define bacula::client::config (
 
   case $director_password {
     ''      : {
-      $director_password_real = $bacula::director::director_password ? {
+      $director_password_real = $::bacula::director::director_password ? {
         undef   => '',
-        default => $bacula::director::director_password,
+        default => $::bacula::director::director_password,
       }
     }
     default : {
@@ -136,9 +136,9 @@ define bacula::client::config (
 
   case $director_server {
     undef   : {
-      $director_server_real = $bacula::director::director_server ? {
-        undef   => $bacula::params::director_server_default,
-        default => $bacula::director::director_server,
+      $director_server_real = $::bacula::director::director_server ? {
+        undef   => $::bacula::params::director_server_default,
+        default => $::bacula::director::director_server,
       }
     }
     default : {
@@ -188,9 +188,9 @@ define bacula::client::config (
 
   case $storage_server {
     undef   : {
-      $storage_server_real = $bacula::director::storage_server ? {
-        undef   => $bacula::params::storage_server_default,
-        default => $bacula::director::storage_server,
+      $storage_server_real = $::bacula::director::storage_server ? {
+        undef   => $::bacula::params::storage_server_default,
+        default => $::bacula::director::storage_server,
       }
     }
     default : {

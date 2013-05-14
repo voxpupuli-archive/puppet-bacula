@@ -134,7 +134,7 @@
 #    }
 #  }
 #
-#  class { 'bacula':
+#  class { '::bacula':
 #    is_storage        => true,
 #    is_director       => true,
 #    is_client         => true,
@@ -209,29 +209,29 @@ class bacula (
   $volume_retention_full = '1 Year',
   $volume_retention_incr = '10 Days'
 ) {
-  include bacula::params
+  include ::bacula::params
 
   $director_server_real = $director_server ? {
-    undef   => $bacula::params::director_server_default,
+    undef   => $::bacula::params::director_server_default,
     default => $director_server,
   }
   $storage_server_real  = $storage_server ? {
-    undef   => $bacula::params::storage_server_default,
+    undef   => $::bacula::params::storage_server_default,
     default => $storage_server,
   }
   $mail_to_real         = $mail_to ? {
-    undef   => $bacula::params::mail_to_default,
+    undef   => $::bacula::params::mail_to_default,
     default => $mail_to,
   }
   $manage_logwatch_real = $manage_logwatch ? {
-    undef   => $bacula::params::manage_logwatch,
+    undef   => $::bacula::params::manage_logwatch,
     default => $manage_logwatch,
   }
 
   case $plugin_dir {
     undef   : {
-      $use_plugins     = $bacula::params::use_plugins
-      $plugin_dir_real = $bacula::params::plugin_dir
+      $use_plugins     = $::bacula::params::use_plugins
+      $plugin_dir_real = $::bacula::params::plugin_dir
     }
     default : {
       $use_plugins     = true
@@ -241,7 +241,7 @@ class bacula (
 
   # Validate our parameters
   # It's ugly to do it in the parent class
-  class { 'bacula::params::validate':
+  class { '::bacula::params::validate':
     backup_catalog        => $backup_catalog,
     console_password      => $console_password,
     db_backend            => $db_backend,
@@ -278,7 +278,7 @@ class bacula (
     use_tls               => $use_tls,
   }
 
-  class { 'bacula::common':
+  class { '::bacula::common':
     db_backend        => $db_backend,
     db_database       => $db_database,
     db_host           => $db_host,
@@ -297,7 +297,7 @@ class bacula (
   }
 
   if $is_director {
-    class { 'bacula::director':
+    class { '::bacula::director':
       backup_catalog        => $backup_catalog,
       clients               => $clients,
       console_password      => $console_password,
@@ -335,14 +335,14 @@ class bacula (
     }
 
     if $manage_logwatch_real {
-      class { 'bacula::director::logwatch':
+      class { '::bacula::director::logwatch':
         logwatch_enabled => $logwatch_enabled,
       }
     }
   }
 
   if $is_storage {
-    class { 'bacula::storage':
+    class { '::bacula::storage':
       console_password      => $console_password,
       db_backend            => $db_backend,
       director_password     => $director_password,
@@ -364,7 +364,7 @@ class bacula (
   }
 
   if $is_client {
-    class { 'bacula::client':
+    class { '::bacula::client':
       director_server   => $director_server_real,
       director_password => $director_password,
       plugin_dir        => $plugin_dir_real,
@@ -381,7 +381,7 @@ class bacula (
   }
 
   if $manage_console {
-    class { 'bacula::console':
+    class { '::bacula::console':
       console_template  => $console_template,
       director_password => $director_password,
       director_server   => $director_server_real,
@@ -396,7 +396,7 @@ class bacula (
   }
 
   if $manage_bat {
-    class { 'bacula::console::bat':
+    class { '::bacula::console::bat':
     }
   }
 }

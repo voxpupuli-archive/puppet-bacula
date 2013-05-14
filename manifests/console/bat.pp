@@ -13,7 +13,7 @@
 #
 # === Sample Usage:
 #
-#  class { 'bacula::console::bat': }
+#  class { '::bacula::console::bat': }
 #
 # === Copyright
 #
@@ -34,10 +34,10 @@
 # limitations under the License.
 #
 class bacula::console::bat {
-  Class['bacula::console'] -> Class['bacula::console::bat']
-  include bacula::params
+  Class['::bacula::console'] -> Class['::bacula::console::bat']
+  include ::bacula::params
 
-  package { $bacula::params::bat_console_package:
+  package { $::bacula::params::bat_console_package:
     ensure  => present,
   }
 
@@ -45,7 +45,7 @@ class bacula::console::bat {
     ensure  => 'symlink',
     target  => 'bconsole.conf',
     require => [
-      Package[$bacula::params::bat_console_package],
+      Package[$::bacula::params::bat_console_package],
       File['/etc/bacula/bconsole.conf'],
     ],
   }

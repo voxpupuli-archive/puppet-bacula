@@ -50,7 +50,7 @@ class bacula::director::sqlite (
     group   => 'root',
     mode    => '0755',
     content => template('bacula/make_sqlite3_tables.sh.erb'),
-    require => Package[$bacula::params::director_sqlite_package],
+    require => Package[$::bacula::params::director_sqlite_package],
   }
 
   $make_db_tables_command = $::operatingsystem ? {

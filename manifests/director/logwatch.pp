@@ -29,7 +29,7 @@
 class bacula::director::logwatch (
   $logwatch_enabled = true
 ) {
-  Class['bacula::director'] -> Class['bacula::director::logwatch']
+  Class['::bacula::director'] -> Class['::bacula::director::logwatch']
 
   $config_ensure = $logwatch_enabled ? {
     false   => absent,

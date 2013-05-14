@@ -34,17 +34,17 @@ class bacula::director::mysql (
   $db_user_host = undef,
   $manage_db    = false
 ){
-  include bacula::params
+  include ::bacula::params
 
   if $manage_db {
-    if defined(Class['mysql::server']) {
-      if defined(Class['mysql::config']) {
+    if defined(Class['::mysql::server']) {
+      if defined(Class['::mysql::config']) {
         $db_require = [
-          Class['mysql::server'],
-          Class['mysql::config'],
+          Class['::mysql::server'],
+          Class['::mysql::config'],
         ]
       } else {
-        $db_require = Class['mysql::server']
+        $db_require = Class['::mysql::server']
       }
     } else {
       $db_require = undef
@@ -75,7 +75,7 @@ class bacula::director::mysql (
     command     => "${make_db_tables_command} ${db_parameters}",
     refreshonly => true,
     logoutput   => true,
-    require     => Package[$bacula::params::director_mysql_package],
+    require     => Package[$::bacula::params::director_mysql_package],
     notify      => Service['bacula-dir'],
   }
 }

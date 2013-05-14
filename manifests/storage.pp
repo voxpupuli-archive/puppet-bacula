@@ -51,14 +51,14 @@ class bacula::storage (
   $use_plugins           = true,
   $use_tls               = false
 ) {
-  include bacula::params
+  include ::bacula::params
 
   $director_server_real = $director_server ? {
-    undef   => $bacula::params::director_server_default,
+    undef   => $::bacula::params::director_server_default,
     default => $director_server,
   }
   $storage_server_real  = $storage_server ? {
-    undef   => $bacula::params::storage_server_default,
+    undef   => $::bacula::params::storage_server_default,
     default => $storage_server,
   }
 
@@ -72,9 +72,9 @@ class bacula::storage (
   # it will install the bacula-common package without
   # necessarily installing the bacula-storage-mysql package
   $db_package           = $db_backend ? {
-    'mysql'      => $bacula::params::storage_mysql_package,
-    'postgresql' => $bacula::params::storage_postgresql_package,
-    default      => $bacula::params::storage_sqlite_package,
+    'mysql'      => $::bacula::params::storage_mysql_package,
+    'postgresql' => $::bacula::params::storage_postgresql_package,
+    default      => $::bacula::params::storage_sqlite_package,
   }
 
   package { $db_package:

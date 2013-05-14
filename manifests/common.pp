@@ -48,7 +48,7 @@ class bacula::common (
   $plugin_dir        = undef,
   $use_plugins       = true
 ) {
-  include bacula::params
+  include ::bacula::params
 
   if $packages {
     $packages_notify = $manage_db_tables ? {
@@ -69,13 +69,13 @@ class bacula::common (
   if $is_client {
     $require_package = 'bacula-client'
   } elsif $is_director {
-    $require_package = $bacula::director::db_package
+    $require_package = $::bacula::director::db_package
   } elsif $is_storage {
-    $require_package = $bacula::storage::db_package
+    $require_package = $::bacula::storage::db_package
   } elsif $manage_console {
-    $require_package = $bacula::params::console_package
+    $require_package = $::bacula::params::console_package
   } elsif $manage_bat {
-    $require_package = $bacula::params::bat_console_package
+    $require_package = $::bacula::params::bat_console_package
   }
 
   if $use_plugins {

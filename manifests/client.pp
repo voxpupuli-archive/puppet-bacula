@@ -44,10 +44,10 @@ class bacula::client (
   $use_plugins       = true,
   $use_tls           = false
 ) {
-  include bacula::params
+  include ::bacula::params
 
   $director_server_real = $director_server ? {
-    undef   => $bacula::params::director_server_default,
+    undef   => $::bacula::params::director_server_default,
     default => $director_server,
   }
 

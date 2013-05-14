@@ -37,14 +37,14 @@ class bacula::console (
   $tls_verify_peer   = 'yes',
   $use_tls           = false
 ) {
-  include bacula::params
+  include ::bacula::params
 
   $director_server_real = $director_server ? {
-    undef   => $bacula::params::director_server_default,
+    undef   => $::bacula::params::director_server_default,
     default => $director_server,
   }
 
-  package { $bacula::params::console_package:
+  package { $::bacula::params::console_package:
     ensure => present,
   }
 
@@ -54,6 +54,6 @@ class bacula::console (
     group   => 'bacula',
     mode    => '0640',
     content => template($console_template),
-    require => Package[$bacula::params::console_package],
+    require => Package[$::bacula::params::console_package],
   }
 }
