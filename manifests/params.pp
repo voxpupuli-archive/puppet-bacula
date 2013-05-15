@@ -72,9 +72,4 @@ class bacula::params {
     /(Debian|Ubuntu)/ => 'bacula-sd-sqlite',
     default           => 'bacula-storage-sqlite',
   }
-  if $::operatingsystem =~ /(?i:RedHat|CentOS|Scientific)/ and versioncmp($::operatingsystemrelease, '6') < 0 {
-    $use_plugins = false
-  } else {
-    $use_plugins = true
-  }
 }

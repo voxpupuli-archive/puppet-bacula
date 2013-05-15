@@ -41,7 +41,6 @@ class bacula::client (
   $tls_key           = undef,
   $tls_require       = 'yes',
   $tls_verify_peer   = 'yes',
-  $use_plugins       = true,
   $use_tls           = false
 ) {
   include ::bacula::params
@@ -55,8 +54,8 @@ class bacula::client (
     ensure => present,
   }
 
-  $file_requires = $use_plugins ? {
-    false   => File['/var/lib/bacula', '/var/run/bacula'],
+  $file_requires = $plugin_dir ? {
+    undef   => File['/var/lib/bacula', '/var/run/bacula'],
     default => File['/var/lib/bacula', '/var/run/bacula', $plugin_dir]
   }
 

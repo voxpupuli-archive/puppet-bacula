@@ -45,8 +45,7 @@ class bacula::common (
   $manage_config_dir = false,
   $manage_db_tables  = true,
   $packages          = undef,
-  $plugin_dir        = undef,
-  $use_plugins       = true
+  $plugin_dir        = undef
 ) {
   include ::bacula::params
 
@@ -78,7 +77,7 @@ class bacula::common (
     $require_package = $::bacula::params::bat_console_package
   }
 
-  if $use_plugins {
+  if $plugin_dir {
     file { $plugin_dir:
       ensure => directory,
       owner  => 'root',

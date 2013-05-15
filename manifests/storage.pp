@@ -48,7 +48,6 @@ class bacula::storage (
   $tls_key               = undef,
   $tls_require           = 'yes',
   $tls_verify_peer       = 'yes',
-  $use_plugins           = true,
   $use_tls               = false
 ) {
   include ::bacula::params
@@ -104,8 +103,8 @@ class bacula::storage (
     mode   => '0640',
   }
 
-  $file_requires = $use_plugins ? {
-    false   => File[
+  $file_requires = $plugin_dir ? {
+    undef   => File[
       '/etc/bacula/bacula-sd.d/empty.conf',
       "${storage_default_mount}/default",
       '/var/lib/bacula',

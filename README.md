@@ -181,12 +181,12 @@ Whether to configure [logwatch](http://www.logwatch.org/) on the director
 
 ### plugin_dir
 
-The directory Bacula plugins are stored in. Use this parameter if you want to
-override the default plugin location. If this is anything other than `undef` it
-will also configure plugins on older distros were the default package is too
-old to support plugins.  Only use if the version in the distro repositories
-supports plugins or you have included a respository with a newer Bacula
-packaged for your distro.
+The directory Bacula plugins are stored in. Use this parameter if you are
+providing Bacula plugins for use. Only use if the package in the distro
+repositories supports plugins or you have included a respository with a newer
+Bacula packaged for your distro. If this is anything other than `undef` and you
+are not providing any plugins in this directory Bacula will throw an error
+every time it starts even if the package supports plugins.
 
 ### storage_default_mount
 

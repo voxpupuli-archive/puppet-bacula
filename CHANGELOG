@@ -6,6 +6,7 @@
     for daemon messages.
   * Removeing purge command from database backup job since it isn't working
     correctly
+  * Only configure plugin dir if plugins are provided
 
 2013-04-08  Russell Harrison <rharrison@fedoraproject.org> - 0.1.0
   * Add abbility to configure 'Rerun Failed Levels' directive to client job configuration.

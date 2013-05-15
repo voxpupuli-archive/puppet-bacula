@@ -10,8 +10,8 @@ Director {
   Query File = "/etc/bacula/scripts/query.sql"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
-<% if use_plugins -%>
-  Plugin Directory = <%= plugin_dir %>
+<% if @plugin_dir -%>
+  Plugin Directory = <%= @plugin_dir %>
 <% end -%>
   Maximum Concurrent Jobs = 5
   Password = "<%= director_password -%>"

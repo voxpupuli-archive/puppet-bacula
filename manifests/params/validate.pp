@@ -58,7 +58,6 @@ class bacula::params::validate (
   $tls_require           = '',
   $tls_verify_peer       = '',
   $use_console           = '',
-  $use_plugins           = '',
   $use_tls               = ''
 ) {
   include ::bacula::params
@@ -75,7 +74,6 @@ class bacula::params::validate (
   validate_bool($manage_db_tables)
   validate_bool($manage_logwatch)
   validate_bool($use_console)
-  validate_bool($use_plugins)
   validate_bool($use_tls)
 
   if $use_console {
@@ -161,7 +159,7 @@ class bacula::params::validate (
 
   validate_absolute_path($storage_default_mount)
 
-  if $use_plugins {
+  if $plugin_dir != undef {
     validate_absolute_path($plugin_dir)
   }
 

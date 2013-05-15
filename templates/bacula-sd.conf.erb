@@ -39,8 +39,8 @@ Storage {
   Name = "<%= storage_server_real -%>:storage"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
-<% if use_plugins -%>
-  Plugin Directory = <%= plugin_dir %>
+<% if @plugin_dir -%>
+  Plugin Directory = <%= @plugin_dir %>
 <% end -%>
   Maximum Concurrent Jobs = 20
 <% if use_tls -%>

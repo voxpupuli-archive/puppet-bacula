@@ -70,10 +70,7 @@
 # [*manage_logwatch*]
 #   Whether to configure {logwatch}[http://www.logwatch.org/] on the director
 # [*plugin_dir*]
-#   The directory Bacula plugins are stored in. Use this parameter if you want to override the default plugin
-#   location. If this is anything other than <tt>undef</tt> it will also configure plugins on older distros were the default
-#   package is too old to support plugins.  Only use if the version in the distro repositories supports plugins or
-#   you have included a respository with a newer Bacula packaged for your distro.
+#   The directory Bacula plugins are stored in. Use this parameter if you are providing Bacula plugins for use. Only use if the package in the distro repositories supports plugins or you have included a respository with a newer Bacula packaged for your distro. If this is anything other than `undef` and you are not providing any plugins in this directory Bacula will throw an error every time it starts even if the package supports plugins.
 # [*storage_default_mount*]
 #   Directory where the default disk for file backups is mounted. A subdirectory named <tt>default</tt> will be created allowing you
 #   to define additional devices in Bacula which use the same disk. Defaults to <tt>'/mnt/bacula'</tt>.
@@ -237,17 +234,6 @@ class bacula (
     default => $manage_logwatch,
   }
 
-  case $plugin_dir {
-    undef   : {
-      $use_plugins     = $::bacula::params::use_plugins
-      $plugin_dir_real = $::bacula::params::plugin_dir
-    }
-    default : {
-      $use_plugins     = true
-      $plugin_dir_real = $plugin_dir
-    }
-  }
-
   # Validate our parameters
   # It's ugly to do it in the parent class
   class { '::bacula::params::validate':
@@ -275,7 +261,7 @@ class bacula (
     manage_db             => $manage_db,
     manage_db_tables      => $manage_db_tables,
     manage_logwatch       => $manage_logwatch_real,
-    plugin_dir            => $plugin_dir_real,
+    plugin_dir            => $plugin_dir,
     storage_default_mount => $storage_default_mount,
     storage_server        => $storage_server_real,
     tls_allowed_cn        => $tls_allowed_cn,
@@ -286,7 +272,6 @@ class bacula (
     tls_require           => $tls_require,
     tls_verify_peer       => $tls_verify_peer,
     use_console           => $use_console,
-    use_plugins           => $use_plugins,
     use_tls               => $use_tls,
   }
 
@@ -304,8 +289,7 @@ class bacula (
     manage_config_dir => $manage_config_dir,
     manage_console    => $manage_console,
     manage_db_tables  => $manage_db_tables,
-    plugin_dir        => $plugin_dir_real,
-    use_plugins       => $use_plugins,
+    plugin_dir        => $plugin_dir,
   }
 
   if $is_director {
@@ -331,7 +315,7 @@ class bacula (
       manage_db             => $manage_db,
       manage_db_tables      => $manage_db_tables,
       manage_logwatch       => $manage_logwatch_real,
-      plugin_dir            => $plugin_dir_real,
+      plugin_dir            => $plugin_dir,
       storage_server        => $storage_server_real,
       tls_allowed_cn        => $tls_allowed_cn,
       tls_ca_cert           => $tls_ca_cert,
@@ -341,7 +325,6 @@ class bacula (
       tls_require           => $tls_require,
       tls_verify_peer       => $tls_verify_peer,
       use_console           => $use_console,
-      use_plugins           => $use_plugins,
       use_tls               => $use_tls,
       volume_retention      => $volume_retention,
       volume_retention_diff => $volume_retention_diff,
@@ -362,7 +345,7 @@ class bacula (
       db_backend            => $db_backend,
       director_password     => $director_password,
       director_server       => $director_server_real,
-      plugin_dir            => $plugin_dir_real,
+      plugin_dir            => $plugin_dir,
       storage_default_mount => $storage_default_mount,
       storage_server        => $storage_server_real,
       storage_template      => $storage_template,
@@ -373,7 +356,6 @@ class bacula (
       tls_key               => $tls_key,
       tls_require           => $tls_require,
       tls_verify_peer       => $tls_verify_peer,
-      use_plugins           => $use_plugins,
       use_tls               => $use_tls,
     }
   }
@@ -382,7 +364,7 @@ class bacula (
     class { '::bacula::client':
       director_server   => $director_server_real,
       director_password => $director_password,
-      plugin_dir        => $plugin_dir_real,
+      plugin_dir        => $plugin_dir,
       tls_allowed_cn    => $tls_allowed_cn,
       tls_ca_cert       => $tls_ca_cert,
       tls_ca_cert_dir   => $tls_ca_cert_dir,
@@ -390,7 +372,6 @@ class bacula (
       tls_key           => $tls_key,
       tls_require       => $tls_require,
       tls_verify_peer   => $tls_verify_peer,
-      use_plugins       => $use_plugins,
       use_tls           => $use_tls,
     }
   }

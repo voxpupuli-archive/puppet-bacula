@@ -57,7 +57,6 @@ class bacula::director (
   $tls_require           = 'yes',
   $tls_verify_peer       = 'yes',
   $use_console           = false,
-  $use_plugins           = true,
   $use_tls               = false,
   $volume_retention      = '1 Year',
   $volume_retention_diff = '40 Days',
@@ -153,8 +152,8 @@ class bacula::director (
     content => '',
   }
 
-  $file_requires = $use_plugins ? {
-    false   => File[
+  $file_requires = $plugin_dir ? {
+    undef   => File[
       '/etc/bacula/bacula-dir.d',
       '/etc/bacula/bacula-dir.d/empty.conf',
       '/var/lib/bacula',
