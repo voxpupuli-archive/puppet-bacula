@@ -40,6 +40,9 @@ class bacula::director (
   $director_password     = '',
   $director_server       = undef,
   $mail_to               = undef,
+  $mail_to_daemon        = undef,
+  $mail_to_on_error      = undef,
+  $mail_to_operator      = undef,
   $manage_config_dir     = false,
   $manage_db             = false,
   $manage_db_tables      = true,
@@ -67,13 +70,43 @@ class bacula::director (
     undef   => $::bacula::params::director_server_default,
     default => $director_server,
   }
-  $storage_server_real  = $storage_server ? {
+
+  # Allow <code>$mail_to_real</cdoe> to be <code>undef</code> only if <code>$mail_to_on_error</code> is supplied and set a default
+  # if it isn't.
+  if $mail_to_on_error {
+    $mail_to_real = $mail_to
+  } else {
+    $mail_to_real = $mail_to ? {
+      undef   => $::bacula::params::mail_to_default,
+      default => $mail_to,
+    }
+  }
+
+  # If <code>$mail_to_daemon</code> and / or <code>$mail_to_operator</code> is undefined set <code>_real</code> variables to be
+  # either <code>$mail_to_real</code> or <code>$mail_to_on_error</code> in that order.
+  if $mail_to_real {
+    $mail_to_daemon_real   = $mail_to_daemon ? {
+      undef   => $mail_to_real,
+      default => $mail_to_daemon,
+    }
+    $mail_to_operator_real = $mail_to_operator ? {
+      undef   => $mail_to_real,
+      default => $mail_to_operator,
+    }
+  } elsif $mail_to_on_error {
+    $mail_to_daemon_real   = $mail_to_daemon ? {
+      undef   => $mail_to_on_error,
+      default => $mail_to_daemon,
+    }
+    $mail_to_operator_real = $mail_to_operator ? {
+      undef   => $mail_to_on_error,
+      default => $mail_to_operator,
+    }
+  }
+
+  $storage_server_real = $storage_server ? {
     undef   => $::bacula::params::storage_server_default,
     default => $storage_server,
-  }
-  $mail_to_real         = $mail_to ? {
-    undef   => $::bacula::params::mail_to_default,
-    default => $mail_to,
   }
 
   if $clients != undef {

@@ -1,5 +1,5 @@
 name 'rharrison-bacula'
-version '0.1.1'
+version '0.2.0'
 
 author 'Puppet Labs and Russell Harrison'
 license 'ASL 2.0'

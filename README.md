@@ -135,7 +135,23 @@ enabled or disabled
 
 ### mail_to
 
-Address to email reports to
+Send the message to this email address for all jobs. Will default to
+`root@${::fqdn}` if it and `mail_to_on_error` are left undefined.
+
+### mail_to_daemon
+
+Send daemon messages to this email address. Will default to either `$mail_to`
+or `$mail_to_on_error` in that order if left undefined.
+
+### mail_to_on_error
+
+Send the message to this email address if the Job terminates with an error
+condition.
+
+### mail_to_operator
+
+Send the message to this email addresse for mount messages. Will default to
+either `$mail_to` or `$mail_to_on_error` in that order if left undefined.
 
 ### manage_bat
 

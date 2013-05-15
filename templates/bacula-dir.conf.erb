@@ -50,8 +50,13 @@ Messages {
   Name = "<%= director_server_real -%>:messages:standard"
   Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula %t %e (for %c)\" %r"
   Operator Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Intervention Required (for %c)\" %r"
-  Mail = <%= mail_to_real -%> = all, !skipped
-  Operator = <%= mail_to_real -%> = mount
+<% if @mail_to_real -%>
+  Mail = <%= @mail_to_real -%> = all, !skipped
+<% end -%>
+<% if @mail_to_on_error -%>
+  Mail On Error = <%= @mail_to_on_error -%> = all, !skipped
+<% end -%>
+  Operator = <%= @mail_to_operator_real -%> = mount
   Console = all, !skipped, !saved
   # WARNING! the following will create a file that you must cycle from
   #          time to time as it will grow indefinitely. However, it will
@@ -64,7 +69,7 @@ Messages {
 Messages {
   Name = "<%= director_server_real -%>:messages:daemon"
   Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Notice (from Director %d)\" %r"
-  Mail = <%= mail_to_real -%> = all, !skipped
+  Mail = <%= @mail_to_daemon_real -%> = all, !skipped
   Console = all, !skipped, !saved
   Append = "/var/log/bacula/<%= director_server_real -%>:director.log" = all, !skipped
 }

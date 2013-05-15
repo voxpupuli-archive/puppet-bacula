@@ -38,6 +38,9 @@ class bacula::params::validate (
   $is_storage            = '',
   $logwatch_enabled      = '',
   $mail_to               = '',
+  $mail_to_daemon        = '',
+  $mail_to_on_error      = '',
+  $mail_to_operator      = '',
   $manage_bat            = '',
   $manage_config_dir     = '',
   $manage_console        = '',
@@ -58,6 +61,7 @@ class bacula::params::validate (
   $use_plugins           = '',
   $use_tls               = ''
 ) {
+  include ::bacula::params
   # Validate our booleans
   validate_bool($backup_catalog)
   validate_bool($is_client)
@@ -80,9 +84,22 @@ class bacula::params::validate (
     }
   }
 
-  # Validate mail_to is an email address
+  # Validate mail_to variables are email address
   if $is_director {
-    validate_re($mail_to, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    if $mail_to != undef {
+      validate_re($mail_to, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    } elsif $mail_to == undef and $mail_to_on_error == undef {
+      validate_re($::bacula::params::mail_to_default, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    }
+    if $mail_to_daemon != undef {
+      validate_re($mail_to_daemon, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    }
+    if $mail_to_on_error != undef {
+      validate_re($mail_to_on_error, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    }
+    if $mail_to_operator != undef {
+      validate_re($mail_to_operator, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    }
   }
 
   # Validate the director and storage servers given are fully qualified

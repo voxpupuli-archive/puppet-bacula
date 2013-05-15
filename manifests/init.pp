@@ -46,7 +46,16 @@
 # [*logwatch_enabled*]
 #   If <tt>manage_logwatch</tt> is <tt>true</tt> should the Bacula logwatch configuration be enabled or disabled
 # [*mail_to*]
-#   Address to email reports to
+#   Send the message to this email address for all jobs. Will default to <code>root@${::fqdn}</code> if it and
+#   <code>mail_to_on_error</code> are left undefined.
+# [*mail_to_daemon*]
+#   Send daemon messages to this email address. Will default to either <code>$mail_to_real</code> or <code>$mail_to_on_error</code>
+#   in that order if left undefined.
+# [*mail_to_on_error*]
+#   Send the message to this email address if the Job terminates with an error condition.
+# [*mail_to_operator*]
+#   Send the message to this email address. Will default to either <code>$mail_to_real</code> or <code>$mail_to_on_error</code> in
+#   that order if left undefined.
 # [*manage_bat*]
 #   Whether the bat should be managed on the node
 # [*manage_config_dir*]
@@ -185,6 +194,9 @@ class bacula (
   $is_storage            = false,
   $logwatch_enabled      = true,
   $mail_to               = undef,
+  $mail_to_daemon        = undef,
+  $mail_to_on_error      = undef,
+  $mail_to_operator      = undef,
   $manage_bat            = false,
   $manage_config_dir     = false,
   $manage_console        = false,
@@ -219,10 +231,7 @@ class bacula (
     undef   => $::bacula::params::storage_server_default,
     default => $storage_server,
   }
-  $mail_to_real         = $mail_to ? {
-    undef   => $::bacula::params::mail_to_default,
-    default => $mail_to,
-  }
+
   $manage_logwatch_real = $manage_logwatch ? {
     undef   => $::bacula::params::manage_logwatch,
     default => $manage_logwatch,
@@ -256,7 +265,10 @@ class bacula (
     is_director           => $is_director,
     is_storage            => $is_storage,
     logwatch_enabled      => $logwatch_enabled,
-    mail_to               => $mail_to_real,
+    mail_to               => $mail_to,
+    mail_to_daemon        => $mail_to_daemon,
+    mail_to_on_error      => $mail_to_on_error,
+    mail_to_operator      => $mail_to_operator,
     manage_bat            => $manage_bat,
     manage_config_dir     => $manage_config_dir,
     manage_console        => $manage_console,
@@ -311,7 +323,10 @@ class bacula (
       dir_template          => $director_template,
       director_password     => $director_password,
       director_server       => $director_server_real,
-      mail_to               => $mail_to_real,
+      mail_to               => $mail_to,
+      mail_to_daemon        => $mail_to_daemon,
+      mail_to_on_error      => $mail_to_on_error,
+      mail_to_operator      => $mail_to_operator,
       manage_config_dir     => $manage_config_dir,
       manage_db             => $manage_db,
       manage_db_tables      => $manage_db_tables,

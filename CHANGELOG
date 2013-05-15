@@ -1,5 +1,8 @@
-2013-05-14  Russell Harrison <rharrison@fedoraproject.org> - 0.1.1
+2013-05-14  Russell Harrison <rharrison@fedoraproject.org> - 0.2.0
   * Move to absolute qualification of variables and classes to avoid https://projects.puppetlabs.com/issues/17335
+  * Add options for setting the email adress for the Mail, Mail On Error,
+    and Operator destinations for standard messages and the Mail destination
+    for daemon messages.
 
 2013-04-08  Russell Harrison <rharrison@fedoraproject.org> - 0.1.0
   * Add abbility to configure 'Rerun Failed Levels' directive to client job configuration.
