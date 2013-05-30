@@ -179,7 +179,8 @@ class bacula::director (
     mode    => '0640',
     content => template($dir_template),
     require => $file_requires,
-    notify  => Service['bacula-dir'],
+    before  => Service['bacula-dir'],
+    notify  => Exec['bacula-dir reload'],
   }
 
   if $backup_catalog {
@@ -212,9 +213,12 @@ class bacula::director (
 
   # Register the Service so we can manage it through Puppet
   if $manage_db_tables {
-    $service_require = Exec['make_db_tables']
+    $service_require = [
+      Exec['make_db_tables'],
+      File['/etc/bacula/bacula-dir.conf'],
+    ]
   } else {
-    $service_require = undef
+    $service_require = File['/etc/bacula/bacula-dir.conf']
   }
 
   service { 'bacula-dir':
@@ -224,5 +228,18 @@ class bacula::director (
     hasstatus  => true,
     hasrestart => true,
     require    => $service_require,
+  }
+
+  # Instead of restarting the <code>bacula-dir</code> service which could interrupt running jobs tell the director to reload its
+  # configuration.
+  exec { 'bacula-dir reload':
+    command     => '/bin/echo reload | /usr/sbin/bconsole',
+    logoutput   => on_failure,
+    refreshonly => true,
+    timeout     => 10,
+    require     => [
+      Class['::bacula::console'],
+      Service['bacula-dir'],
+    ],
   }
 }

@@ -208,6 +208,7 @@ define bacula::client::config (
     group   => 'bacula',
     mode    => '0640',
     content => template('bacula/client_config.erb'),
-    notify  => Service['bacula-dir'],
+    before  => Service['bacula-dir'],
+    notify  => Exec['bacula-dir reload'],
   }
 }

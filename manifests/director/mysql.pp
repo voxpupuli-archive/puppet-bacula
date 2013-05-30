@@ -76,6 +76,6 @@ class bacula::director::mysql (
     refreshonly => true,
     logoutput   => true,
     require     => Package[$::bacula::params::director_mysql_package],
-    notify      => Service['bacula-dir'],
+    before      => Service['bacula-dir'],
   }
 }

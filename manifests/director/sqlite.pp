@@ -62,6 +62,6 @@ class bacula::director::sqlite (
     command     => $make_db_tables_command,
     refreshonly => true,
     require     => File['/usr/local/libexec/bacula/make_sqlite3_tables.sh'],
-    notify      => Service['bacula-dir'],
+    before      => Service['bacula-dir'],
   }
 }

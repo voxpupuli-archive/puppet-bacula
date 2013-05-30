@@ -51,6 +51,7 @@ define bacula::director::fileset (
     mode    => '0640',
     content => template('bacula/fileset.conf.erb'),
     require => File['/etc/bacula/bacula-dir.conf'],
-    notify  => Service['bacula-dir'],
+    before  => Service['bacula-dir'],
+    notify  => Exec['bacula-dir reload'],
   }
 }

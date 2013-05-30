@@ -229,6 +229,10 @@ class bacula (
     default => $storage_server,
   }
 
+  $manage_console_real = $is_director ? {
+    true    => true,
+    default => $manage_console,
+  }
   $manage_logwatch_real = $manage_logwatch ? {
     undef   => $::bacula::params::manage_logwatch,
     default => $manage_logwatch,
@@ -287,7 +291,7 @@ class bacula (
     is_storage        => $is_storage,
     manage_bat        => $manage_bat,
     manage_config_dir => $manage_config_dir,
-    manage_console    => $manage_console,
+    manage_console    => $manage_console_real,
     manage_db_tables  => $manage_db_tables,
     plugin_dir        => $plugin_dir,
   }
@@ -376,7 +380,7 @@ class bacula (
     }
   }
 
-  if $manage_console {
+  if $manage_console_real {
     class { '::bacula::console':
       console_template  => $console_template,
       director_password => $director_password,
