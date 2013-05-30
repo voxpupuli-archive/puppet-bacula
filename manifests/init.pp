@@ -329,7 +329,7 @@ class bacula (
       volume_retention      => $volume_retention,
       volume_retention_diff => $volume_retention_diff,
       volume_retention_full => $volume_retention_full,
-      volume_retention_incr => $volume_retention,
+      volume_retention_incr => $volume_retention_incr,
     }
 
     if $manage_logwatch_real {

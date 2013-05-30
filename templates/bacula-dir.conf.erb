@@ -168,7 +168,7 @@ Pool {
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
-  Label Format = "${Job}.inc.${Year}${Month:p/2/0/r}${Day:p/2/0/r}.${Hour:p/2/0/r}${Minute:p/2/0/r}"
+  Label Format = "${Job}.incr.${Year}${Month:p/2/0/r}${Day:p/2/0/r}.${Hour:p/2/0/r}${Minute:p/2/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of 40 days
   # Note the files for the old volumes will still remain on the disk but will
