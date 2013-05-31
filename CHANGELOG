@@ -1,8 +1,9 @@
-2013-05-30  Russell Harrison <rharrison@fedoraproject.org> - 0.2.1
+2013-05-30  Russell Harrison <rharrison@fedoraproject.org> - 0.3.0
   * Fix bug where the volume retention period for the default pool was getting
     passed to the default incremental pool
   * Instead of restarting the bacula-dir service which could interrupt running
     jobs tell the director to reload its configuration
+  * Added ability to decide if volumes in the default pools are auto pruned or not.
 
 2013-05-14  Russell Harrison <rharrison@fedoraproject.org> - 0.2.0
   * Move to absolute qualification of variables and classes to avoid

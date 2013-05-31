@@ -247,11 +247,13 @@ daemon requests. If TLS is enabled and TLS is required, then Bacula will refuse
 any connection that does not use TLS. Valid values are `'yes'` or `'no'`.
 
 ### tls_verify_peer
+
 Verify peer certificate. Instructs server to request and verify the client's
 x509 certificate. Any client certificate signed by a known-CA will be accepted
 unless the `TLS Allowed CN` configuration directive is used, in which case the
 client certificate must correspond to the Allowed Common Name specified.
 Valid values are `'yes'` or `'no'`.
+
 ### use_console
 
 Whether to configure a console resource on the director
@@ -259,6 +261,38 @@ Whether to configure a console resource on the director
 ### use_tls
 
 Whether to use [Bacula TLS - Communications Encryption](http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html).
+
+### volume_autoprune
+
+[Auto prune volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune) in the default pool.
+
+### volume_autoprune_diff
+
+[Auto prune volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune) in the default differential pool.
+
+### volume_autoprune_full
+
+[Auto prune volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune) in the default full pool.
+
+### volume_autoprune_incr
+
+[Auto prune volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune) in the default incremental pool.
+
+### volume_retention
+
+Length of time to [retain volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention) in the default pool.
+
+### volume_retention_diff
+
+Length of time to [retain volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention) in the default differential pool.
+
+### volume_retention_full
+
+Length of time to [retain volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention) in the default full pool.
+
+### volume_retention_incr
+
+Length of time to [retain volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention) in the default incremental pool.
 
 # Custom FileSets
 

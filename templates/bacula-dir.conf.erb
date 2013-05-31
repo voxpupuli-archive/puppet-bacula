@@ -121,7 +121,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = Yes
+  Auto Prune = <%= @volume_autoprune %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention %>
   # Don't allow re-use of volumes; one volume per job only
@@ -138,7 +138,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = Yes
+  Auto Prune = <%= @volume_autoprune_full %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_full %>
   # Don't allow re-use of volumes; one volume per job only
@@ -156,7 +156,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = Yes
+  Auto Prune = <%= @volume_autoprune_diff %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_diff %>
   # Don't allow re-use of volumes; one volume per job only
@@ -174,7 +174,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = Yes
+  Auto Prune = <%= @volume_autoprune_incr %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_incr %>
   # Don't allow re-use of volumes; one volume per job only

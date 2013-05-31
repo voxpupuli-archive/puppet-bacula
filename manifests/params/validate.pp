@@ -58,7 +58,11 @@ class bacula::params::validate (
   $tls_require           = '',
   $tls_verify_peer       = '',
   $use_console           = '',
-  $use_tls               = ''
+  $use_tls               = '',
+  $volume_autoprune      = '',
+  $volume_autoprune_diff = '',
+  $volume_autoprune_full = '',
+  $volume_autoprune_incr = ''
 ) {
   include ::bacula::params
   # Validate our booleans
@@ -82,8 +86,13 @@ class bacula::params::validate (
     }
   }
 
-  # Validate mail_to variables are email address
   if $is_director {
+    validate_re($volume_autoprune, '^(Yes|yes|No|no)$')
+    validate_re($volume_autoprune_diff, '^(Yes|yes|No|no)$')
+    validate_re($volume_autoprune_full, '^(Yes|yes|No|no)$')
+    validate_re($volume_autoprune_incr, '^(Yes|yes|No|no)$')
+
+    # Validate mail_to variables are email address
     if $mail_to != undef {
       validate_re($mail_to, '^[\w-]+@([\w-]+\.)+[\w-]+$')
     } elsif $mail_to == undef and $mail_to_on_error == undef {

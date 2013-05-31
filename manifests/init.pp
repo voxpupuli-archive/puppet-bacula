@@ -114,6 +114,18 @@
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
 #   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
+# [*volume_autoprune*]
+#   {Auto prune volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune] in
+#   the default pool.
+# [*volume_autoprune_diff*]
+#   {Auto prune volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune] in
+#   the default differential pool.
+# [*volume_autoprune_full*]
+#   {Auto prune volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune] in
+#   the default full pool.
+# [*volume_autoprune_incr*]
+#   {Auto prune volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune] in
+#   the default incremental pool.
 # [*volume_retention*]
 #   Length of time to {retain volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#VolRetention] in
 #   the default pool.
@@ -213,6 +225,10 @@ class bacula (
   $tls_verify_peer       = 'yes',
   $use_console           = false,
   $use_tls               = false,
+  $volume_autoprune      = 'Yes',
+  $volume_autoprune_diff = 'Yes',
+  $volume_autoprune_full = 'Yes',
+  $volume_autoprune_incr = 'Yes',
   $volume_retention      = '1 Year',
   $volume_retention_diff = '40 Days',
   $volume_retention_full = '1 Year',
@@ -277,6 +293,10 @@ class bacula (
     tls_verify_peer       => $tls_verify_peer,
     use_console           => $use_console,
     use_tls               => $use_tls,
+    volume_autoprune      => $volume_autoprune,
+    volume_autoprune_diff => $volume_autoprune_diff,
+    volume_autoprune_full => $volume_autoprune_full,
+    volume_autoprune_incr => $volume_autoprune_incr,
   }
 
   class { '::bacula::common':
@@ -330,6 +350,10 @@ class bacula (
       tls_verify_peer       => $tls_verify_peer,
       use_console           => $use_console,
       use_tls               => $use_tls,
+      volume_autoprune      => $volume_autoprune,
+      volume_autoprune_diff => $volume_autoprune_diff,
+      volume_autoprune_full => $volume_autoprune_full,
+      volume_autoprune_incr => $volume_autoprune_incr,
       volume_retention      => $volume_retention,
       volume_retention_diff => $volume_retention_diff,
       volume_retention_full => $volume_retention_full,
