@@ -146,6 +146,7 @@ class bacula::director (
     recurse => $manage_config_dir,
     source  => $config_dir_source,
     require => Package[$db_package],
+    notify  => Exec['bacula-dir reload'],
   }
 
   file { '/etc/bacula/bacula-dir.d/empty.conf':

@@ -1,3 +1,6 @@
+2013-06-11  Russell Harrison <rharrison@fedoraproject.org> - 0.3.1
+  * Reload bacula-dir configuration if files are removed from bacula-dir.d
+
 2013-05-30  Russell Harrison <rharrison@fedoraproject.org> - 0.3.0
   * Fix bug where the volume retention period for the default pool was getting
     passed to the default incremental pool
