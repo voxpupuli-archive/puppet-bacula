@@ -22,6 +22,7 @@ Job {
   Name     = "<%= @name %>"
   Client   = "<%= @name %>"
   Type     = Backup
+  Enabled  = "<%= @backup_enable %>"
   FileSet  = "<%= @fileset %>"
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Schedule = "<%= @client_schedule %>"
@@ -68,6 +69,7 @@ Job {
   Name     = "<%= @name %> Restore"
   Client   = "<%= @name %>"
   Type     = Restore
+  Enabled  = "<%= @restore_enable %>"
   FileSet  = "<%= @fileset %>"
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"

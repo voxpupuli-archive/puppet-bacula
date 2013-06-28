@@ -4,6 +4,8 @@
 #
 # === Parameters
 #
+# [*backup_enable*]
+#   If the backup job for the client should be enabled <code>'yes'</code> (default) or <code>'no'</code>.
 # [*client_schedule*]
 #   The schedule for backups to be performed.
 # [*db_backend*]
@@ -33,6 +35,8 @@
 #   this directive: first, a failed job is defined as one that has not terminated normally, which includes any running job of the
 #   same name (you need to ensure that two jobs of the same name do not run simultaneously); secondly, the Ignore FileSet Changes
 #   directive is not considered when checking for failed levels, which means that any FileSet change will trigger a rerun.
+# [*restore_enable*]
+#   If the restore job for the client should be enabled <code>'yes'</code> (default) or <code>'no'</code>.
 # [*restore_where*]
 #   The default path to restore files to defined in the restore job for this client.
 # [*run_scripts*]
@@ -69,7 +73,7 @@
 #
 # === Copyright
 #
-# Copyright 2012 Russell Harrison
+# Copyright 2012-2013 Russell Harrison
 #
 # === License
 #
@@ -86,6 +90,7 @@
 # limitations under the License.
 #
 define bacula::client::config (
+  $backup_enable       = 'yes',
   $client_schedule     = 'WeeklyCycle',
   $db_backend          = undef,
   $director_password   = '',
@@ -96,6 +101,7 @@ define bacula::client::config (
   $pool_full           = undef,
   $pool_incr           = undef,
   $rerun_failed_levels = 'no',
+  $restore_enable      = 'yes',
   $restore_where       = '/var/tmp/bacula-restores',
   $run_scripts         = undef,
   $storage_server      = undef,
@@ -109,6 +115,8 @@ define bacula::client::config (
   if !is_domain_name($name) {
     fail "Name for client ${name} must be a fully qualified domain name"
   }
+
+  validate_re($backup_enable, '^(yes|Yes|no|No)$')
 
   case $db_backend {
     undef   : {
@@ -149,7 +157,7 @@ define bacula::client::config (
   if !is_domain_name($director_server_real) {
     fail "director_server=${director_server_real} must be a fully qualified domain name"
   }
-
+  validate_re($restore_enable, '^(yes|Yes|no|No)$')
   validate_absolute_path($restore_where)
 
   $pool_diff_real = $pool_diff ? {

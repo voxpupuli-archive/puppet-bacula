@@ -350,6 +350,11 @@ parameter on the director node. Each will need to know the parameters of the
 
 ## `bacula::client::config` Parameters
 
+### backup_enable
+
+If the backup job for the client should be enabled `'yes'` (default)
+or `'no'`.
+
 ### client_schedule
 
 The schedule for backups to be performed.
@@ -405,6 +410,11 @@ normally, which includes any running job of the same name (you need to ensure
 that two jobs of the same name do not run simultaneously); secondly, the
 `Ignore FileSet Changes` directive is not considered when checking for failed
 levels, which means that any FileSet change will trigger a rerun.
+
+### restore_enable
+
+If the restore job for the client should be enabled `'yes'` (default)
+or `'no'`.
 
 ### restore_where
 
