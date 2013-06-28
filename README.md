@@ -350,6 +350,11 @@ parameter on the director node. Each will need to know the parameters of the
 
 ## `bacula::client::config` Parameters
 
+### ensure
+
+If the configuration should be deployed to the director. `file` (default),
+`present`, or `absent`.
+
 ### backup_enable
 
 If the backup job for the client should be enabled `'yes'` (default)

@@ -1,5 +1,6 @@
 2013-06-28  Russell Harrison <rharrison@fedoraproject.org> - 0.4.0
   * Add an option to disable client backup and / or restore jobs
+  * Add an option to ensure client configs are present or absent
 
 2013-06-11  Russell Harrison <rharrison@fedoraproject.org> - 0.3.1
   * Reload bacula-dir configuration if files are removed from bacula-dir.d

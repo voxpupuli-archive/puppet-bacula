@@ -4,6 +4,9 @@
 #
 # === Parameters
 #
+# [*ensure*]
+#   If the configuration should be deployed to the director. <code>file</code> (default), <code>present</code>, or
+#   <code>absent</code>.
 # [*backup_enable*]
 #   If the backup job for the client should be enabled <code>'yes'</code> (default) or <code>'no'</code>.
 # [*client_schedule*]
@@ -42,8 +45,8 @@
 # [*run_scripts*]
 #   An array of hashes containing the parameters for any
 #   {RunScripts}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#6971] to include in the backup job
-#   definition. For each hash in the array a <code>RunScript</code> directive block will be inserted with the <code>key = value</code>
-#   settings from the hash.  Note: The <code>RunsWhen</code> key is required.
+#   definition. For each hash in the array a <code>RunScript</code> directive block will be inserted with the
+#   <code>key = value</code> settings from the hash.  Note: The <code>RunsWhen</code> key is required.
 # [*storage_server*]
 #   The storage server hosting the pool this client will backup to
 # [*tls_ca_cert*]
@@ -53,8 +56,8 @@
 # [*tls_ca_cert_dir*]
 #   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
 #   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
-#   <code>TLS CA Certificate File</code> or <code>TLS CA Certificate Dir</code> are required in a server context if <code>TLS Verify Peer</code>
-#   is also specified, and are always required in a client context.
+#   <code>TLS CA Certificate File</code> or <code>TLS CA Certificate Dir</code> are required in a server context if
+#   <code>TLS Verify Peer</code> is also specified, and are always required in a client context.
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
 #   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
@@ -90,6 +93,7 @@
 # limitations under the License.
 #
 define bacula::client::config (
+  $ensure              = file,
   $backup_enable       = 'yes',
   $client_schedule     = 'WeeklyCycle',
   $db_backend          = undef,
@@ -108,7 +112,7 @@ define bacula::client::config (
   $tls_ca_cert         = undef,
   $tls_ca_cert_dir     = undef,
   $tls_require         = 'yes',
-  $use_tls             = false
+  $use_tls             = false,
 ) {
   include ::bacula::params
 
@@ -211,7 +215,7 @@ define bacula::client::config (
   }
 
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
-    ensure  => file,
+    ensure  => $ensure,
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0640',
