@@ -9,6 +9,9 @@
 #       The director's password
 #   $client_package:
 #       The name of the package to install the bacula-fd service.
+#   $template:
+#       The ERB template to us to generate the bacula-dir.conf file
+#     - Default: 'bacula/bacula-fd.conf.erb'
 #
 # Actions:
 #   - Enforce the $client_package package be installed
@@ -25,7 +28,8 @@
 class bacula::client(
     $director_server,
     $director_password,
-    $client_package
+    $client_package,
+    $template = 'bacula/bacula-fd.conf.erb'
   ) {
 
   $director_name_array = split($director_server, '[.]')
@@ -37,7 +41,7 @@ class bacula::client(
 
   file { '/etc/bacula/bacula-fd.conf':
     ensure  => file,
-    content => template('bacula/bacula-fd.conf.erb'),
+    content => template($template),
     notify  => Service['bacula-fd'],
     require => Package[$client_package],
   }
