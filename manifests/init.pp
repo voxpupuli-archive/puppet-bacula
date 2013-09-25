@@ -40,6 +40,8 @@
 #     The name of the package to install the director's mysql functionality
 #   $storage_mysql_package
 #     The name of the package to install the storage's sqlite functionality
+#   $client_template
+#     The ERB template to use for configuring the client instead of the one included with the module
 #   $director_template
 #     The ERB template to use for configuring the director instead of the one included with the module
 #   $storage_template
@@ -123,6 +125,7 @@ class bacula(
     $storage_sqlite_package  = $bacula::config::storage_sqlite_package,
     $director_mysql_package  = $bacula::config::director_mysql_package,
     $storage_mysql_package   = $bacula::config::storage_mysql_package,
+    $client_template         = $bacula::config::client_template,
     $director_template       = $bacula::config::director_template,
     $storage_template        = $bacula::config::storage_template,
     $console_template        = $bacula::config::console_template,
@@ -212,6 +215,7 @@ class bacula(
       director_server   => $director_server,
       director_password => $director_password,
       client_package    => $client_package,
+      template          => $client_template,
       require           => Class['bacula::common'],
     }
   }

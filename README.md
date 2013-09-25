@@ -109,6 +109,7 @@ The following lists all the class parameters the bacula class accepts as well as
     storage_sqlite_package        bacula_storage_sqlite_package   The name of the package to install the storage daemon's sqlite functionality
     director_mysql_package        bacula_director_mysql_package   The name of the package to install the director's mysql functionality
     storage_mysql_package         bacula_storage_mysql_package    The name of the package to install the storage's sqlite functionality
+    client_template               bacula_client_template          The ERB template to use for configuring the client instead of the one included with the module
     director_template             bacula_director_template        The ERB template to use for configuring the director instead of the one included with the module
     storage_template              bacula_storage_template         The ERB template to use for configuring the storage daemon instead of the one included with the module
     console_template              bacula_console_template         The ERB template to use for configuring the bconsole instead of the one included with the module
