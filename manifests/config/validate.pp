@@ -43,7 +43,7 @@ class bacula::config::validate(
 
   #Validate mail_to is an email address
   if $is_director {
-    validate_re($mail_to, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    validate_re($mail_to, '^[\w\.-]+@([\w-]+\.)+[\w-]+$')
   }
   
   #Validate the director and storage servers given are fully qualified domain names
