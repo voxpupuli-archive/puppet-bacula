@@ -4,7 +4,7 @@ define bacula::config::client (
    $template = 'bacula/client_config.erb',
  ) {
 
- if ! is_domain_name($name) {
+ if ! is_domain_name("${name}") {
    fail "Name for client ${name} must be a fully qualified domain name"
  }
 
