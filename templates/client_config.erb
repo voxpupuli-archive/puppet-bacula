@@ -16,5 +16,5 @@ Job {
   Storage  = "<%= scope.lookupvar('bacula::director::storage_name') %>:storage:default"
   Schedule = "<%= schedule %>"
   Pool     = "<%= scope.lookupvar('bacula::director::storage_name') %>:pool:default"
-  Messages = "<%= director_name %>:messages:standard"
+  Messages = "<%= scope.lookupvar('bacula::director::director_name') %>:messages:standard"
 }
