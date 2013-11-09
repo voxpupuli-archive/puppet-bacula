@@ -16,7 +16,7 @@ Director {
   DirAddresses = {
     <%- scope.lookupvar('bacula::director::listen').each_pair do |family, listen| -%>
     <%- listen.each do |hash| -%>
-    <%= family -%> = { addr = <%= hash['addr'] -%> ; port = <%= hash['port'] -%> ; }
+    <%= family -%> = { addr = <%= hash['addr'] -%> ; <%- if hash.has_key?('port') -%>port = <%= hash['port'] -%> ; <%- end -%>}
     <%- end -%>
     <%- end -%>
   }
