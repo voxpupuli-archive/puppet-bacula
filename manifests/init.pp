@@ -20,6 +20,12 @@
 #     The console's password
 #   $director_server
 #     The FQDN of the bacula director
+#   $director_listen
+#     Hash of addresses and ports to have bacula director listening on
+#   $client_listen
+#     Hash of addresses and ports to have bacula file daemon listening on
+#   $storage_listen
+#     Hash of addresses and ports to have bacula storage daemon listening on
 #   $storage_server
 #     The FQDN of the storage server
 #   $manage_console
@@ -112,6 +118,9 @@ class bacula(
     $director_password       = $bacula::config::director_password,
     $console_password        = $bacula::config::console_password,
     $director_server         = $bacula::config::bacula_director_server,
+    $director_listen         = $bacula::config::director_listen,
+    $client_listen           = $bacula::config::client_listen,
+    $storage_listen          = $bacula::config::storage_listen,
     $storage_server          = $bacula::config::bacula_storage_server,
     $manage_console          = $bacula::config::safe_manage_console,
     $console_package         = $bacula::config::console_package,
@@ -173,6 +182,7 @@ class bacula(
     class { 'bacula::director':
       db_backend       => $db_backend,
       server           => $director_server,
+      listen           => $director_listen,
       storage_server   => $storage_server,
       password         => $director_password,
       mysql_package    => $director_mysql_package,
@@ -196,6 +206,7 @@ class bacula(
     class { 'bacula::storage':
       db_backend        => $db_backend,
       director_server   => $director_server,
+      listen            => $storage_listen,
       director_password => $director_password,
       storage_server    => $storage_server,
       mysql_package     => $storage_mysql_package,
@@ -210,6 +221,7 @@ class bacula(
   if $is_client {
     class { 'bacula::client': 
       director_server   => $director_server,
+      listen            => $client_listen,
       director_password => $director_password,
       client_package    => $client_package,
       require           => Class['bacula::common'],

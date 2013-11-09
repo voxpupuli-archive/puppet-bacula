@@ -129,6 +129,24 @@ class bacula::config {
     default => $::bacula_director_server,
   }
 
+  if $::bacula_director_listen == undef {
+    $director_listen = { 'ipv4' => [{ addr => '0.0.0.0', port => '9101' }]}
+  } else {
+    $director_listen = $::bacula_director_listen
+  }
+
+  if $::bacula_client_listen == undef {
+    $client_listen = { 'ipv4' => [{ addr => '0.0.0.0', port => '9102' }] }
+  } else {
+    $client_listen = $::bacula_client_listen
+  }
+
+  if $::bacula_storage_listen == undef {
+    $storage_listen = { 'ipv4' => [{ addr => '0.0.0.0', port => '9103' }] }
+  } else {
+    $storage_listen = $::bacula_storage_listen
+  }
+
   $storage_server = $::bacula_storage_server ? {
     undef   => '',
     default => $::bacula_storage_server,

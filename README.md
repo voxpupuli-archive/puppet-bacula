@@ -114,6 +114,39 @@ The following lists all the class parameters the bacula class accepts as well as
     console_template              bacula_console_template         The ERB template to use for configuring the bconsole instead of the one included with the module
     use_console                   bacula_use_console              Whether to configure a console resource on the director
     console_password              bacula_console_password         The password to use for the console resource on the director
+    director_listen               bacula_director_listen          Hash of addresses and ports to have bacula director listening on
+    client_listen                 bacula_client_listen            Hash of addresses and ports to have bacula file daemon listening on
+    storage_listen                bacula_storage_listen           Hash of addresses and ports to have bacula storage daemon listening on
+
+Listening on non-default address/port
+=====================================
+
+To have bacula director, file daemon or storage daemon listening on non-default address and port, set the director_listen, client_listen or storage_listen respectivly
+
+```puppet
+  $dir_listen = {
+    'ipv4' => [
+      {addr => '0.0.0.0', port => '9101'},
+      {addr => '127.0.0.1', port => '9108'}
+    ],
+    'ipv6' => [
+      {addr => '::', port => '9101'}
+    ]
+  }
+
+  class { 'bacula':
+    is_storage        => true,
+    is_director       => true,
+    is_client         => true,
+    director_listen   => $dir_listen,
+    manage_console    => true,
+    director_password => 'XXXXXXXXX',
+    console_password  => 'XXXXXXXXX',
+    director_server   => 'bacula.domain.com',
+    mail_to           => 'bacula-admin@domain.com',
+    storage_server    => 'bacula.domain.com',
+  }
+```
 
 CLIENTS
 =======
