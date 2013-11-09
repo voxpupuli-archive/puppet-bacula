@@ -5,6 +5,8 @@
 # Parameters:
 #   $director_server:
 #       The FQDN of the bacula director
+#   $listen:
+#       Hash of addresses and ports to have bacula file daemon listening on
 #   $director_password:
 #       The director's password
 #   $client_package:
@@ -24,6 +26,7 @@
 # }
 class bacula::client(
     $director_server,
+    $listen,
     $director_password,
     $client_package
   ) {

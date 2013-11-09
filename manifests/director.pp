@@ -5,6 +5,8 @@
 # Parameters:
 #   $server:
 #     The FQDN of the bacula director
+#   $listen:
+#     Hash of addresses and ports to have bacula director listening on
 #   $password:
 #     The password of the director
 #   $db_backend:
@@ -38,6 +40,7 @@
 # }
 class bacula::director(
     $server,
+    $listen,
     $password,
     $db_backend,
     $db_user,

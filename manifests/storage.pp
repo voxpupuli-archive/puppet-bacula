@@ -7,6 +7,8 @@
 #     The database backend to use. (Currently only supports sqlite)
 #   $director_server:
 #     The FQDN of the bacula director
+#   $listen:
+#     Hash of addresses and ports to have bacula storage daemon listening on
 #   $director_password:
 #     The director's password
 #   $storage_server:
@@ -42,6 +44,7 @@ class bacula::storage(
     $director_server,
     $director_password,
     $storage_server,
+    $listen,
     $storage_package = '',
     $mysql_package,
     $sqlite_package,

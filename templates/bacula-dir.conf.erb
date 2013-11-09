@@ -13,6 +13,13 @@ Director {
   Maximum Concurrent Jobs = 5
   Password = "<%= password -%>"
   Messages = "<%= director_name -%>:messages:daemon"
+  DirAddresses = {
+    <%- scope.lookupvar('bacula::director::listen').each_pair do |family, listen| -%>
+    <%- listen.each do |hash| -%>
+    <%= family -%> = { addr = <%= hash['addr'] -%> ; port = <%= hash['port'] -%> ; }
+    <%- end -%>
+    <%- end -%>
+  }
 }
 
 # This is where the catalog information will be stored (basically

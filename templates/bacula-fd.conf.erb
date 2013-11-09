@@ -16,6 +16,13 @@ FileDaemon {
   Working Directory = /var/lib/bacula
   PID Directory = /var/run/bacula
   Maximum Concurrent Jobs = 3
+  FDAddresses = {
+    <%- scope.lookupvar('bacula::client::listen').each_pair do |family, listen| -%>
+    <%- listen.each do |hash| -%>
+    <%= family -%> = { addr = <%= hash['addr'] -%> ; port = <%= hash['port'] -%> ; }
+    <%- end -%>
+    <%- end -%>
+  }
 }
 
 # Finally, set where the messages are going to go
