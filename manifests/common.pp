@@ -38,7 +38,10 @@ class bacula::common(
 
   if $manage_db_tables {
     exec { 'make_db_tables':
-      command     => "/usr/lib/bacula/make_bacula_tables ${db_parameters}",
+      command     => $::osfamily ? {
+        'Redhat' => "/usr/libexec/bacula/make_bacula_tables ${db_parameters}",
+        default  => "/usr/lib/bacula/make_bacula_tables ${db_parameters}",
+      },
       refreshonly => true,
     }
   }

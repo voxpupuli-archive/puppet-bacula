@@ -123,6 +123,10 @@ class bacula::director(
 
   # Register the Service so we can manage it through Puppet
   service { 'bacula-director':
+    name       => $::osfamily ? {
+      'Redhat' => 'bacula-dir',
+      default  => 'bacula-director',
+    },
     enable     => true,
     ensure     => running,
     hasstatus  => true,
