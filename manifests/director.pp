@@ -15,6 +15,8 @@
 #     The name of the package that installs the director (Optional)
 #   $mysql_package:
 #     The name of the package that installs the mysql support for the director
+#   $postgresql_package:
+#     The name of the package that installs the postgresql support for the director
 #   $sqlite_package:
 #     The name of the package that installs the sqlite support for the director
 #   $template:
@@ -48,6 +50,7 @@ class bacula::director(
     $storage_server,
     $director_package = '',
     $mysql_package,
+    $postgresql_package,
     $mail_to,
     $sqlite_package,
     $template = 'bacula/bacula-dir.conf.erb',
@@ -75,8 +78,9 @@ class bacula::director(
   # The given backend is validated in the bacula::config::validate class
   # before this code is reached.
   $db_package = $db_backend ? {
-    'mysql'  => $mysql_package,
-    'sqlite' => $sqlite_package,
+    'mysql'      => $mysql_package,
+    'postgresql' => $postgres_package,
+    'sqlite'     => $sqlite_package,
   }
   
   if $director_package {
