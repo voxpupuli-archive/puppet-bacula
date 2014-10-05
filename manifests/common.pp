@@ -11,18 +11,27 @@
 #
 # class { 'bacula::common': }
 class bacula::common(
-    $packages = '',
     $manage_db_tables,
+    $manage_db,
     $db_backend,
     $db_user,
     $db_database,
     $db_password,
     $db_port,
+    $mysql_package,
+    $postgresql_package,
+    $sqlite_package,
     $db_host
   ) {
 
-  if $packages {
-    package { $packages: 
+  $db_package = $db_backend ? {
+    'mysql'  => $mysql_package,
+    'sqlite' => $sqlite_package,
+    'postgresql' => $postgresql_package,
+  }
+
+  if $db_package {
+    package { $db_package: 
       ensure => installed,
       notify => $manage_db_tables ? {
         true  => Exec['make_db_tables'],
@@ -34,11 +43,14 @@ class bacula::common(
   $db_parameters = $db_backend ? {
     'sqlite' => '',
     'mysql'  => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
+    'postgresql'  => "--host=${db_host} --username=${db_user} --port=${db_port} --dbname=${db_database}",
   }
 
   if $manage_db_tables {
     exec { 'make_db_tables':
-      command     => "/usr/lib/bacula/make_bacula_tables ${db_parameters}",
+      environment => "PGPASSWORD=${db_password}",
+      command     => "make_bacula_tables ${db_parameters}",
+      path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/lib64/bacula:/usr/lib/bacula:/usr/libexec/bacula",
       refreshonly => true,
     }
   }
@@ -59,6 +71,26 @@ class bacula::common(
             false => undef,
           },
         }
+      }
+
+      'postgresql': {
+        Postgresql_psql {
+             cwd => '/',
+        }
+        postgresql::server::db { $db_database:
+          user     => $db_user,
+          password => $db_password,
+          owner    => $db_user,
+          notify   => $manage_db_tables ? {
+            true  => Exec['make_db_tables'],
+            false => undef,
+          },
+          require => defined(Class['postgresql::server']) ? {
+            true  => Class['postgresql::server'],
+            false => undef,
+          },
+        }
+        Postgresql::Server::Role[$db_user] -> Postgresql::Server::Database[$db_database]
       }
 
       'sqlite': {

@@ -155,17 +155,39 @@ class bacula::config {
   }
 
   $storage_mysql_package  = $::bacula_storage_mysql_package ? {
-    undef   => 'bacula-sd-mysql',
+	undef   => $osfamily ? {
+      /(RedHat|Suse)/ => 'bacula-storage-mysql',
+      default         => 'bacula-sd-mysql',
+    },
     default => $::bacula_storage_mysql_package,
   }
 
+  $director_postgresql_package  = $::bacula_director_postgresql_package ? {
+    undef   => 'bacula-director-postgresql',
+    default => $::bacula_director_postgresql_package,
+  }
+
+  $storage_postgresql_package  = $::bacula_storage_postgresql_package ? {
+	undef   => $osfamily ? {
+      /(RedHat|Suse)/ => 'bacula-storage-postgresql',
+      default         => 'bacula-sd-postgresql',
+    },
+    default => $::bacula_storage_postgresql_package,
+  }
+
   $director_sqlite_package = $::bacula_director_sqlite_package ? {
-    undef   => 'bacula-director-sqlite3',
+	undef  => $osfamily ? {
+      /(RedHat|Suse)/ => 'bacula-director-sqlite',
+      default         => 'bacula-director-sqlite3',
+    },
     default => $::bacula_director_sqlite_package,
   }
 
   $storage_sqlite_package = $::bacula_storage_sqlite_package ? {
-    undef   => 'bacula-sd-sqlite3',
+	undef  => $osfamily ? {
+      /(RedHat|Suse)/ => 'bacula-storage-sqlite',
+      default         => 'bacula-sd-sqlite3',
+    },
     default => $::bacula_storage_sqlite_package,
   }
 
@@ -188,10 +210,10 @@ class bacula::config {
     undef   => '',
     default => $::bacula_db_user,
   }
- 
+
   $db_port = $::bacula_db_port ? {
     undef   => '3306',
-    default => $::bacula_db_user,
+    default => $::bacula_db_port,
   }
 
   $db_password = $::bacula_db_password ? {
@@ -209,9 +231,16 @@ class bacula::config {
     default => $::bacula_db_database,
   }
 
-
   #If it's undef, that's fine
   $director_template = $::bacula_director_template
   $storage_template  = $::bacula_storage_template
   $console_template  = $::bacula_console_template
+  
+  $director_service = $::bacula_director_service ? {
+    undef  => $osfamily ? {
+      /(RedHat|Suse)/ => 'bacula-dir',
+      default         => 'bacula-director',
+    },
+    default => $::bacula_director_service,
+  }
 }

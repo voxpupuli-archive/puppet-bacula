@@ -17,6 +17,8 @@
 #     The package name to install the storage daemon mysql component
 #   $sqlite_package:
 #     The package name to install the storage daemon sqlite component
+#   $postgresql_package:
+#     The package name to install the storage daemon postgresql component
 #   $console_password:
 #     The password for the Console compoenent of the Director service
 #   $template:
@@ -45,6 +47,7 @@ class bacula::storage(
     $storage_package = '',
     $mysql_package,
     $sqlite_package,
+    $postgresql_package,
     $console_password,
     $template = 'bacula/bacula-sd.conf.erb'
   ) {
@@ -57,6 +60,7 @@ class bacula::storage(
   $db_package = $db_backend ? {
     'mysql'  => $mysql_package,
     'sqlite' => $sqlite_package,
+    'postgresql' => $postgresql_package,
   }
 
   # This is necessary because the bacula-common package will
