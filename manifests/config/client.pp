@@ -12,11 +12,6 @@ define bacula::config::client (
  $name_array = split($name, '[.]')
  $hostname   = $name_array[0]
 
- $bacula_director_service = $osfamily ? {
-   /(RedHat|Suse)/ => 'bacula-dir',
-   default  => 'bacula-director',
- }
-
  file { "/etc/bacula/bacula-dir.d/${name}.conf":
    ensure  => file,
    content => template($template),
