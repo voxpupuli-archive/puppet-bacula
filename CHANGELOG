@@ -1,3 +1,9 @@
+2013-10-17  Russell Harrison <rharrison@fedoraproject.org> - 0.4.1
+  * Work around a bug in v1.0.0 of the puppetlabs-mysql module that causes the
+    mysql_grant type to notify on every run by having the mysql_database
+    resource created in the mysql::db define notify Exec['make_db_tables']
+    directly.
+
 2013-06-28  Russell Harrison <rharrison@fedoraproject.org> - 0.4.0
   * Add an option to disable client backup and / or restore jobs
   * Add an option to ensure client configs are present or absent

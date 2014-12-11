@@ -32,8 +32,8 @@ class bacula::director::mysql (
   $db_port      = '3306',
   $db_user      = '',
   $db_user_host = undef,
-  $manage_db    = false
-){
+  $manage_db    = false,
+) {
   include ::bacula::params
 
   if $manage_db {
@@ -55,14 +55,20 @@ class bacula::director::mysql (
       default => $db_user_host,
     }
 
+    #FIXME Due to a bug in v1.0.0 of the puppetlabs-mysql module I can't use a notify here on the define.
     mysql::db { $db_database:
-      user      => $db_user,
-      password  => $db_password,
-      host      => $db_user_host,
-      grant     => ['all'],
-      require   => $db_require,
-      notify    => Exec['make_db_tables'],
+      user     => $db_user,
+      password => $db_password,
+      host     => $db_user_host,
+      grant    => ['all'],
+      require  => $db_require,
+      # notify    => Exec['make_db_tables'],
+      before   => Exec['make_db_tables'],
     }
+    #FIXME Work around a bug in v1.0.0 of the puppetlabs-mysql module that causes the <code>mysql_grant</code> type to notify on
+    # every run by having the <code>mysql_database</code> resource created in the <code>mysql::db</code> define notify
+    # <code>Exec['make_db_tables']</code> instead of using the more flexible notify from the entire define.
+    Mysql_database[$db_database] ~> Exec['make_db_tables']
   }
 
   $make_db_tables_command = $::operatingsystem ? {

@@ -1,5 +1,5 @@
 name 'rharrison-bacula'
-version '0.4.0'
+version '0.4.1'
 
 author 'Puppet Labs and Russell Harrison'
 license 'ASL 2.0'
@@ -8,5 +8,5 @@ source 'http://github.com/rharrison10/rharrison-bacula'
 summary 'This module manages a bacula infrastructure'
 description 'This module manages Bacula, a complete backup solution.'
 dependency 'puppetlabs/stdlib', '>=2.2.0'
-dependency 'puppetlabs/mysql', '>=0.0.1'
+dependency 'puppetlabs-mysql', '>=1.0.0'
 dependency 'puppetlabs/sqlite', '>=0.0.1'
