@@ -30,6 +30,13 @@
 # [*pool_incr*]
 #   The pool to use for incremental backups. Setting this to <code>false</code> will prevent configuring a specific pool for
 #   incremental backups. Defaults to <code>"${pool}.incremental"</code>.
+# [*priority*]
+#   This directive permits you to control the order in which your jobs will be run by specifying a positive non-zero number. The
+#   higher the number, the lower the job priority. Assuming you are not running concurrent jobs, all queued jobs of priority 1 will
+#   run before queued jobs of priority 2 and so on, regardless of the original scheduling order.  The priority only affects waiting
+#   jobs that are queued to run, not jobs that are already running. If one or more jobs of priority 2 are already running, and a new
+#   job is scheduled with priority 1, the currently running priority 2 jobs must complete before the priority 1 job is run, unless
+#   Allow Mixed Priority is set. The default priority is 10.
 # [*rerun_failed_levels*]
 #   If this directive is set to <code>'yes'</code> (default <code>'no'</code>), and Bacula detects that a previous job at a higher
 #   level (i.e. Full or Differential) has failed, the current job level will be upgraded to the higher level. This is particularly
@@ -104,6 +111,7 @@ define bacula::client::config (
   $pool_diff           = undef,
   $pool_full           = undef,
   $pool_incr           = undef,
+  $priority            = undef,
   $rerun_failed_levels = 'no',
   $restore_enable      = 'yes',
   $restore_where       = '/var/tmp/bacula-restores',

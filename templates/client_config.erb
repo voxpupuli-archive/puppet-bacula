@@ -6,6 +6,9 @@ Client {
   File Retention = 6 Weeks
   Job Retention  = 1 Year
   Auto Prune = Yes
+<%- if @priority -%>
+  Priority = <%= @priority %>
+<%- end -%>
 <% if @use_tls -%>
   TLS Enable = Yes
   TLS Require = <%= @tls_require %>
