@@ -24,12 +24,12 @@ module Puppet::Parser::Functions
           raise Puppet::ParseError, 'Could not parse parameters given. Please check your format'
         end
 
-        function_create_resources('bacula::config::client', {client => parameters})
+        function_create_resources(['bacula::config::client', {client => parameters}])
       end
     end
 
     begin
-      function_create_resources('bacula::config::client', args[0])
+      function_create_resources(['bacula::config::client', args[0]])
     rescue => e
       raise Puppet::ParseError, e
     end
