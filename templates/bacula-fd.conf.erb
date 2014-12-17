@@ -2,29 +2,29 @@
 #
 # Bacula File Daemon Configuration
 #   for <%= scope.lookupvar('::fqdn') %>
-#   via <%= director_server_real -%>:director (<%= director_server_real -%>)
+#   via <%= @director_server_real -%>:director (<%= @director_server_real -%>)
 
 # Configure the Director which will manage this host's backups
 Director {
-  Name = "<%= director_server_real -%>:director"
-  Password = "<%= director_password -%>"
-<% if use_tls -%>
+  Name = "<%= @director_server_real -%>:director"
+  Password = "<%= @director_password -%>"
+<% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
-  TLS Verify Peer = <%= tls_verify_peer %>
-<% tls_allowed_cn.each do |allowed_cn| -%>
+  TLS Require = <%= @tls_require %>
+  TLS Verify Peer = <%= @tls_verify_peer %>
+<% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
   # This is a server certificate, used for incoming
   # console connections.
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
@@ -37,22 +37,22 @@ FileDaemon {
 <% end -%>
   PID Directory = /var/run/bacula
   Maximum Concurrent Jobs = 3
-<% if use_tls -%>
+<% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
+  TLS Require = <%= @tls_require %>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
 # Finally, set where the messages are going to go
 Messages {
-  Name = "<%= director_server_real -%>:messages:standard"
-  Director = "<%= director_server_real -%>:director" = all, !skipped, !restored
+  Name = "<%= @director_server_real -%>:messages:standard"
+  Director = "<%= @director_server_real -%>:director" = all, !skipped, !restored
 }

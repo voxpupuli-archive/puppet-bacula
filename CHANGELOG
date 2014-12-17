@@ -1,5 +1,6 @@
 2014-12-12  Russell Harrison  <rharrison@fedoraproject.org> - 0.5.0
   * Add the option to set the priority for a backup job.
+  * Fix deprecated variable access in the templates
 
 2013-10-17  Russell Harrison <rharrison@fedoraproject.org> - 0.4.1
   * Work around a bug in v1.0.0 of the puppetlabs-mysql module that causes the

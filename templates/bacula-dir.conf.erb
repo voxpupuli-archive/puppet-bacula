@@ -1,12 +1,12 @@
 # DO NOT EDIT - Managed by Puppet
 #
 # Bacula Director Master Configuration
-#   for <%= director_server_real %>
+#   for <%= @director_server_real %>
 
 # Define the name of this director so other clients can
 # connect to it and work with our system
 Director {
-  Name = "<%= director_server_real -%>:director"
+  Name = "<%= @director_server_real -%>:director"
   Query File = "/etc/bacula/scripts/query.sql"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
@@ -14,40 +14,40 @@ Director {
   Plugin Directory = <%= @plugin_dir %>
 <% end -%>
   Maximum Concurrent Jobs = 5
-  Password = "<%= director_password -%>"
-  Messages = "<%= director_server_real -%>:messages:daemon"
-<% if use_tls -%>
+  Password = "<%= @director_password -%>"
+  Messages = "<%= @director_server_real -%>:messages:daemon"
+<% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
-  TLS Verify Peer = <%= tls_verify_peer %>
-<% tls_allowed_cn.each do |allowed_cn| -%>
+  TLS Require = <%= @tls_require %>
+  TLS Verify Peer = <%= @tls_verify_peer %>
+<% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
 # This is where the catalog information will be stored (basically
 # this should be how to connect to whatever database we're using)
 Catalog {
-  Name = "<%= director_server_real -%>:<%= db_backend -%>"
-  dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
-  <% if db_backend == 'mysql' # postgres and sqlite don't require these settings -%>
-  dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
+  Name = "<%= @director_server_real -%>:<%= @db_backend -%>"
+  dbname = "<%= @db_database -%>"; dbdriver = dbi:<%= @db_backend %>
+  <% if @db_backend == 'mysql' # postgres and sqlite don't require these settings -%>
+  dbaddress = <%= @db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
   <% end -%>
 }
 
 # Configure how the directory will log and/or send messages. This
 # should should be for just about everything.
 Messages {
-  Name = "<%= director_server_real -%>:messages:standard"
+  Name = "<%= @director_server_real -%>:messages:standard"
   Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula %t %e (for %c)\" %r"
   Operator Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Intervention Required (for %c)\" %r"
 <% if @mail_to_real -%>
@@ -61,23 +61,23 @@ Messages {
   # WARNING! the following will create a file that you must cycle from
   #          time to time as it will grow indefinitely. However, it will
   #          also keep all your messages if they scroll off the console.
-  Append = "/var/log/bacula/<%= director_server_real -%>:director.log" = all, !skipped
+  Append = "/var/log/bacula/<%= @director_server_real -%>:director.log" = all, !skipped
   Catalog = all
 }
 
 # These are messages directly from the various daemons themselves.
 Messages {
-  Name = "<%= director_server_real -%>:messages:daemon"
+  Name = "<%= @director_server_real -%>:messages:daemon"
   Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Notice (from Director %d)\" %r"
   Mail = <%= @mail_to_daemon_real -%> = all, !skipped
   Console = all, !skipped, !saved
-  Append = "/var/log/bacula/<%= director_server_real -%>:director.log" = all, !skipped
+  Append = "/var/log/bacula/<%= @director_server_real -%>:director.log" = all, !skipped
 }
 
-<% if use_console -%>
+<% if @use_console -%>
 # Restricted console used by tray-monitor to get the status of the director
 Console {
-  Name = "<%= director_server_real -%>:monitor:director"
+  Name = "<%= @director_server_real -%>:monitor:director"
   Password = "<%= console_password -%>"
   CommandACL = status, .status
 }
@@ -90,27 +90,27 @@ Console {
 # Storage Daemon to connect to (using the standard FileStorage device) and a
 # Pool which will be used with that as well.
 Storage {
-  Name = "<%= storage_server_real -%>:storage:default"
-  Address = <%= storage_server_real %>
-  Password = "<%= director_password -%>"
+  Name = "<%= @storage_server_real -%>:storage:default"
+  Address = <%= @storage_server_real %>
+  Password = "<%= @director_password -%>"
   Device = "DefaultFileStorage"
   Media Type = File
-<% if use_tls -%>
+<% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
+  TLS Require = <%= @tls_require %>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
 Pool {
-  Name = "<%= storage_server_real -%>:pool:default"
+  Name = "<%= @storage_server_real -%>:pool:default"
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
@@ -128,7 +128,7 @@ Pool {
   Maximum Volume Jobs = 1
 }
 Pool {
-  Name = "<%= storage_server_real -%>:pool:default.full"
+  Name = "<%= @storage_server_real -%>:pool:default.full"
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
@@ -146,7 +146,7 @@ Pool {
 }
 
 Pool {
-  Name = "<%= storage_server_real -%>:pool:default.differential"
+  Name = "<%= @storage_server_real -%>:pool:default.differential"
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
@@ -164,7 +164,7 @@ Pool {
 }
 
 Pool {
-  Name = "<%= storage_server_real -%>:pool:default.incremental"
+  Name = "<%= @storage_server_real -%>:pool:default.incremental"
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
@@ -182,10 +182,10 @@ Pool {
 }
 
 Pool {
-  Name = "<%= storage_server_real -%>:pool:catalog"
+  Name = "<%= @storage_server_real -%>:pool:catalog"
   # All Volumes will have the format director.catalog.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
-  Label Format = "${Job}.<%= director_server_real -%>.${Counter<%= director_server_real.split('.')[0].capitalize -%>Catalog+:p/3/0/r}"
+  Label Format = "${Job}.<%= @director_server_real -%>.${Counter<%= @director_server_real.split('.')[0].capitalize -%>Catalog+:p/3/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
@@ -200,9 +200,9 @@ Pool {
 
 # Create a Counter which will be used to label the catalog volumes on the system
 Counter {
-  Name    = "Counter<%= director_server_real.split('.')[0].capitalize -%>Catalog"
+  Name    = "Counter<%= @director_server_real.split('.')[0].capitalize -%>Catalog"
   Minimum = 1
-  Catalog = "<%= director_server_real -%>:<%= db_backend %>"
+  Catalog = "<%= @director_server_real -%>:<%= @db_backend %>"
 }
 
 # FILE SETS -------------------------------------------------------------------
@@ -384,14 +384,14 @@ Schedule {
 Job {
   Name = "BackupCatalog"
   Type = Backup
-  Client = <%= director_server_real %>
+  Client = <%= @director_server_real %>
   FileSet="Catalog"
   Schedule = "WeeklyCycleAfterBackup"
-  Storage = "<%= storage_server_real -%>:storage:default"
-  Messages = "<%= director_server_real -%>:messages:standard"
-  Pool = "<%= storage_server_real -%>:pool:catalog"
+  Storage = "<%= @storage_server_real -%>:storage:default"
+  Messages = "<%= @director_server_real -%>:messages:standard"
+  Pool = "<%= @storage_server_real -%>:pool:catalog"
   # This creates an ASCII copy of the catalog
-  RunBeforeJob = "/usr/libexec/bacula/make_catalog_backup.pl <%= director_server_real -%>:<%= db_backend -%>"
+  RunBeforeJob = "/usr/libexec/bacula/make_catalog_backup.pl <%= @director_server_real -%>:<%= @db_backend -%>"
   # This deletes the copy of the catalog
   RunAfterJob  = "/usr/libexec/bacula/delete_catalog_backup"
   Write Bootstrap = "/var/lib/bacula/BackupCatalog.bsr"
@@ -416,11 +416,11 @@ JobDefs {
   Level = Incremental
   FileSet = "Basic:<%= doHome -%>"
   Schedule = "Weekly:on<%= onDay -%>"
-  Messages = "<%= director_server_real -%>:messages:standard"
+  Messages = "<%= @director_server_real -%>:messages:standard"
   # Set the job to work as standard with the default Pool & Storage
   # (this will be overridden by the Job configuration for each Client)
-  Storage = "<%= storage_server_real -%>:storage:default"
-  Pool = "<%= storage_server_real -%>:pool:default"
+  Storage = "<%= @storage_server_real -%>:storage:default"
+  Pool = "<%= @storage_server_real -%>:pool:default"
   Write Bootstrap = "/var/lib/bacula/%c.bsr"
   Priority = 15
   # Define how long any of these jobs are allowed to run for before we should

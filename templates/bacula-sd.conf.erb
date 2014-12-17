@@ -1,73 +1,73 @@
 # DO NOT EDIT - Managed by Puppet
 #
 # Bacula Storage Daemon Configuration
-#   for <%= storage_server_real %>
-#   via <%= director_server_real -%>:director (<%= director_server_real -%>)
+#   for <%= @storage_server_real %>
+#   via <%= @director_server_real -%>:director (<%= @director_server_real -%>)
 
 # Configure the Director which will manage this Storage Daemon, and the
 # Director through which we'll send our messages (will be the same) one.
 Director {
-  Name = "<%= director_server_real -%>:director"
-  Password = "<%= director_password -%>"
-<% if use_tls -%>
+  Name = "<%= @director_server_real -%>:director"
+  Password = "<%= @director_password -%>"
+<% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
-  TLS Verify Peer = <%= tls_verify_peer %>
-<% tls_allowed_cn.each do |allowed_cn| -%>
+  TLS Require = <%= @tls_require %>
+  TLS Verify Peer = <%= @tls_verify_peer %>
+<% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
   # This is a server certificate, used for incoming
   # console connections.
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
 Messages {
-  Name = "<%= storage_server_real -%>:messages:standard"
-  Director = "<%= director_server_real -%>:director" = all
+  Name = "<%= @storage_server_real -%>:messages:standard"
+  Director = "<%= @director_server_real -%>:director" = all
 }
 
 # Configure the basic details for the Storage Daemon on this server
 Storage {
-  Name = "<%= storage_server_real -%>:storage"
+  Name = "<%= @storage_server_real -%>:storage"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
 <% if @plugin_dir -%>
   Plugin Directory = <%= @plugin_dir %>
 <% end -%>
   Maximum Concurrent Jobs = 20
-<% if use_tls -%>
+<% if @use_tls -%>
   # These TLS configuration options are used for incoming file daemon
   # connections. Director TLS settings are handled above.
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
+  TLS Require = <%= @tls_require %>
   # Peer certificate is not required/requested -- peer validity is verified by
   # the storage connection cookie provided to the File Daemon by the director.
   TLS Verify Peer = no
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
   # This is a server certificate, used for incoming
   # console connections.
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
 # Also configure access for something to monitor this Storage Daemon
 Director {
-  Name = "<%= storage_server_real -%>:monitor:storage"
-  Password = "<%= console_password -%>"
+  Name = "<%= @storage_server_real -%>:monitor:storage"
+  Password = "<%= @console_password -%>"
   Monitor = Yes
 }
 
@@ -75,7 +75,7 @@ Director {
 Device {
   Name = "DefaultFileStorage"
   Media Type = File
-  Archive Device = <%= storage_default_mount %>/default
+  Archive Device = <%= @storage_default_mount %>/default
   Label Media = Yes
   Random Access = Yes
   Automatic Mount = Yes
