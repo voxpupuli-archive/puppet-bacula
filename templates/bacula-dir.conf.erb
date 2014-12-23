@@ -1,24 +1,24 @@
 # DO NOT EDIT - Managed by Puppet
 #
 # Bacula Director Master Configuration
-#   for <%= director_name %>
+#   for <%= @director_name %>
 
 # Define the name of this director so other clients can
 # connect to it and work with our system
 Director {
-  Name = "<%= director_name -%>:director"
+  Name = "<%= @director_name -%>:director"
   Query File = "/etc/bacula/scripts/query.sql"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 5
-  Password = "<%= password -%>"
-  Messages = "<%= director_name -%>:messages:daemon"
+  Password = "<%= @password -%>"
+  Messages = "<%= @director_name -%>:messages:daemon"
 }
 
 # This is where the catalog information will be stored (basically
 # this should be how to connect to whatever database we're using)
 Catalog {
-  Name = "<%= director_name -%>:<%= db_backend -%>"
+  Name = "<%= @director_name -%>:<%= db_backend -%>"
   dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
   <% unless db_backend == 'sqlite' -%>
   dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
@@ -28,7 +28,7 @@ Catalog {
 # Configure how the directory will log and/or send messages. This
 # should should be for just about everything.
 Messages {
-  Name = "<%= director_name -%>:messages:standard"
+  Name = "<%= @director_name -%>:messages:standard"
   Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula %t %e (for %c)\" %r"
   Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
   Mail = <%= mail_to -%> = all, !skipped
@@ -37,23 +37,23 @@ Messages {
   # WARNING! the following will create a file that you must cycle from
   #          time to time as it will grow indefinitely. However, it will
   #          also keep all your messages if they scroll off the console.
-  Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
+  Append = "/var/log/bacula/<%= @director_name -%>:director.log" = all, !skipped
   Catalog = all
 }
 
 # These are messages directly from the various daemons themselves.
 Messages {
-  Name = "<%= director_name -%>:messages:daemon"
+  Name = "<%= @director_name -%>:messages:daemon"
   Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Notice (from Director %d)\" %r"
   Mail = <%= mail_to -%> = all, !skipped
   Console = all, !skipped, !saved
-  Append = "/var/log/bacula/<%= director_name -%>:director.log" = all, !skipped
+  Append = "/var/log/bacula/<%= @director_name -%>:director.log" = all, !skipped
 }
 
 <% if use_console -%>
 # Restricted console used by tray-monitor to get the status of the director
 Console {
-  Name = "<%= director_name -%>:monitor:director"
+  Name = "<%= @director_name -%>:monitor:director"
   Password = "<%= console_password -%>"
   CommandACL = status, .status
 }
@@ -68,7 +68,7 @@ Console {
 Storage {
   Name = "<%= storage_name -%>:storage:default"
   Address = <%= storage_name %>
-  Password = "<%= password -%>"
+  Password = "<%= @password -%>"
   Device = "FileStorage"
   Media Type = File
 }
@@ -93,7 +93,7 @@ Pool {
   Name = "<%= storage_name -%>:pool:catalog"
   # All Volumes will have the format director.catalog.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
-  Label Format = "<%= director_name -%>.catalog.${Counter<%= server.capitalize -%>Catalog+:p/3/0/r}"
+  Label Format = "<%= @director_name -%>.catalog.${Counter<%= server.capitalize -%>Catalog+:p/3/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
@@ -110,7 +110,7 @@ Pool {
 Counter {
   Name    = "Counter<%= server.capitalize -%>Catalog"
   Minimum = 1
-  Catalog = "<%= director_name -%>:<%= db_backend %>"
+  Catalog = "<%= @director_name -%>:<%= db_backend %>"
 }
 
 # FILE SETS -------------------------------------------------------------------
@@ -295,7 +295,7 @@ JobDefs {
   Level = Incremental
   FileSet = "Basic:<%= doHome -%>"
   Schedule = "Weekly:on<%= onDay -%>"
-  Messages = "<%= director_name -%>:messages:standard"
+  Messages = "<%= @director_name -%>:messages:standard"
   # Set the job to work as standard with the default Pool & Storage
   # (this will be overridden by the Job configuration for each Client)
   Storage = "<%= storage_name -%>:storage:default"

@@ -35,22 +35,22 @@
 #   client_package    => 'bacula-client',
 # }
 class bacula::client(
-    $client_conf = "/etc/bacula/bacula-fd.conf",
-    $client_conf_template = "bacula/bacula-fd.conf.erb",
-    $client_package = "bacula-client",
-    $client_service = "bacula-fd",
+    $client_conf = '/etc/bacula/bacula-fd.conf',
+    $client_conf_template = 'bacula/bacula-fd.conf.erb',
+    $client_package = 'bacula-client',
+    $client_service = 'bacula-fd',
     $director_password,
     $director_server,
     $package_provider = undef,
-    $pid_dir = "/var/run/bacula",
-    $working_dir = "/var/lib/bacula"
+    $pid_dir = '/var/run/bacula',
+    $working_dir = '/var/lib/bacula'
   ) {
 
   $director_name_array = split($director_server, '[.]')
   $director_name = $director_name_array[0]
 
   package { $client_package:
-    ensure => installed,
+    ensure   => installed,
     provider => $package_provider
   }
 

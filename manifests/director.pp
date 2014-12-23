@@ -56,13 +56,13 @@ class bacula::director(
     $clients = {}
   ) {
 
-  
+
   $storage_name_array = split($storage_server, '[.]')
   $director_name_array = split($server, '[.]')
   $storage_name = $storage_name_array[0]
   $director_name = $director_name_array[0]
 
-  
+
   # This function takes each client specified in $clients
   # and generates a bacula::client resource for each
   #
@@ -78,7 +78,7 @@ class bacula::director(
     'mysql'  => $mysql_package,
     'sqlite' => $sqlite_package,
   }
-  
+
   if $director_package {
     package { $director_package:
       ensure => installed,
@@ -128,8 +128,8 @@ class bacula::director(
     hasstatus  => true,
     hasrestart => true,
     require    => $db_package ? {
-      ''       => undef,
-      default  => Package[$db_package],
+      ''      => undef,
+      default => Package[$db_package],
     }
   }
 }

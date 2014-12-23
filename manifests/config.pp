@@ -45,7 +45,7 @@ class bacula::config {
 
 
   $is_director = $::bacula_is_director ? {
-    undef   => false, 
+    undef   => false,
     default => $::bacula_is_director,
   }
   if is_string($is_director) {
