@@ -6,9 +6,6 @@ Client {
   File Retention = 6 Weeks
   Job Retention  = 1 Year
   Auto Prune = Yes
-<%- if @priority -%>
-  Priority = <%= @priority %>
-<%- end -%>
 <% if @use_tls -%>
   TLS Enable = Yes
   TLS Require = <%= @tls_require %>
@@ -26,6 +23,9 @@ Job {
   Client   = "<%= @name %>"
   Type     = Backup
   Enabled  = "<%= @backup_enable %>"
+<%- if @priority -%>
+  Priority = <%= @priority %>
+<%- end -%>
   FileSet  = "<%= @fileset %>"
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Schedule = "<%= @client_schedule %>"

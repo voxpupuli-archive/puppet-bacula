@@ -1,3 +1,6 @@
+2015-01-07  Russell Harrison  <rharrison@fedoraproject.org> - 0.5.1
+  * Fix priority for client jobs.
+
 2014-12-12  Russell Harrison  <rharrison@fedoraproject.org> - 0.5.0
   * Add the option to set the priority for a backup job.
   * Fix deprecated variable access in the templates
