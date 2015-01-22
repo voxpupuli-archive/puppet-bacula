@@ -27,7 +27,8 @@ REQUIREMENTS
    Declare the mysql::server class to set up a mysql server on the bacula director node and set `manage_db` to true to have bacula manage the mysql database.
  * Puppetlabs/sqlite module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/sqlite or with the command `puppet-module install puppetlabs/sqlite`
    Declare the mysql::sqlite class so it's available for the bacula class to use.
-
+ * Puppetlabs/postgresql module.  Can be obtained here http://forge.puppetlabs.com/puppetlabs/postgresql or with the command `puppet-module install puppetlabs/postgresql`
+   Declare the postgresql::server class to set up a postgresql server on the bacula director node and set `manage_db` to true to have bacula manage the postgresql database.
 
 CONFIGURATION
 =============
@@ -108,7 +109,9 @@ The following lists all the class parameters the bacula class accepts as well as
     director_sqlite_package       bacula_director_sqlite_package  The name of the package to install the director's sqlite functionality
     storage_sqlite_package        bacula_storage_sqlite_package   The name of the package to install the storage daemon's sqlite functionality
     director_mysql_package        bacula_director_mysql_package   The name of the package to install the director's mysql functionality
-    storage_mysql_package         bacula_storage_mysql_package    The name of the package to install the storage's sqlite functionality
+    storage_mysql_package         bacula_storage_mysql_package    The name of the package to install the storage's mysql functionality
+    director_postgresql_package   bacula_director_postgresql_package The name of the package to install the director's postgresql functionality
+    storage_postgresql_package    bacula_storage_postgresql_package The name of the package to install the storage's postgresql functionality
     director_template             bacula_director_template        The ERB template to use for configuring the director instead of the one included with the module
     storage_template              bacula_storage_template         The ERB template to use for configuring the storage daemon instead of the one included with the module
     console_template              bacula_console_template         The ERB template to use for configuring the bconsole instead of the one included with the module
