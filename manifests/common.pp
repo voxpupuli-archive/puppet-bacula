@@ -32,13 +32,17 @@ class bacula::common(
   }
 
   $db_parameters = $db_backend ? {
-    'sqlite' => '',
-    'mysql'  => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
+    'sqlite'     => '',
+    'mysql'      => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
+    'postgresql' => "--host=${db_host} --user=${db_user} --password=${db_password} --port=${db_port} --database=${db_database}",
   }
 
   if $manage_db_tables {
     exec { 'make_db_tables':
-      command     => "/usr/lib/bacula/make_bacula_tables ${db_parameters}",
+      command     => $::osfamily ? {
+        'Redhat' => "/usr/libexec/bacula/make_bacula_tables ${db_parameters}",
+        default  => "/usr/lib/bacula/make_bacula_tables ${db_parameters}",
+      },
       refreshonly => true,
     }
   }
@@ -56,6 +60,23 @@ class bacula::common(
           },
           require => defined(Class['mysql::server']) ? {
             true  => Class['mysql::server'],
+            false => undef,
+          }
+        }
+      }
+
+      'postgresql': {
+        include postgresql::server
+
+        postgresql::server::db { $db_database:
+          user     => $db_user,
+          password => $db_password,
+          notify   => $manage_db_tables ? {
+            true  => Exec['make_db_tables'],
+            false => undef,
+          },
+          require => defined(Class['postgresql::server']) ? {
+            true  => Class['postgresql::server'],
             false => undef,
           },
         }
