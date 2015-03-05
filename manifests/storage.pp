@@ -99,10 +99,10 @@ class bacula::storage(
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:
-    ensure  => directory,
-    owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0750',
+    ensure => directory,
+    owner  => 'bacula',
+    group  => 'bacula',
+    mode   => '0750',
   }
 
   file { '/etc/bacula/bacula-sd.d':
