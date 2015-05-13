@@ -1,5 +1,12 @@
 {
+  "name": "rharrison-bacula",
+  "version": "0.5.1",
   "author": "Puppet Labs and Russell Harrison",
+  "summary": "This module manages a bacula infrastructure",
+  "license": "ASL 2.0",
+  "source": "http://github.com/rharrison10/rharrison-bacula",
+  "project_page": "http://github.com/rharrison10/rharrison-bacula",
+  "issues_url": "https://github.com/rharrison10/rharrison-bacula/issues",
   "checksums": {
     "CHANGELOG": "f4168d735227a7ed4233838c1191f0ea",
     "LICENSE": "3b83ef96387f14655fc854ddc3c6bd57",
@@ -39,28 +46,13 @@
     "templates/make_sqlite3_tables.sh.erb": "480b86d36d88539f5f94dfe44f6a172d",
     "tests/init.pp": "5ba171d279e18975a83fe44545b4712e"
   },
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">=2.2.0"
-    },
-    {
-      "name": "puppetlabs-mysql",
-      "version_requirement": ">=1.0.0"
-    },
-    {
-      "name": "puppetlabs/sqlite",
-      "version_requirement": ">=0.0.1"
-    }
-  ],
   "description": "This module manages Bacula, a complete backup solution.",
-  "license": "ASL 2.0",
-  "name": "rharrison-bacula",
-  "project_page": "http://github.com/rharrison10/rharrison-bacula",
-  "source": "http://github.com/rharrison10/rharrison-bacula",
-  "summary": "This module manages a bacula infrastructure",
   "types": [
-
+  
   ],
-  "version": "0.5.1"
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">=2.2.0"},
+    {"name":"puppetlabs-mysql","version_requirement":">=1.0.0"},
+    {"name":"puppetlabs/sqlite","version_requirement":">=0.0.1"}
+  ]
 }

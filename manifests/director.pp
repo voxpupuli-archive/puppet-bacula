@@ -39,6 +39,7 @@ class bacula::director (
   $dir_template          = 'bacula/bacula-dir.conf.erb',
   $director_password     = '',
   $director_server       = undef,
+  $mail_command          = $::bacula::params::mail_command,
   $mail_to               = undef,
   $mail_to_daemon        = undef,
   $mail_to_on_error      = undef,
@@ -47,6 +48,7 @@ class bacula::director (
   $manage_db             = false,
   $manage_db_tables      = true,
   $manage_logwatch       = undef,
+  $operator_command      = $::bacula::params::operator_command,
   $plugin_dir            = undef,
   $storage_server        = undef,
   $tls_allowed_cn        = [],
@@ -66,8 +68,8 @@ class bacula::director (
   $volume_retention_diff = '40 Days',
   $volume_retention_full = '1 Year',
   $volume_retention_incr = '10 Days'
-) {
-  include ::bacula::params
+) inherits ::bacula::params {
+
 
   $director_server_real = $director_server ? {
     undef   => $::bacula::params::director_server_default,

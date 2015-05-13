@@ -48,8 +48,8 @@ Catalog {
 # should should be for just about everything.
 Messages {
   Name = "<%= @director_server_real -%>:messages:standard"
-  Mail Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula %t %e (for %c)\" %r"
-  Operator Command = "/usr/sbin/bsmtp -h localhost -f bacula@<%= scope.lookupvar('::fqdn') -%> -s \"Bacula Intervention Required (for %c)\" %r"
+  Mail Command = "<%= @mail_command %>"
+  Operator Command = "<%= @operator_command %>"
 <% if @mail_to_real -%>
   Mail = <%= @mail_to_real -%> = all, !skipped
 <% end -%>

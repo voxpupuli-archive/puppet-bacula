@@ -53,11 +53,13 @@ class bacula::params {
     /(Debian|Ubuntu)/ => '/usr/lib',
     default           => "/usr/${lib}",
   }
-  $mail_to_default             = "root@${::fqdn}"
+  $mail_command    = "/usr/sbin/bsmtp -h localhost -f bacula@${::fqdn} -s \\\"Bacula %t %e (for %c)\\\" %r"
+  $mail_to_default = "root@${::fqdn}"
   $manage_logwatch = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => false,
     default           => true,
   }
+  $operator_command    = "/usr/sbin/bsmtp -h localhost -f bacula@${::fqdn} -s \\\"Bacula Intervention Required (for %c)\\\" %r"
   $plugin_dir           = "${libdir}/bacula"
   $storage_mysql_package       = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-mysql',

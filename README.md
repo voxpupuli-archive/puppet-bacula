@@ -133,6 +133,13 @@ Whether the node should be a storage server
 If `manage_logwatch` is `true` should the Bacula logwatch configuration be
 enabled or disabled
 
+### mail_command
+
+The [command](http://www.bacula.org/5.0.x-manuals/en/main/main/Messages_Resource.html#12970)
+bacula will use to send mail.
+
+Defaults to `"/usr/sbin/bsmtp -h localhost -f bacula@${::fqdn} -s \"Bacula %t %e (for %c)\" %r"`.
+
 ### mail_to
 
 Send the message to this email address for all jobs. Will default to
@@ -178,6 +185,13 @@ Defaults to `true`.
 ### manage_logwatch
 
 Whether to configure [logwatch](http://www.logwatch.org/) on the director
+
+### operator_command
+
+The [command](http://www.bacula.org/5.0.x-manuals/en/main/main/Messages_Resource.html#12997)
+bacula will use to send mail for Operator messages.
+
+Defaults to `"/usr/sbin/bsmtp -h localhost -f bacula@${::fqdn} -s \"Bacula Intervention Required (for %c)\" %r"`.
 
 ### plugin_dir
 
