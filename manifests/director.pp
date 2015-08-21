@@ -46,7 +46,7 @@ class bacula::director(
     $db_database,
     $db_port,
     $storage_server,
-    $director_package = '',
+    $director_package,
     $mysql_package,
     $mail_to,
     $sqlite_package,
@@ -103,10 +103,6 @@ class bacula::director(
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-director'],
-    require => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
   }
 
   file { '/etc/bacula/bacula-dir.d':

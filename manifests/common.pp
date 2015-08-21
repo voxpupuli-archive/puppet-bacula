@@ -11,7 +11,7 @@
 #
 # class { 'bacula::common': }
 class bacula::common(
-    $packages = '',
+    $packages,
     $manage_db_tables,
     $db_backend,
     $db_user,

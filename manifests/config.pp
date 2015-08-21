@@ -115,32 +115,32 @@ class bacula::config {
   }
 
   $director_password = $::bacula_director_password ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_director_password,
   }
 
   $console_password = $::bacula_console_password ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_console_password,
   }
 
   $director_server = $::bacula_director_server ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_director_server,
   }
 
   $storage_server = $::bacula_storage_server ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_storage_server,
   }
 
   $director_package = $::bacula_director_package ? {
-    undef   => '', # By default, let the db package handle this
+    undef   => "void", # By default, let the db package handle this
     default => $::bacula_director_package,
   }
 
   $storage_package = $::bacula_storage_package ? {
-    undef   => '', # By default, let the db package handle this
+    undef   => false, # By default, let the db package handle this
     default => $::bacula_storage_package,
   }
 
@@ -170,7 +170,7 @@ class bacula::config {
   }
 
   $director_db_package = $::bacula_director_db_package ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_director_db_package,
   }
 
@@ -180,12 +180,12 @@ class bacula::config {
   }
 
   $storage_db_package = $::bacula_storage_db_package ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_director_db_package,
   }
 
   $db_user = $::bacula_db_user ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_db_user,
   }
  
@@ -195,7 +195,7 @@ class bacula::config {
   }
 
   $db_password = $::bacula_db_password ? {
-    undef   => '',
+    undef   => false,
     default => $::bacula_db_password,
   }
 
