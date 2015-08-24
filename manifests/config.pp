@@ -135,7 +135,7 @@ class bacula::config {
   }
 
   $director_package = $::bacula_director_package ? {
-    undef   => "void", # By default, let the db package handle this
+    undef   => false, # By default, let the db package handle this
     default => $::bacula_director_package,
   }
 
