@@ -1,6 +1,6 @@
 {
   "name": "rharrison-bacula",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "author": "Puppet Labs and Russell Harrison",
   "summary": "This module manages a bacula infrastructure",
   "license": "ASL 2.0",

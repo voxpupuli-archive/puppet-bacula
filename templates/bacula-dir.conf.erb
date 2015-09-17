@@ -397,12 +397,15 @@ Job {
   Write Bootstrap = "/var/lib/bacula/BackupCatalog.bsr"
   # Run after main backup
   Priority = 50
-# This doesn't seem to be working correctly removing it.
-#  RunScript {
-#   RunsWhen=After
-#   RunsOnClient=No
-#   Console = "purge volume action=all allpools storage=File"
-#  }
+<% if @use_vol_purge_script -%>
+# Run the volume purge script to clean up old file volumes
+  RunScript {
+    RunsWhen=After
+    RunsOnClient=Yes
+    Command = "<%= @purge_script_command %>"
+    FailJobOnError=Yes
+  }
+<% end -%>
 }
 <% end -%>
 

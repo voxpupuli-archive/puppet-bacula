@@ -59,6 +59,8 @@ class bacula::params::validate (
   $tls_verify_peer       = '',
   $use_console           = '',
   $use_tls               = '',
+  $use_vol_purge_script  = false,
+  $use_vol_purge_mvdir   = undef,
   $volume_autoprune      = '',
   $volume_autoprune_diff = '',
   $volume_autoprune_full = '',
@@ -106,6 +108,15 @@ class bacula::params::validate (
     }
     if $mail_to_operator != undef {
       validate_re($mail_to_operator, '^[\w-]+@([\w-]+\.)+[\w-]+$')
+    }
+    validate_bool($use_vol_purge_script)
+    if $use_vol_purge_script {
+      unless $is_director and $is_storage {
+        fail('The automatic volume script requires that the director and storage daemon be on the same host')
+      }
+      if $use_vol_purge_mvdir != undef {
+        validate_absolute_path($use_vol_purge_mvdir)
+      }
     }
   }
 

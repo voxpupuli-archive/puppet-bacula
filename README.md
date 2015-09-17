@@ -276,6 +276,20 @@ Whether to configure a console resource on the director
 
 Whether to use [Bacula TLS - Communications Encryption](http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html).
 
+### use_vol_purge_script
+
+Run a script to automatically clean up old volumes from the default file pool
+after the BackupCatalog job is run each day. It is only valid if the Director
+and the Storage daemon are running on the same host. `true` or `false` (default).
+
+### use_vol_purge_mvdir
+
+The volume purge script can move volume files to a side directory for further
+inspection instead of removing the volume files. Bacula has a tendency (at
+least as of version 5.0.x) to occasionally label volume files incorrectly or
+store jobs in a volume labeled differently than the job name. Takes an absolute
+file file path to a directory or `undef` the default.
+
 ### volume_autoprune
 
 [Auto prune volumes](http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune) in the default pool.

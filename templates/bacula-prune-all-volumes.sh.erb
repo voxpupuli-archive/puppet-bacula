@@ -1,0 +1,322 @@
+#!/bin/bash
+# Borrowed and modified from http://whirlysworld.blogspot.com/2011/05/bacula-disk-storage-maintenance.html
+date=`date +%F-%H-%M`
+DEBUG=/bin/false
+move_files=/bin/false
+SCRIPTNAME=`basename $0`
+temp_dir=`mktemp -d --tmpdir ${SCRIPTNAME}.XXXXXX`
+temp_file_bconsole="${temp_dir}/bconsole_cmds"
+temp_file_volumes="${temp_dir}/bacula-list_volumes"
+temp_file_vol_check="${temp_dir}/vol_check.out"
+log_file="/var/log/bacula/${SCRIPTNAME}-${date}.out"
+problem_volume_log="/var/log/bacula/${SCRIPTNAME}-problem_volumes-${date}.out"
+
+clean_exit() {
+  # Clean up our tmp files and exit with the return code and message provided
+  # First argument is the exit code and the second argument is the message
+  rm -rf $temp_dir
+  [ -n "$2" ] && echo -e "$2" >&2
+  exit $1
+}
+
+# Dates we can remove volumes after
+incr_date=`date -d '<%= @volume_retention_incr %> ago' +%s` || clean_exit 1 "Incremental date not valid"
+diff_date=`date -d '<%= @volume_retention_diff %> ago' +%s` || clean_exit 1 "Differential date not valid"
+full_date=`date -d '<%= @volume_retention_full %> ago' +%s` || clean_exit 1 "Full date not valid"
+
+# For text formating we only want to display color if we have an interactive
+# terminal. Using '/bin/true' will result in a blank string instead of an
+# escape code
+if [ -t 0 ] ; then
+  TPUT_CMD='/bin/true'
+else
+  TPUT_CMD='tput'
+fi
+
+# Basic text formatting
+BOLD=`${TPUT_CMD} bold`
+DIM=`${TPUT_CMD} dim`
+UL=`${TPUT_CMD} smul` # begin underline mode
+UL_OFF=`${TPUT_CMD} rmul` # exit underline mode
+REV_TEXT=`${TPUT_CMD} rev` # Turn on reverse mode
+NORMAL=`${TPUT_CMD} sgr0` # removes all formating including color
+
+# Basic colors
+BLACK=`${TPUT_CMD} setaf 0`
+RED=`${TPUT_CMD} setaf 1`
+GREEN=`${TPUT_CMD} setaf 2`
+YELLOW=`${TPUT_CMD} setaf 3`
+BLUE=`${TPUT_CMD} setaf 4`
+MAGENTA=`${TPUT_CMD} setaf 5`
+CYAN=`${TPUT_CMD} setaf 6`
+WHITE=`${TPUT_CMD} setaf 7`
+
+# Background colors
+BLACK_BG=`${TPUT_CMD} setaf 0`
+RED_BG=`${TPUT_CMD} setaf 1`
+GREEN_BG=`${TPUT_CMD} setaf 2`
+YELLOW_BG=`${TPUT_CMD} setaf 3`
+BLUE_BG=`${TPUT_CMD} setaf 4`
+MAGENTA_BG=`${TPUT_CMD} setaf 5`
+CYAN_BG=`${TPUT_CMD} setaf 6`
+WHITE_BG=`${TPUT_CMD} setaf 7`
+
+usage() {
+  echo -e "${BOLD}Usage:${NORMAL}
+  ${BOLD}${SCRIPTNAME} -s ${UL}STORAGE_DEVICE_DIR${UL_OFF} [${UL}OPTIONS${UL_OFF}]
+
+${BOLD}Description:${NORMAL}
+  Retrieves all of the Bacula volumes of the File type and runs the prune command
+  on them so they will be marked as Purged once they reach the end of their
+  Volume Retention period. Then Purged volumes are deleted from the catalog and
+  the volume files are either deleted from the disk or moved to another directory
+
+  ${BOLD}-h, --help${NORMAL}
+    Output this usage information
+
+  ${BOLD}-d, --debug${NORMAL}
+    Output additional debug information to stderr.
+
+  ${BOLD}-m${NORMAL} ${UL}MOVE_DEST_DIR${UL_OFF}, ${BOLD}--movedir=${NORMAL}${UL}MOVE_DEST_DIR${UL_OFF}
+    The directory where you would like to move your volume files to instead of
+    deleting them.
+
+  ${BOLD}-s${NORMAL} ${UL}STORAGE_DEVICE_DIR${UL_OFF}, ${BOLD}--storagedir=${NORMAL}${UL}STORAGE_DEVICE_DIR${UL_OFF}
+    ${BOLD}Required${NORMAL} The directory where your file storage device is configured
+    to store its files
+"
+}
+
+GETOPT_TMP=`getopt -o dhm:s: -l debug,help,movedir:,storagedir: -- "$@"`
+[ "$?" == "0" ] || {
+  usage
+  clean_exit 1
+}
+eval set -- "$GETOPT_TMP"
+
+while [ ! -z "$1" ] ; do
+  case "$1" in
+    --debug|-d)
+      DEBUG=/bin/true
+      ;;
+    --help|-h)
+      usage
+      clean_exit 0
+      ;;
+    --movedir|-m)
+      # Remove a trailing slash if there is one
+      move_dest_dir="${2%/}"
+      move_files=/bin/true
+      shift
+      ;;
+    --storagedir|-s)
+      # Remove a trailing slash if there is one
+      storage_device_dir="${2%/}"
+      shift
+      ;;
+    *) break ;;
+  esac
+  shift
+done
+
+if [ -z "$storage_device_dir" -o ! -d "$storage_device_dir" ] ; then
+  usage
+  echo -e "\n${RED}No directory supplied for ${UL}STORAGE_DEVICE_DIR${UL_OFF}${NORMAL}" >&2
+  clean_exit 1
+fi
+
+if $move_files && [ -z "$move_dest_dir" -o ! -d "$move_dest_dir" ] ; then
+  usage
+  echo -e "\n${RED}No directory supplied for ${UL}MOVE_DEST_DIR${UL_OFF}${NORMAL}" >&2
+  clean_exit 1
+fi
+
+# use bacula's bconsole to list all the volumes we need to check and save the
+# results to a file.
+#
+# Note: Catalog backups are on a different rotation schedule so we don't
+# want to work on them.
+echo "`date +'%F %T'` Getting the list of volumes to work on" >> $log_file
+
+echo -e "list volumes\nquit" | /usr/sbin/bconsole | \
+  grep '^|[[:space:]]*[[:digit:]].*\(\| Full|\| Used\)'| \
+  grep -v BackupCatalog > $temp_file_volumes
+
+# Get the number of volumes to work on and set the vol_num to 0
+num_volumes=`wc -l $temp_file_volumes | awk '{ print $1}'`
+
+if [ "${num_volumes}" -eq "0" ] ; then
+  echo -e "`date +'%F %T'` No volumes to work on" >> $log_file
+  echo -e "`date +'%F %T'` No volumes to work on" 1>&2
+  clean_exit 1
+fi
+
+vol_num=0
+
+while read volume_info_line ; do
+  # Increment the volume number
+  let "vol_num += 1"
+  # Note: The sed part just trims leading and trailing whitespace
+  # echo "line = '$volume_info_line'"
+  volume_name=$(echo "$volume_info_line" | cut -d"|" -f3 | sed 's/^[ \t]*//;s/[ \t]*$//')
+  retention=$(echo "$volume_info_line" | cut -d"|" -f8 | sed 's/^[ \t]*//;s/[ \t]*$//')
+  last_written=$(echo "$volume_info_line" | cut -d"|" -f13 | sed 's/^[ \t]*//;s/[ \t]*$//')
+  last_written_year=$(echo "$last_written" | cut -d"-" -f1)
+  last_written_month=$(echo "$last_written" | cut -d"-" -f2)
+
+  # bconsole comment for the logs.
+  echo -e "\n@#`date +'%F %T'` volume ${vol_num} of ${num_volumes}: name = $volume_name, retention = $retention, last_written = $last_written, year=$last_written_year\n" >> $temp_file_bconsole
+  # Commands to actually run
+  echo "list volume=$volume_name
+prune volume=$volume_name
+yes
+list volume=$volume_name
+@sleep 1" >> $temp_file_bconsole
+
+done < $temp_file_volumes
+
+echo "quit" >> $temp_file_bconsole
+
+# Now lets run the commands we've created to prune any volumes past their
+# retention date
+
+echo -e "`date +'%F %T'` Begin pruning ${num_volumes} volumes with a 'Full' or 'Used' state\n" >> $log_file
+
+/usr/sbin/bconsole >> $log_file < $temp_file_bconsole
+
+# OK lets get about removing the actual physical volume files
+
+# Update the volume list now that the prune has been done
+
+echo -e "\nGetting the list of purged volumes\n" >> $log_file
+echo -e "list volumes\nquit" | /usr/sbin/bconsole | \
+  grep '^|[[:space:]]*[[:digit:]].* Purged' | \
+  grep -v BackupCatalog > $temp_file_volumes
+
+# We only need the volume names after the prune. Everything marked as "Purged"
+# should be safe to remove.
+volume_names=`grep "Purged" $temp_file_volumes | awk '{print $4}'`
+num_volumes=`echo $volume_names | wc -w`
+vol_num=0
+num_problem_volumes=0
+
+# Instead of batching the bacula commands we'll be handling each volume
+# individually so we can check the physical volume as well.
+
+for vol_name in $volume_names ; do
+  # Increment the volume number
+  let "vol_num += 1"
+  # zero out our variables
+  job_line=''
+  job_date=''
+  job_level=''
+  job_type=''
+
+  echo "Examining volume ${vol_num} of ${num_volumes} : ${storage_device_dir}/${vol_name}" >> $log_file
+
+  # Now we want to conduct a few manual checks on the physical volume file
+  # before removing it from the catalog.
+
+  # First lets make sure the file exists in the first place.
+  if [ ! -f ${storage_device_dir}/${vol_name} ] ; then
+    echo -e "${RED}Volume ${BOLD}${storage_device_dir}/${vol_name}${NORMAL}${RED} Does not exist" | tee -a $problem_volume_log 1>&2
+    continue
+  fi
+
+  # Get the volume information according to bls
+  # The timeout is used to keep large volumes from taking an extremely long
+  # time since we only want the header and there are cases where bls will hang
+  timeout 30 /usr/sbin/bls -p -j ${storage_device_dir}/${vol_name} &> $temp_file_vol_check
+
+  # Occasionally Bacula will name volumes in a way that doesn't match their
+  # header info.
+  if grep -q 'Wrong Volume mounted on device' $temp_file_vol_check ; then
+    file_name_new=`grep 'Wrong Volume mounted on device' $temp_file_vol_check | sed -e 's/^.* Wanted \(.*\) have \(.*\)/\2/g'`
+    echo -e "${RED}Volume ${BOLD}${storage_device_dir}/${vol_name}${NORMAL}${RED} has the incorrect file name. It should be ${BOLD}${storage_device_dir}/${file_name_new}${NORMAL}" | tee -a $problem_volume_log 1>&2
+    let "num_problem_volumes += 1"
+    cat $temp_file_vol_check | tee -a $problem_volume_log 1>&2
+    echo -e "\n" | tee -a $problem_volume_log 1>&2
+    # We'll want to leave this volume alone and move on to the next one.
+    continue
+  else
+    job_line=`grep '^[[:space:]]*Job=' ${temp_file_vol_check}`
+  fi
+
+  # The setup this script is intended for only writes one job to any one file.
+  # if there is more than one job its best to look at the file by hand.
+  if [ -z "${job_line}" -o `echo "${job_line}" | wc -l` -gt 1 ] ; then
+    echo -e "${YELLOW}Unable to determine only one job for ${BOLD}${storage_device_dir}/${vol_name}${NORMAL}\njob_line =\n${job_line}\n" | tee -a $problem_volume_log >&2
+    let "num_problem_volumes += 1"
+    cat $temp_file_vol_check | tee -a $problem_volume_log 1>&2
+    echo -e "\n" | tee -a $problem_volume_log 1>&2
+    # Move on without removing the volume from the catalog.
+    continue
+  fi
+
+  # Get the information on the job
+  job_name=`echo "${job_line}" | awk '{ print $1 }' | sed -s 's/Job=//g'`
+  job_date=`echo "${job_line}" | awk '{ print $2 }' | sed -s 's/Date=//g'`
+  job_level=`echo "${job_line}" | awk '{ print $4 }' | sed -s 's/Level=//g'`
+  job_type=`echo "${job_line}" | awk '{ print $5 }' | sed -s 's/Type=//g'`
+
+  echo -e "\tjob_name:\t${job_name}
+\tjob_date:\t${job_date}
+\tjob_level:\t${job_level}
+\tjob_type:\t${job_type}" >> $log_file
+
+  if [ "$job_type" != "B" ]; then
+    # Volumes containing jobs other than backups should be examined by hand
+    echo -e "${YELLOW}Unable to determine job type for ${BOLD}${storage_device_dir}/${vol_name}${NORMAL}\njob_line =\n${job_line}\n" | tee -a $problem_volume_log >&2
+    let "num_problem_volumes += 1"
+    cat $temp_file_vol_check | tee -a $problem_volume_log 1>&2
+    echo -e "\n" | tee -a $problem_volume_log 1>&2
+    continue
+  fi
+
+  # Set the removal date based on the job level
+  case "${job_level}" in
+    D) rm_date=${diff_date} ;;
+    F) rm_date=${full_date} ;;
+    I) rm_date=${incr_date} ;;
+    *)
+      # Best take a look if we can't determine a job level
+      echo -e "${YELLOW}Unable to determine job level for ${BOLD}${storage_device_dir}/${vol_name}${NORMAL}\njob_line =\n${job_line}\n" | tee -a $problem_volume_log >&2
+      let "num_problem_volumes += 1"
+      cat $temp_file_vol_check | tee -a $problem_volume_log 1>&2
+      echo -e "\n" | tee -a $problem_volume_log 1>&2
+      continue
+    ;;
+  esac
+
+  # If the removal date is greater than the job date we'll leave the file around
+  # in the catalog and on disk till the next run for safety.
+  if [ `date -d ${job_date} +%s` -gt ${incr_date} ] ; then
+    continue
+  fi
+
+  # Now we know its safe to remove the volume.
+  echo -e "\n`date +'%F %T'` volume ${vol_num} of ${num_volumes} ${vol_name}: Using bconsole to delete purged volume record" >> $log_file
+  /usr/sbin/bconsole >> $log_file <<EOF
+list volume=${vol_name}
+delete volume=${vol_name}
+yes
+list volume=${vol_name}
+EOF
+  if $move_files ; then
+    echo -e "`date +'%F %T'` volume ${vol_num} of ${num_volumes} ${vol_name}: Moving deleted volume to ${move_dest_dir}\n" >> $log_file
+    mv ${storage_device_dir}/${vol_name} ${move_dest_dir}/${vol_name} >> $log_file
+  else
+    echo -e "`date +'%F %T'` volume ${vol_num} of ${num_volumes} ${vol_name}: Removing physical file ${storage_device_dir}/${vol_name}\n" >> $log_file
+    rm ${storage_device_dir}/${vol_name} >> $log_file
+  fi
+done
+
+echo -e "\n`date +'%F %T'` - ${SCRIPTNAME} finished working on volumes" >> $log_file
+
+if [ $num_problem_volumes -gt 0 ] ; then
+  echo -e "${RED}There were volumes that could not be handled automatically and may have problems${NORMAL}" | tee -a $log_file 1>&2
+  echo -e "${RED}Look in ${problem_volume_log} for details${NORMAL}" | tee -a $log_file 1>&2
+fi
+echo $temp_dir
+
+clean_exit $num_problem_volumes

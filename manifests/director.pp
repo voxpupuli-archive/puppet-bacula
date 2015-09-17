@@ -60,6 +60,8 @@ class bacula::director (
   $tls_verify_peer       = 'yes',
   $use_console           = false,
   $use_tls               = false,
+  $use_vol_purge_script  = false,
+  $use_vol_purge_mvdir   = undef,
   $volume_autoprune      = 'Yes',
   $volume_autoprune_diff = 'Yes',
   $volume_autoprune_full = 'Yes',
@@ -177,6 +179,25 @@ class bacula::director (
       '/var/run/bacula',
       $plugin_dir
     ],
+  }
+
+  $purge_script_ensure = $use_vol_purge_script ? {
+    true    => file,
+    default => absent,
+  }
+
+  file { '/usr/local/bin/bacula-prune-all-volumes.sh':
+    ensure  => $purge_script_ensure,
+    owner   => 'bacula',
+    group   => 'bacula',
+    mode    => '0750',
+    content => template('bacula/bacula-prune-all-volumes.sh.erb'),
+    before  => File['/etc/bacula/bacula-dir.conf'],
+  }
+
+  $purge_script_command = $use_vol_purge_mvdir ? {
+    undef   => "/usr/local/bin/bacula-prune-all-volumes.sh -s ${::bacula::storage_default_mount}/default",
+    default => "/usr/local/bin/bacula-prune-all-volumes.sh -s ${::bacula::storage_default_mount}/default -m ${use_vol_purge_mvdir}",
   }
 
   file { '/etc/bacula/bacula-dir.conf':

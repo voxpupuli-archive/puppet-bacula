@@ -118,6 +118,13 @@
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
 #   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
+# [*use_vol_purge_script*]
+#   Run a script to automatically clean up old volumes from the default file pool after the BackupCatalog job is run each day. It
+#   is only valid if the Director and the Storage daemon are running on the same host. <tt>true</tt> or <tt>false</tt> (default).
+# [*use_vol_purge_mvdir*]
+#   The volume purge script can move volume files to a side directory for further inspection instead of removing the volume files.
+#   Bacula has a tendency (at least as of version 5.0.x) to occasionally label volume files incorrectly or store jobs in a volume
+#   labeled differently than the job name. Takes an absolute file file path to a directory or <tt>undef</tt> the default.
 # [*volume_autoprune*]
 #   {Auto prune volumes}[http://www.bacula.org/5.0.x-manuals/en/main/main/Configuring_Director.html#AutoPrune] in
 #   the default pool.
@@ -231,6 +238,8 @@ class bacula (
   $tls_verify_peer       = 'yes',
   $use_console           = false,
   $use_tls               = false,
+  $use_vol_purge_script  = false,
+  $use_vol_purge_mvdir   = undef,
   $volume_autoprune      = 'Yes',
   $volume_autoprune_diff = 'Yes',
   $volume_autoprune_full = 'Yes',
@@ -298,6 +307,8 @@ class bacula (
     tls_verify_peer       => $tls_verify_peer,
     use_console           => $use_console,
     use_tls               => $use_tls,
+    use_vol_purge_script  => $use_vol_purge_script,
+    use_vol_purge_mvdir   => $use_vol_purge_mvdir,
     volume_autoprune      => $volume_autoprune,
     volume_autoprune_diff => $volume_autoprune_diff,
     volume_autoprune_full => $volume_autoprune_full,
@@ -357,6 +368,8 @@ class bacula (
       tls_verify_peer       => $tls_verify_peer,
       use_console           => $use_console,
       use_tls               => $use_tls,
+      use_vol_purge_script  => $use_vol_purge_script,
+      use_vol_purge_mvdir   => $use_vol_purge_mvdir,
       volume_autoprune      => $volume_autoprune,
       volume_autoprune_diff => $volume_autoprune_diff,
       volume_autoprune_full => $volume_autoprune_full,

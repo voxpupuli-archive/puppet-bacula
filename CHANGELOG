@@ -1,3 +1,6 @@
+2015-09-04  Russell Harrison  <rharrison@fedoraproject.org> - 0.6.0
+  * Add script to automattically remove volume files that are no longer needed.
+
 2015-01-07  Russell Harrison  <rharrison@fedoraproject.org> - 0.5.1
   * Fix priority for client jobs.
 
