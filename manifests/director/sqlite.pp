@@ -26,22 +26,22 @@
 # limitations under the License.
 #
 class bacula::director::sqlite (
-  $db_database  = 'bacula'
-){
+  $db_database = 'bacula'
+) {
   sqlite::db { $db_database:
-    ensure    => present,
-    location  => "/var/lib/bacula/${db_database}.db",
-    owner     => 'bacula',
-    group     => 'bacula',
-    require   => File['/var/lib/bacula'],
-    notify    => Exec['make_db_tables'],
+    ensure   => present,
+    location => "/var/lib/bacula/${db_database}.db",
+    owner    => 'bacula',
+    group    => 'bacula',
+    require  => File['/var/lib/bacula'],
+    notify   => Exec['make_db_tables'],
   }
 
   file { '/usr/local/libexec/bacula':
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
 
   file { '/usr/local/libexec/bacula/make_sqlite3_tables.sh':
