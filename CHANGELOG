@@ -1,4 +1,7 @@
-2015-09-04  Russell Harrison  <rharrison@fedoraproject.org> - 0.6.0
+2015-09-07  Russell Harrison  <rharrison@fedoraproject.org> - 0.6.1
+  * Minor changes to resolve automated code quality checks on the forge.
+
+2015-09-14  Russell Harrison  <rharrison@fedoraproject.org> - 0.6.0
   * Add script to automattically remove volume files that are no longer needed.
 
 2015-01-07  Russell Harrison  <rharrison@fedoraproject.org> - 0.5.1
