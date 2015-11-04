@@ -15,6 +15,5 @@ define bacula::config::client (
  file { "/etc/bacula/bacula-dir.d/${name}.conf":
    ensure  => file,
    content => template($template),
-   notify  => Service["$bacula_director_service"],
  }
 }
