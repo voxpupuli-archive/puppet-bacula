@@ -1,24 +1,24 @@
 # DO NOT EDIT - Managed by Puppet
 #
 # Bacula Storage Daemon Configuration
-#   for <%= storage_name %>
-#   via <%= director_name -%>:director (<%= director_name -%>)
+#   for <%= @storage_name %>
+#   via <%= @director_name -%>:director (<%= @director_name -%>)
 
 # Configure the Director which will manage this Storage Daemon, and the
 # Director through which we'll send our messages (will be the same) one.
 Director {
-  Name = "<%= director_name -%>:director"
-  Password = "<%= director_password -%>"
+  Name = "<%= @director_name -%>:director"
+  Password = "<%= @director_password -%>"
 }
 
 Messages {
-  Name = "<%= storage_name -%>:messages:standard"
-  Director = "<%= director_name -%>:director" = all
+  Name = "<%= @storage_name -%>:messages:standard"
+  Director = "<%= @director_name -%>:director" = all
 }
 
 # Configure the basic details for the Storage Daemon on this server
 Storage {
-  Name = "<%= storage_name -%>:storage"
+  Name = "<%= @storage_name -%>:storage"
   Working Directory = "/var/lib/bacula"
   PID Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 20
@@ -26,8 +26,8 @@ Storage {
 
 # Also configure access for something to monitor this Storage Daemon
 Director {
-  Name = "<%= storage_name -%>:monitor:storage"
-  Password = "<%= console_password -%>"
+  Name = "<%= @storage_name -%>:monitor:storage"
+  Password = "<%= @console_password -%>"
   Monitor = Yes
 }
 

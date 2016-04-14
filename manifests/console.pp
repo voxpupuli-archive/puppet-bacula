@@ -24,7 +24,7 @@ class bacula::console(
     $template = 'bacula/bconsole.conf.erb'
   ) {
 
-  $director_name_array = split($server, '[.]')
+  $director_name_array = split($director_server, '[.]')
   $director_name = $director_name_array[0]
 
   if $console_package {

@@ -18,10 +18,10 @@ Director {
 # This is where the catalog information will be stored (basically
 # this should be how to connect to whatever database we're using)
 Catalog {
-  Name = "<%= @director_name -%>:<%= db_backend -%>"
-  dbname = "<%= db_database -%>"; dbdriver = dbi:<%= db_backend %>
-  <% unless db_backend == 'sqlite' -%>
-  dbaddress = <%= db_host %>; dbport = <%= db_port %>; user = <%= db_user %>; password = <%= db_password %>
+  Name = "<%= @director_name -%>:<%= @db_backend -%>"
+  dbname = "<%= @db_database -%>"; dbdriver = dbi:<%= @db_backend %>
+  <% unless @db_backend == 'sqlite' -%>
+  dbaddress = <%= @db_host %>; dbport = <%= @db_port %>; user = <%= @db_user %>; password = <%= @db_password %>
   <% end %>
 }
 
@@ -29,10 +29,10 @@ Catalog {
 # should should be for just about everything.
 Messages {
   Name = "<%= @director_name -%>:messages:standard"
-  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula %t %e (for %c)\" %r"
-  Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
-  Mail = <%= mail_to -%> = all, !skipped
-  Operator = <%= mail_to -%> = mount
+  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= @domain -%> -s \"Bacula %t %e (for %c)\" %r"
+  Operator Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= @domain -%> -s \"Bacula Intervention Required (for %c)\" %r"
+  Mail = <%= @mail_to -%> = all, !skipped
+  Operator = <%= @mail_to -%> = mount
   Console = all, !skipped, !saved
   # WARNING! the following will create a file that you must cycle from
   #          time to time as it will grow indefinitely. However, it will
@@ -44,17 +44,17 @@ Messages {
 # These are messages directly from the various daemons themselves.
 Messages {
   Name = "<%= @director_name -%>:messages:daemon"
-  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= domain -%> -s \"Bacula Notice (from Director %d)\" %r"
-  Mail = <%= mail_to -%> = all, !skipped
+  Mail Command = "/usr/lib/bacula/bsmtp -h localhost -f bacula@<%= @domain -%> -s \"Bacula Notice (from Director %d)\" %r"
+  Mail = <%= @mail_to -%> = all, !skipped
   Console = all, !skipped, !saved
   Append = "/var/log/bacula/<%= @director_name -%>:director.log" = all, !skipped
 }
 
-<% if use_console -%>
+<% if @use_console -%>
 # Restricted console used by tray-monitor to get the status of the director
 Console {
   Name = "<%= @director_name -%>:monitor:director"
-  Password = "<%= console_password -%>"
+  Password = "<%= @console_password -%>"
   CommandACL = status, .status
 }
 <% end -%>
@@ -66,15 +66,15 @@ Console {
 # Storage Daemon to connect to (using the standard FileStorage device) and a
 # Pool which will be used with that as well.
 Storage {
-  Name = "<%= storage_name -%>:storage:default"
-  Address = <%= storage_name %>
+  Name = "<%= @storage_name -%>:storage:default"
+  Address = <%= @storage_name %>
   Password = "<%= @password -%>"
   Device = "FileStorage"
   Media Type = File
 }
 
 Pool {
-  Name = "<%= storage_name -%>:pool:default"
+  Name = "<%= @storage_name -%>:pool:default"
   # All Volumes will have the format standard.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
   # We won't use a counter format for this at the moment.
@@ -90,10 +90,10 @@ Pool {
 }
 
 Pool {
-  Name = "<%= storage_name -%>:pool:catalog"
+  Name = "<%= @storage_name -%>:pool:catalog"
   # All Volumes will have the format director.catalog.date.time to ensure they
   # are kept unique throughout the operation and also aid quick analysis
-  Label Format = "<%= @director_name -%>.catalog.${Counter<%= server.capitalize -%>Catalog+:p/3/0/r}"
+  Label Format = "<%= @director_name -%>.catalog.${Counter<%= @server.capitalize -%>Catalog+:p/3/0/r}"
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
@@ -108,9 +108,9 @@ Pool {
 
 # Create a Counter which will be used to label the catalog volumes on the sytem
 Counter {
-  Name    = "Counter<%= server.capitalize -%>Catalog"
+  Name    = "Counter<%= @server.capitalize -%>Catalog"
   Minimum = 1
-  Catalog = "<%= @director_name -%>:<%= db_backend %>"
+  Catalog = "<%= @director_name -%>:<%= @db_backend %>"
 }
 
 # FILE SETS -------------------------------------------------------------------
@@ -298,8 +298,8 @@ JobDefs {
   Messages = "<%= @director_name -%>:messages:standard"
   # Set the job to work as standard with the default Pool & Storage
   # (this will be overridden by the Job configuration for each Client)
-  Storage = "<%= storage_name -%>:storage:default"
-  Pool = "<%= storage_name -%>:pool:default"
+  Storage = "<%= @storage_name -%>:storage:default"
+  Pool = "<%= @storage_name -%>:pool:default"
   Write Bootstrap = "/var/lib/bacula/%c.bsr"
   Priority = 15
   # Define how long any of these jobs are allowed to run for before we should
