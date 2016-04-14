@@ -191,7 +191,7 @@ class bacula::config {
  
   $db_port = $::bacula_db_port ? {
     undef   => '3306',
-    default => $::bacula_db_user,
+    default => $::bacula_db_port,
   }
 
   $db_password = $::bacula_db_password ? {
