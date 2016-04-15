@@ -51,7 +51,7 @@ class bacula::client(
 
   package { $client_package:
     ensure   => installed,
-    provider => $package_provider
+    provider => $package_provider,
   }
 
   file { $client_conf:

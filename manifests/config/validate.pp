@@ -19,7 +19,6 @@ class bacula::config::validate(
     $storage_server,
     $manage_console,
     $manage_bat,
-    $console_password,
     $use_console,
     $manage_db,
     $manage_db_tables
@@ -45,7 +44,7 @@ class bacula::config::validate(
   if $is_director {
     validate_re($mail_to, '^[\w\.-]+@([\w-]+\.)+[\w-]+$')
   }
-  
+
   #Validate the director and storage servers given are fully qualified domain names
   validate_re($director_server, '^[a-z0-9_-]+(\.[a-z0-9_-]+){2,}$')
   validate_re($storage_server, '^[a-z0-9_-]+(\.[a-z0-9_-]+){2,}$')

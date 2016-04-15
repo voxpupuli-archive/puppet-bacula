@@ -86,16 +86,19 @@ class bacula::storage(
     }
   }
 
+  if $db_package == '' {
+    $real_db_package = undef
+  } else {
+    $real_db_package = 'Package[$db_package]'
+  }
+
   file { '/etc/bacula/bacula-sd.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-sd'],
-    require => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
+    require => $real_db_package,
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:
@@ -119,13 +122,10 @@ class bacula::storage(
 
   # Register the Service so we can manage it through Puppet
   service { 'bacula-sd':
-    enable     => true,
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
+    require    => $real_db_package,
   }
 }

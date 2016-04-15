@@ -110,7 +110,7 @@ class bacula::config {
   }
 
   $mail_to = $::bacula_mail_to ? {
-    undef   => "root@${domain}",
+    undef   => "root@${::domain}",
     default => $::bacula_mail_to,
   }
 
@@ -188,7 +188,7 @@ class bacula::config {
     undef   => false,
     default => $::bacula_db_user,
   }
- 
+
   $db_port = $::bacula_db_port ? {
     undef   => '3306',
     default => $::bacula_db_port,
@@ -208,7 +208,6 @@ class bacula::config {
     undef   => 'bacula',
     default => $::bacula_db_database,
   }
-
 
   #If it's undef, that's fine
   $director_template = $::bacula_director_template

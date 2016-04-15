@@ -10,24 +10,27 @@
 # Sample Usage:
 #
 # class { 'bacula::common': }
-class bacula::common(
-    $packages,
-    $manage_db_tables,
-    $db_backend,
-    $db_user,
-    $db_database,
-    $db_password,
-    $db_port,
-    $db_host
+class bacula::common (
+  $packages,
+  $manage_db_tables,
+  $manage_db         = true,
+  $db_backend,
+  $db_user,
+  $db_database,
+  $db_password,
+  $db_port,
+  $db_host,
   ) {
+
+  $notify_database = $manage_db_tables ? {
+    true  => Exec['make_db_tables'],
+    false => undef,
+  }
 
   if $packages {
     package { $packages:
       ensure => installed,
-      notify => $manage_db_tables ? {
-        true  => Exec['make_db_tables'],
-        false => undef,
-      }
+      notify => $notify_database,
     }
   }
 
@@ -44,29 +47,30 @@ class bacula::common(
   }
 
   if $manage_db {
+
+    if defined(Class['mysql::server']) {
+      $mysql_class = 'Class["mysql::server"]'
+    } else {
+      $mysql_class = undef
+    }
+
     case $db_backend {
       'mysql': {
         mysql::db { $db_database:
           user     => $db_user,
           password => $db_password,
           host     => $db_host,
-          notify   => $manage_db_tables ? {
-            true  => Exec['make_db_tables'],
-            false => undef,
-          },
-          require  => defined(Class['mysql::server']) ? {
-            true  => Class['mysql::server'],
-            false => undef,
-          },
+          notify   => $notify_database,
+          require  => $mysql_class,
         }
       }
 
       'sqlite': {
         sqlite::db { $db_database:
+          ensure   => present,
           location => "/var/lib/bacula/${db_database}.db",
           owner    => 'bacula',
           group    => 'bacula',
-          ensure   => present,
           require  => File['/var/lib/bacula'],
         }
       }
