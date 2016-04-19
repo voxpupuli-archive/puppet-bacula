@@ -16,6 +16,43 @@ describe 'bacula' do
         :storage_server    => 'bacula.domain.com',
       }
     }
+
+    let (:facts) {
+      {
+        :bacula_manage_console          => '',
+        :bacula_manage_bat              => '',
+        :bacula_is_director             => '',
+        :bacula_is_client               => '',
+        :bacula_is_storage              => '',
+        :bacula_use_console             => '',
+        :bacula_manage_db               => '',
+        :bacula_manage_db_tables        => '',
+        :bacula_db_backend              => '',
+        :bacula_mail_to                 => '',
+        :bacula_director_password       => '',
+        :bacula_console_password        => '',
+        :bacula_director_server         => '',
+        :bacula_storage_server          => '',
+        :bacula_director_package        => '',
+        :bacula_storage_package         => '',
+        :bacula_client_package          => '',
+        :bacula_director_sqlite_package => '',
+        :bacula_storage_sqlite_package  => '',
+        :bacula_director_mysql_package  => '',
+        :bacula_storage_mysql_package   => '',
+        :bacula_director_template       => '',
+        :bacula_storage_template        => '',
+        :bacula_console_template        => '',
+        :bacula_director_db_package     => '',
+        :bacula_console_package         => '',
+        :bacula_storage_db_package      => '',
+        :bacula_db_user                 => '',
+        :bacula_db_port                 => '',
+        :bacula_db_password             => '',
+        :bacula_db_host                 => '',
+        :bacula_db_database             => '',
+      }
+    }
     it { should contain_class('bacula') }
     it { should contain_class('bacula::common') }
     it { should contain_class('bacula::config') }
