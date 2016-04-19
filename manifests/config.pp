@@ -208,6 +208,11 @@ class bacula::config {
     undef   => 'bacula',
     default => $::bacula_db_database,
   }
+  
+  $packages = $::bacula_packages ? {
+    undef   => ['bacula-common', 'bacula-client'],
+    default => $::bacula_packages,
+  }
 
   #If it's undef, that's fine
   $director_template = $::bacula_director_template
