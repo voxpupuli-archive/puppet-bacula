@@ -10,15 +10,15 @@
 #   $client_package:
 #       The name of the package to install the bacula-fd service.
 #   $client_conf:
-#       File name of bacula-fd configuration file 
+#       File name of bacula-fd configuration file
 #   $client_conf_template:
-#       Template for bacula-fd configuration file 
+#       Template for bacula-fd configuration fie
 #   $client_service:
 #       The name of bacula-fd service
 #   $package_provider:
-#       Package provider (for solaris only) 
+#       Package provider (for solaris only)
 #   $pid_dir:
-#       The bacula-fd pid dir 
+#       The bacula-fd pid dir
 #   $working_dir:
 #       The bacula-fd working dir
 #
@@ -28,7 +28,7 @@
 #   - Enforce the bacula-fd service to be running
 #
 # Sample Usage:
-# 
+#
 # class { 'bacula::client':
 #   director_server   => 'bacula.domain.com',
 #   director_password => 'XXXXXXXXXX',

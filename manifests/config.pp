@@ -1,13 +1,13 @@
 # Class:: bacula::config
-# 
+#
 # This class determines default values for parameters needed
-# to configure the bacula class.  It looks for variables in 
+# to configure the bacula class.  It looks for variables in
 # top scope (probably from an ENC such as Dashboard).
 # If the variable doesn't exist in top scope, fall back to
-# a hard coded default. 
-# 
+# a hard coded default.
+#
 # Some of the variables in this class need to be booleans.
-# However, if we get the value from top scope, it could 
+# However, if we get the value from top scope, it could
 # be a string since Dashboard can't express booleans.
 # So we need to see if it's a string and attempt to
 # convert it to a boolean
@@ -208,7 +208,7 @@ class bacula::config {
     undef   => 'bacula',
     default => $::bacula_db_database,
   }
-  
+
   $packages = $::bacula_packages ? {
     undef   => ['bacula-common', 'bacula-client'],
     default => $::bacula_packages,

@@ -13,7 +13,7 @@ This module manages [Bacula](http://bacula.org).  Through declaration of the `ba
 INSTALLATION
 ============
 
-The module can be obtained from the [Puppet Forge](http://forge.puppetlabs.com/puppetlabs/bacula).  Select `Download` which downloads a tar.gz file.  Upload the tar.gz file to your Puppet Master.  Untar the file.  This will create a new directory called `puppetlabs-bacula-${version_number}`.  Rename this directory to just **bacula** and place it in your [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules). 
+The module can be obtained from the [Puppet Forge](http://forge.puppetlabs.com/puppetlabs/bacula).  Select `Download` which downloads a tar.gz file.  Upload the tar.gz file to your Puppet Master.  Untar the file.  This will create a new directory called `puppetlabs-bacula-${version_number}`.  Rename this directory to just **bacula** and place it in your [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules).
 
 You can also use the [puppet-module tool](https://github.com/puppetlabs/puppet-module-tool).  Just run this command from your modulepath.
 `puppet-module install puppetlabs/bacula`
@@ -35,7 +35,7 @@ CONFIGURATION
 There is one class (bacula) that needs to be declared on all nodes managing any component of bacula.
 These nodes are configured using one of two methods.
 
- 1. Using Top Scope (e.g. Dashboard) parameters 
+ 1. Using Top Scope (e.g. Dashboard) parameters
  2. Declare the bacula class on node definitions in your manifest.
 
 NOTE: The two methods can be mixed and matched, but take care not to create the same Top Scope parameter and class parameter simultaneously (See below for class parameters and their matching Top Scope parameter) as you may get unexpected results.
@@ -95,7 +95,7 @@ The following lists all the class parameters the bacula class accepts as well as
     storage_server                bacula_storage_server           The FQDN of the storage server
     manage_console                bacula_manage_console           Whether the bconsole should be managed on the node
     manage_bat                    bacula_manage_bat               Whether the bat should be managed on the node
-    clients                       *See Adding Clients section*    
+    clients                       *See Adding Clients section*
 
 
     UNCOMMON PARAMETERS:
@@ -128,8 +128,8 @@ Additionally the following (uncommon) parameters can be passed to the bacula::cl
 CLIENTS
 =======
 
-To back up clients on your network, you need to tell the director about them. The director is whichever node you included the 
-`bacula` class and you specifed the parameter `is_director` to true.  The way to add clients is different depending on if 
+To back up clients on your network, you need to tell the director about them. The director is whichever node you included the
+`bacula` class and you specifed the parameter `is_director` to true.  The way to add clients is different depending on if
 you're using an ENC such as Dashboard or if you're using parameterized classes.  Both need to know the parameters of the client
 
 Client Parameters
@@ -175,7 +175,7 @@ Using Top Scope (Dashboard)
 
 The bacula module will look for parameters of a certain format to build its clients list. For each client, make a parmaeter of this
 format:
-  bacula_client_client1.domain.com 
+  bacula_client_client1.domain.com
 with value:
   fileset=MyFileSet,schedule=MySchedule
 
@@ -227,11 +227,11 @@ Included FileSets
 Included Schedules
 ==================
 
- * WeeklyCycle  
+ * WeeklyCycle
    * Full First Sun at 23:05
    * Differential Second-Fifth Sun at 23:05
    * Incremental Mon-Sat at 23:05
- 
+
  * WeeklyCycleAfterBackup
    * Full Mon-Sun at 23:10
 
@@ -249,9 +249,9 @@ Included Schedules
    * Full First Sun at 15:30
    * Differential Second-Fifth Sun at 15:30
    * Incremental Mon-Sat at 20:00
-   
+
  * Weekly:onMonday
-   * Full First Mon at 18:30 
+   * Full First Mon at 18:30
    * Differential Second-Fifth Mon at 18:30
    * Incremental Tue-Sun at 20:00
 
