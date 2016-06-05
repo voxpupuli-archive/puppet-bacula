@@ -6,7 +6,7 @@ module Puppet::Parser::Functions
     # $bacula_client_mynode with values in format
     # fileset=Basic:noHome,schedule=Hourly
     to_hash.each do |variable, value|
-      next unless variable =~ /^bacula_client_.*$/
+      next unless variable =~ %r{^bacula_client_.*$}
       client = variable[14..-1]
 
       begin

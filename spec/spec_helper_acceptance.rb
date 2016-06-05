@@ -3,7 +3,7 @@ require 'beaker-rspec/helpers/serverspec'
 
 hosts.each do |host|
   # Install Puppet 4 on CentOS 7
-  if host['platform'] =~ /el-7/
+  if host['platform'] =~ %r{el-7}
     on host, 'yum install -y http://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm'
     on host, 'yum install -y install puppet-agent'
   else
