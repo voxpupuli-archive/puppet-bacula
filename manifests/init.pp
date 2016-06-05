@@ -96,7 +96,7 @@
 #   storage_server    => 'bacula.domain.com',
 #   clients           => $clients,
 # }
-class bacula(
+class bacula (
   $db_backend              = $bacula::config::db_backend,
   $db_user                 = $bacula::config::db_user,
   $db_password             = $bacula::config::db_password,
@@ -115,6 +115,7 @@ class bacula(
   $storage_server          = $bacula::config::bacula_storage_server,
   $manage_console          = $bacula::config::safe_manage_console,
   $console_package         = $bacula::config::console_package,
+  $packages                = $bacula::config::packages,
   $manage_bat              = $bacula::config::safe_manage_bat,
   $director_package        = $bacula::config::director_package,
   $storage_package         = $bacula::config::storage_package,
@@ -127,13 +128,12 @@ class bacula(
   $storage_template        = $bacula::config::storage_template,
   $console_template        = $bacula::config::console_template,
   $use_console             = $bacula::config::safe_use_console,
-  $console_password        = $bacula::config::console_password,
   $clients                 = {}
 ) inherits bacula::config {
 
   #Validate our parameters
   #It's ugly to do it in the parent class
-  class { 'bacula::config::validate':
+  class { '::bacula::config::validate':
     db_backend        => $db_backend,
     mail_to           => $mail_to,
     is_director       => $is_director,
@@ -155,7 +155,7 @@ class bacula(
     manage_db         => $manage_db,
   }
 
-  class { 'bacula::common':
+  class { '::bacula::common':
     manage_db_tables => $manage_db_tables,
     db_backend       => $db_backend,
     db_user          => $db_user,
@@ -167,7 +167,7 @@ class bacula(
   }
 
   if $is_director {
-    class { 'bacula::director':
+    class { '::bacula::director':
       db_backend       => $db_backend,
       server           => $director_server,
       storage_server   => $storage_server,
@@ -190,7 +190,7 @@ class bacula(
   }
 
   if $is_storage {
-    class { 'bacula::storage':
+    class { '::bacula::storage':
       db_backend        => $db_backend,
       director_server   => $director_server,
       director_password => $director_password,
@@ -205,7 +205,7 @@ class bacula(
   }
 
   if $is_client {
-    class { 'bacula::client':
+    class { '::bacula::client':
       director_server   => $director_server,
       director_password => $director_password,
       client_package    => $client_package,
@@ -214,7 +214,7 @@ class bacula(
   }
 
   if $manage_console {
-    class { 'bacula::console':
+    class { '::bacula::console':
       director_server   => $director_server,
       director_password => $director_password,
       console_package   => $console_package,
@@ -223,7 +223,7 @@ class bacula(
   }
 
   if $manage_bat {
-    class { 'bacula::bat':
+    class { '::bacula::bat':
       require => Class['bacula::common'],
     }
   }

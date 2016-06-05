@@ -18,7 +18,7 @@ describe 'bacula class' do
         }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
   end
 end

@@ -31,7 +31,7 @@
 #   - Enforce the bacula-sd service to be running
 #
 # Sample Usage:
-# 
+#
 # class { 'bacula::client':
 #   director_server   => 'bacula.domain.com',
 #   director_password => 'XXXXXXXXXX',
@@ -60,10 +60,10 @@ class bacula::storage(
   }
 
   # This is necessary because the bacula-common package will
-  # install the bacula-storage-mysql package regardless of 
+  # install the bacula-storage-mysql package regardless of
   # wheter we're installing the bacula-storage-sqlite package
   # This causes the bacula storage daemon to use mysql no
-  # matter what db backend we want to use.  
+  # matter what db backend we want to use.
   #
   # However, if we install only the db compoenent package,
   # it will install the bacula-common package without
@@ -86,16 +86,19 @@ class bacula::storage(
     }
   }
 
+  if $db_package == '' {
+    $real_db_package = undef
+  } else {
+    $real_db_package = 'Package[$db_package]'
+  }
+
   file { '/etc/bacula/bacula-sd.conf':
     ensure  => file,
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),
     notify  => Service['bacula-sd'],
-    require => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
+    require => $real_db_package,
   }
 
   file { ['/mnt/bacula', '/mnt/bacula/default']:
@@ -119,13 +122,10 @@ class bacula::storage(
 
   # Register the Service so we can manage it through Puppet
   service { 'bacula-sd':
-    enable     => true,
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => $db_package ? {
-      ''      => undef,
-      default => Package[$db_package],
-    }
+    require    => $real_db_package,
   }
 }

@@ -1,4 +1,4 @@
-class { 'bacula':
+class { '::bacula':
   is_storage        => true,
   is_director       => true,
   is_client         => true,

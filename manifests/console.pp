@@ -24,6 +24,13 @@ class bacula::console(
     $template = 'bacula/bconsole.conf.erb'
   ) {
 
+  if $console_package == '' {
+    $real_console_package = undef
+  } else {
+    $real_console_package = Package['bacula-console']
+  }
+
+
   $director_name_array = split($director_server, '[.]')
   $director_name = $director_name_array[0]
 
@@ -38,9 +45,6 @@ class bacula::console(
     owner   => 'bacula',
     group   => 'bacula',
     content => template($template),
-    require => $console_package ? {
-      ''      => undef,
-      default => Package['bacula-console'],
-    }
+    require => $real_console_package,
   }
 }

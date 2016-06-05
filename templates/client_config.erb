@@ -1,6 +1,6 @@
 Client {
-  Name     = "<%= hostname %>"
-  Address  = "<%= name %>"
+  Name     = "<%= @hostname %>"
+  Address  = "<%= @name %>"
   Password = "<%= scope.lookupvar('bacula::director::password') %>"
   Catalog  = "<%= scope.lookupvar('bacula::director::director_name') %>:<%= scope.lookupvar('bacula::director::db_backend') %>"
   File Retention = 6 Weeks
@@ -14,7 +14,7 @@ Job {
   Type     = Backup
   FileSet  = "<%= fileset %>"
   Storage  = "<%= scope.lookupvar('bacula::director::storage_name') %>:storage:default"
-  Schedule = "<%= schedule %>"
+  Schedule = "<%= @backup_schedule %>"
   Pool     = "<%= scope.lookupvar('bacula::director::storage_name') %>:pool:default"
   Messages = "<%= scope.lookupvar('bacula::director::director_name') %>:messages:standard"
 }
