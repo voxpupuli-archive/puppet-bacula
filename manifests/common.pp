@@ -153,6 +153,7 @@ class bacula::common (
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0755',
+    seltype => 'bacula_var_run_t',
     require => Package[$require_package],
   }
 }
