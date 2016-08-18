@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'bacula' do
   context 'with default parameters' do
-    let(:params) {
+    let(:params) do
       {
         is_storage: true,
         is_director: true,
@@ -14,9 +14,9 @@ describe 'bacula' do
         mail_to: 'bacula-admin@domain.com',
         storage_server: 'bacula.domain.com',
       }
-    }
+    end
 
-    let(:facts) {
+    let(:facts) do
       {
         bacula_manage_console: '',
         bacula_manage_bat: '',
@@ -52,7 +52,7 @@ describe 'bacula' do
         bacula_db_database: 'testdb',
         bacula_packages: 'bacula-console',
       }
-    }
+    end
     it { should contain_class('bacula') }
     it { should contain_class('bacula::common') }
     it { should contain_class('bacula::config') }
