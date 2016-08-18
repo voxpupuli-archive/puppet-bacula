@@ -12,7 +12,7 @@ describe 'bacula' do
         console_password: 'XXXXXXXXX',
         director_server: 'bacula.domain.com',
         mail_to: 'bacula-admin@domain.com',
-        storage_server: 'bacula.domain.com',
+        storage_server: 'bacula.domain.com'
       }
     end
 
@@ -50,7 +50,7 @@ describe 'bacula' do
         bacula_db_password: 'fakepw',
         bacula_db_host: 'localhost',
         bacula_db_database: 'testdb',
-        bacula_packages: 'bacula-console',
+        bacula_packages: 'bacula-console'
       }
     end
     it { should contain_class('bacula') }
