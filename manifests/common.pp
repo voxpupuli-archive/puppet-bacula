@@ -13,13 +13,13 @@
 class bacula::common (
   $packages,
   $manage_db_tables,
-  $manage_db         = true,
   $db_backend,
   $db_user,
   $db_database,
   $db_password,
   $db_port,
   $db_host,
+  $manage_db         = true,
   ) {
 
   $notify_database = $manage_db_tables ? {

@@ -50,9 +50,9 @@ class bacula::director (
     $mysql_package,
     $mail_to,
     $sqlite_package,
-    $template = 'bacula/bacula-dir.conf.erb',
     $use_console,
     $console_password,
+    $template = 'bacula/bacula-dir.conf.erb',
     $clients = {}
 ) {
 
