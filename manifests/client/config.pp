@@ -57,15 +57,22 @@
 #   <code>key = value</code> settings from the hash.  Note: The <code>RunsWhen</code> key is required.
 # [*storage_server*]
 #   The storage server hosting the pool this client will backup to
+# [*tls_ca_cert_dir*]
+#   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
+#   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
+#   <tt>TLS CA Certificate File</tt> or <tt>TLS CA Certificate Dir</tt> are required in a server context if <tt>TLS Verify Peer</tt>
+#   is also specified, and are always required in a client context.
 # [*tls_ca_cert*]
 #   The full path and filename specifying a PEM encoded TLS CA certificate(s). Multiple certificates are permitted in
 #   the file. One of <code>TLS CA Certificate File</code> or <code>TLS CA Certificate Dir</code> are required in a server context if
 #   <code>TLS Verify Peer</code> is also specified, and are always required in a client context.
-# [*tls_ca_cert_dir*]
-#   Full path to TLS CA certificate directory. In the current implementation, certificates must be stored PEM
-#   encoded with OpenSSL-compatible hashes, which is the subject name's hash and an extension of .0. One of
-#   <code>TLS CA Certificate File</code> or <code>TLS CA Certificate Dir</code> are required in a server context if
-#   <code>TLS Verify Peer</code> is also specified, and are always required in a client context.
+# [*tls_cert*]
+#   The full path and filename of a PEM encoded TLS certificate. It can be used as either a client or server
+#   certificate. PEM stands for Privacy Enhanced Mail, but in this context refers to how the certificates are
+#   encoded. It is used because PEM files are base64 encoded and hence ASCII text based rather than binary. They may
+#   also contain encrypted information.
+# [*tls_key*]
+#   The full path and filename of a PEM encoded TLS private key. It must correspond to the TLS certificate.
 # [*use_tls*]
 #   Whether to use {Bacula TLS - Communications
 #   Encryption}[http://www.bacula.org/en/dev-manual/main/main/Bacula_TLS_Communications.html].
@@ -118,10 +125,14 @@ define bacula::client::config (
   $restore_where       = '/var/tmp/bacula-restores',
   $run_scripts         = undef,
   $storage_server      = undef,
-  $tls_ca_cert         = undef,
-  $tls_ca_cert_dir     = undef,
-  $tls_require         = 'yes',
-  $use_tls             = false,
+  $tls_allowed_cn    = [],
+  $tls_ca_cert       = undef,
+  $tls_ca_cert_dir   = undef,
+  $tls_cert          = undef,
+  $tls_key           = undef,
+  $tls_require       = 'yes',
+  $tls_verify_peer   = 'yes',
+  $use_tls           = false,
 ) {
   include ::bacula::params
 
@@ -193,7 +204,7 @@ define bacula::client::config (
   }
 
   if $run_scripts {
-    case type($run_scripts) {
+    case type3x($run_scripts) {
       'array' : {
         # TODO figure out how to validate each item in the array is a hash.
         $run_scripts_real = $run_scripts
