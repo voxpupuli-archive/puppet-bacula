@@ -203,7 +203,7 @@ class bacula (
   $db_database           = 'bacula',
   $db_host               = 'localhost',
   $db_password           = '',
-  $db_port               = '3306',
+  $db_port               = undef,
   $db_user               = '',
   $db_user_host          = undef,
   $director_password     = '',
@@ -250,6 +250,15 @@ class bacula (
   $volume_retention_incr = '10 Days'
 ) inherits ::bacula::params {
 
+  $db_port_real = $db_port ? {
+    undef => $db_backend ? {
+      'mysql'      => '3306',
+      'postgresql' => '5432',
+      default      => '',
+    },
+    default => $db_port,
+  }
+
   $director_server_real = $director_server ? {
     undef   => $::bacula::params::director_server_default,
     default => $director_server,
@@ -277,7 +286,7 @@ class bacula (
     db_database           => $db_database,
     db_host               => $db_host,
     db_password           => $db_password,
-    db_port               => $db_port,
+    db_port               => $db_port_real,
     db_user               => $db_user,
     director_password     => $director_password,
     director_server       => $director_server_real,

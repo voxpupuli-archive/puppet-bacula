@@ -6,6 +6,9 @@ Copyright (c) 2011, Puppet Labs Inc.
 Author: Russell Harrison <rharrison@fedoraproject.org>
 Copyright (c) 2012-2013, Russell Harrison
 
+Author: Michael Watters <michael.watters@dart.biz>
+Copyright (c) 2017, Dart Container
+
 # About
 
 This module manages the [Bacula](http://bacula.org) backup solution.  Through
@@ -17,10 +20,15 @@ This module is a fork of the [Puppet Labs](http://puppetlabs.com/)
 
 # Requirements
 
-* Puppet >=2.6
+* Puppet >=3.8
 * Puppetlabs/stdlib module.  Can be obtained
   [here](http://forge.puppetlabs.com/puppetlabs/stdlib) or with the command
   `puppet-module install puppetlabs/stdlib`
+
+## Postgresql Database Backend
+* puppetlabs-postgresql module.  Can be obtained
+  [here](http://forge.puppetlabs.com/puppetlabs/postgresql) or with the command
+  `puppet-module install puppetlabs/postgresql`
 
 ## MySQL Database Backend
 * Puppetlabs/mysql module.  Can be obtained
@@ -755,7 +763,6 @@ stored the custom template.
 * Add ability to create custom schedules.
 * Add ability to configure storage servers external to the director.
 * Add ability to configure multiple pools on a storage server
-* PostgreSQL support
 * [rspec-puppet](http://rspec-puppet.com/) unit tests.
 
 

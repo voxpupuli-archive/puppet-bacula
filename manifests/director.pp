@@ -33,7 +33,7 @@ class bacula::director (
   $db_database           = 'bacula',
   $db_host               = 'localhost',
   $db_password           = '',
-  $db_port               = '3306',
+  $db_port               = undef,
   $db_user               = '',
   $db_user_host          = undef,
   $dir_template          = 'bacula/bacula-dir.conf.erb',
@@ -126,6 +126,15 @@ class bacula::director (
     'mysql'      => $::bacula::params::director_mysql_package,
     'postgresql' => $::bacula::params::director_postgresql_package,
     default      => $::bacula::params::director_sqlite_package,
+  }
+
+  $db_port_real = $db_port ? {
+    undef => $db_backend ? {
+      'mysql'      => '3306',
+      'postgresql' => '5432',
+      default      => '',
+    },
+    default => $db_port,
   }
 
   package { $db_package:
@@ -222,7 +231,18 @@ class bacula::director (
           db_database  => $db_database,
           db_user      => $db_user,
           db_password  => $db_password,
-          db_port      => $db_port,
+          db_port      => $db_port_real,
+          db_host      => $db_host,
+          db_user_host => $db_user_host,
+          manage_db    => $manage_db,
+        }
+      }
+      'postgresql' : {
+        class { '::bacula::director::postgresql':
+          db_database  => $db_database,
+          db_user      => $db_user,
+          db_password  => $db_password,
+          db_port      => $db_port_real,
           db_host      => $db_host,
           db_user_host => $db_user_host,
           manage_db    => $manage_db,
