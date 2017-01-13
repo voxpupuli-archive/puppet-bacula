@@ -34,6 +34,7 @@ This module is a fork of the [Puppet Labs](http://puppetlabs.com/)
 * Puppetlabs/mysql module.  Can be obtained
   [here](http://forge.puppetlabs.com/puppetlabs/mysql) or with the command
   `puppet-module install puppetlabs/mysql`
+
 * Declare the `mysql::server` class to set up a MySQL server on the Bacula
   director node and set `manage_db` to true to have the bacula module manage the
   MySQL database.
@@ -45,22 +46,15 @@ This module is a fork of the [Puppet Labs](http://puppetlabs.com/)
 
 # Installation
 
-The module can be obtained from the
-[github repository](https://github.com/rharrison10/rharrison-bacula).
+This module can be installed using r10k by adding the module to the Puppetfile.
 
-1. Select `Downloads` and then `Download as tar.gz` which downloads a tar.gz
-   archive.
-1. Upload the tar.gz file to your Puppet Master.
-1. Untar the file.  This will create a new directory called
-1. `rharrison10-rharrison-bacula-${commit_hash}`.
-1. Rename this directory to just `bacula` and place it in your
-   [modulepath](http://docs.puppetlabs.com/learning/modules1.html#modules).
+`mod 'puppet-bacula',
+    :git => 'git://mdct-pagure.dartcontainer.com/mdct/puppet-bacula.git'
+`
 
-<!---
-You can also use the
-[puppet-module tool](https://github.com/puppetlabs/puppet-module-tool). Just
-run this command from your modulepath. `puppet-module install puppetlabs/bacula`
---->
+Add these lines and then run r10k to update your environment.
+
+`r10k puppetfile install`
 
 # Configuration
 
