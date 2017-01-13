@@ -9,12 +9,17 @@ Client {
 <% if @use_tls -%>
   TLS Enable = Yes
   TLS Require = <%= @tls_require %>
+<% @tls_allowed_cn.each do |allowed_cn| -%>
+  TLS Allowed CN = "<%= allowed_cn %>"
+<% end -%>
 <% if @tls_ca_cert -%>
   TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
   TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
 
@@ -34,15 +39,6 @@ Job {
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Schedule = "<%= @client_schedule %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
-  <%- if @pool_full_real -%>
-  Full Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_full_real %>"
-  <%- end -%>
-  <%- if @pool_incr_real -%>
-  Incremental Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_incr_real %>"
-  <%- end -%>
-  <%- if @pool_diff_real -%>
-  Differential Backup Pool = "<%= @storage_server_real %>:pool:<%= @pool_diff_real %>"
-  <%- end -%>
   Messages = "<%= @director_server_real %>:messages:standard"
   Rerun Failed Levels = <%= @rerun_failed_levels %>
 <% if @run_scripts_real -%>
@@ -72,6 +68,7 @@ Job {
 <% end -%>
 }
 
+<%- if @restore_enable.downcase == 'yes' -%>
 Job {
   Name     = "<%= @name %> Restore"
   Client   = "<%= @name %>"
@@ -83,3 +80,4 @@ Job {
   Messages = "<%= @director_server_real %>:messages:standard"
   Where    = <%= @restore_where %>
 }
+<%- end -%>
