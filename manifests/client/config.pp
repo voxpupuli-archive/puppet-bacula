@@ -19,6 +19,8 @@
 #   The FQDN of the director server the client will connect to.
 # [*fileset*]
 #   The file set used by the client for backups
+# [*base*]
+#   The job to use as a base.  Default to undef.
 # [*pool*]
 #   The pool used by the client for backups
 # [*pool_diff*]
@@ -85,6 +87,7 @@
 #     director_password => 'directorpassword',
 #     director_server   => 'bacula.example.com',
 #     fileset           => 'Basic:noHome',
+#     base              => 'LinuxBase',
 #     pool              => 'otherpool',
 #     storage_server    => 'bacula.example.com',
 #   }
@@ -115,6 +118,7 @@ define bacula::client::config (
   $director_password   = '',
   $director_server     = undef,
   $fileset             = 'Basic:noHome',
+  $base                = undef,
   $pool                = 'default',
   $pool_diff           = undef,
   $pool_full           = undef,

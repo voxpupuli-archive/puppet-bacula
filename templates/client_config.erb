@@ -27,6 +27,10 @@ Job {
   Priority = <%= @priority %>
 <%- end -%>
   FileSet  = "<%= @fileset %>"
+<% if @base -%>
+  Base     = "<%= @base %>"
+  Accurate = yes
+<% end -%>
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Schedule = "<%= @client_schedule %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
