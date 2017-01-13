@@ -2,22 +2,22 @@
 #
 # Bacula Console Configuration
 #   for <%= scope.lookupvar('::fqdn') %>
-#    to <%= director_server_real -%>:director (<%= director_server_real -%>)
+#    to <%= @director_server_real -%>:director (<%= @director_server_real -%>)
 
 Director {
-  Name = "<%= director_server_real -%>:director"
-  Address = <%= director_server_real %>
-  Password = "<%= director_password %>"
-  <% if use_tls -%>
+  Name = "<%= @director_server_real -%>:director"
+  Address = <%= @director_server_real %>
+  Password = "<%= @director_password %>"
+  <% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= tls_require %>
+  TLS Require = <%= @tls_require %>
 <% if @tls_ca_cert -%>
-  TLS CA Certificate File = <%= tls_ca_cert %>
+  TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
 <% if @tls_ca_cert_dir -%>
-  TLS CA Certificate Dir = <%= tls_ca_cert_dir %>
+  TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
-  TLS Certificate = <%= tls_cert %>
-  TLS Key = <%= tls_key %>
+  TLS Certificate = <%= @tls_cert %>
+  TLS Key = <%= @tls_key %>
 <% end -%>
 }
