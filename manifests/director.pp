@@ -177,7 +177,6 @@ class bacula::director (
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
-      '/var/run/bacula'
     ],
     default => File[
       '/etc/bacula/bacula-dir.d',
@@ -185,7 +184,6 @@ class bacula::director (
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
-      '/var/run/bacula',
       $plugin_dir
     ],
   }

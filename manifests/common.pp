@@ -147,14 +147,4 @@ class bacula::common (
     mode    => '0755',
     require => Package[$require_package],
   }
-
-  file { '/var/run/bacula':
-    ensure  => directory,
-    owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0755',
-    seltype => 'bacula_var_run_t',
-    require => Package[$require_package],
-    before  => Service['bacula-fd'],
-  }
 }

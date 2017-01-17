@@ -108,13 +108,11 @@ class bacula::storage (
       '/etc/bacula/bacula-sd.d/empty.conf',
       "${storage_default_mount}/default",
       '/var/lib/bacula',
-      '/var/run/bacula'
     ],
     default => File[
       '/etc/bacula/bacula-sd.d/empty.conf',
       "${storage_default_mount}/default",
       '/var/lib/bacula',
-      '/var/run/bacula',
       $plugin_dir
     ],
   }

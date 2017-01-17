@@ -55,8 +55,8 @@ class bacula::client (
   }
 
   $file_requires = $plugin_dir ? {
-    undef   => File['/var/lib/bacula', '/var/run/bacula'],
-    default => File['/var/lib/bacula', '/var/run/bacula', $plugin_dir]
+    undef   => File['/var/lib/bacula'],
+    default => File['/var/lib/bacula', $plugin_dir]
   }
 
   file { '/etc/bacula/bacula-fd.conf':

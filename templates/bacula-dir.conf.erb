@@ -9,7 +9,7 @@ Director {
   Name = "<%= @director_server_real -%>:director"
   Query File = "/etc/bacula/scripts/query.sql"
   Working Directory = "/var/lib/bacula"
-  PID Directory = "/var/run/bacula"
+  PID Directory = "/var/lib/bacula"
 <% if @plugin_dir -%>
   Plugin Directory = <%= @plugin_dir %>
 <% end -%>

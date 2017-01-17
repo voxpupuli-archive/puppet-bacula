@@ -38,7 +38,7 @@ Messages {
 Storage {
   Name = "<%= @storage_server_real -%>:storage"
   Working Directory = "/var/lib/bacula"
-  PID Directory = "/var/run/bacula"
+  PID Directory = "/var/lib/bacula"
 <% if @plugin_dir -%>
   Plugin Directory = <%= @plugin_dir %>
 <% end -%>
