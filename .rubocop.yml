@@ -74,7 +74,7 @@ Style/WhileUntilModifier:
 Lint/AmbiguousRegexpLiteral:
   Enabled: True
 
-Lint/Eval:
+Security/Eval:
   Enabled: True
 
 Lint/BlockAlignment:
@@ -302,7 +302,7 @@ Style/EmptyLiteral:
 Metrics/LineLength:
   Enabled: False
 
-Style/MethodCallParentheses:
+Style/MethodCallWithoutArgsParentheses:
   Enabled: True
 
 Style/MethodDefParentheses:
@@ -509,4 +509,12 @@ RSpec/ExampleLength:
   Enabled: False
 
 RSpec/NamedSubject:
+  Enabled: False
+
+# disabled for now since they cause a lot of issues
+# these issues aren't easy to fix
+RSpec/RepeatedDescription:
+  Enabled: False
+
+RSpec/NestedGroups:
   Enabled: False
