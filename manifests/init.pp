@@ -168,24 +168,24 @@ class bacula (
 
   if $is_director {
     class { '::bacula::director':
-      db_backend       => $db_backend,
       server           => $director_server,
-      storage_server   => $storage_server,
       password         => $director_password,
-      mysql_package    => $director_mysql_package,
-      sqlite_package   => $director_sqlite_package,
-      director_package => $director_package,
-      mail_to          => $mail_to,
-      template         => $director_template,
-      use_console      => $use_console,
-      console_password => $console_password,
+      db_backend       => $db_backend,
       db_user          => $db_user,
       db_password      => $db_password,
       db_host          => $db_host,
-      db_port          => $db_port,
       db_database      => $db_database,
-      require          => Class['bacula::common'],
+      db_port          => $db_port,
+      storage_server   => $storage_server,
+      director_package => $director_package,
+      mysql_package    => $director_mysql_package,
+      mail_to          => $mail_to,
+      sqlite_package   => $director_sqlite_package,
+      template         => $director_template,
+      use_console      => $use_console,
+      console_password => $console_password,
       clients          => $clients,
+      require          => Class['bacula::common'],
     }
   }
 
