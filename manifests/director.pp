@@ -66,6 +66,8 @@ class bacula::director (
   $volume_autoprune_diff = 'Yes',
   $volume_autoprune_full = 'Yes',
   $volume_autoprune_incr = 'Yes',
+  $volume_max_bytes      = '10G',
+  $volume_max_volumes    = '2000',
   $volume_retention      = '1 Year',
   $volume_retention_diff = '40 Days',
   $volume_retention_full = '1 Year',

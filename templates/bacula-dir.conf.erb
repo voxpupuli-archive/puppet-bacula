@@ -121,8 +121,8 @@ Pool {
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention %>
   Job Retention = 1 year
-  Maximum Volume Bytes = 10G   # Limit Volume size to something reasonable
-  Maximum Volumes = 2000       # Limit number of volumes in pool to avoid filling the disk
+  Maximum Volume Bytes = <%= @volume_max_bytes %>   # Limit Volume size to something reasonable
+  Maximum Volumes = <%= @volume_max_volumes %>      # Limit number of volumes in pool to avoid filling the disk
   Label Format = backupVolume
   Volume Use Duration = 30d;
   Recycle Oldest Volume = yes
