@@ -48,7 +48,8 @@ class bacula::storage (
   $tls_key               = undef,
   $tls_require           = 'yes',
   $tls_verify_peer       = 'yes',
-  $use_tls               = false
+  $use_tls               = false,
+  $block_checksum        = 'Yes'
 ) {
   include ::bacula::params
 
