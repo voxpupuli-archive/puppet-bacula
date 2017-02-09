@@ -17,6 +17,7 @@
 # === Copyright
 #
 # Copyright 2012 Russell Harrison
+# Copyright 2017 Dart Container
 #
 # === License
 #
@@ -108,7 +109,7 @@ class bacula::storage (
     undef   => File[
       '/etc/bacula/bacula-sd.d/empty.conf',
       "${storage_default_mount}/default",
-      '/var/lib/bacula',
+      '/var/lib/bacula'
     ],
     default => File[
       '/etc/bacula/bacula-sd.d/empty.conf',
