@@ -210,14 +210,15 @@ class bacula::director (
   }
 
   file { '/etc/bacula/bacula-dir.conf':
-    ensure  => file,
-    owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0640',
-    content => template($dir_template),
-    require => $file_requires,
-    before  => Service['bacula-dir'],
-    notify  => Exec['bacula-dir reload'],
+    ensure    => file,
+    owner     => 'bacula',
+    group     => 'bacula',
+    mode      => '0640',
+    content   => template($dir_template),
+    require   => $file_requires,
+    before    => Service['bacula-dir'],
+    notify    => Exec['bacula-dir reload'],
+    show_diff => false,
   }
 
   if $backup_catalog {

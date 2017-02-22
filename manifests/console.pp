@@ -49,11 +49,12 @@ class bacula::console (
   }
 
   file { '/etc/bacula/bconsole.conf':
-    ensure  => file,
-    owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0640',
-    content => template($console_template),
-    require => Package[$::bacula::params::console_package],
+    ensure    => file,
+    owner     => 'bacula',
+    group     => 'bacula',
+    mode      => '0640',
+    content   => template($console_template),
+    require   => Package[$::bacula::params::console_package],
+    show_diff => false,
   }
 }

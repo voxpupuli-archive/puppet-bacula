@@ -60,16 +60,17 @@ class bacula::client (
   }
 
   file { '/etc/bacula/bacula-fd.conf':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0640',
-    content => template('bacula/bacula-fd.conf.erb'),
-    require => [
+    ensure    => file,
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0640',
+    content   => template('bacula/bacula-fd.conf.erb'),
+    require   => [
       Package['bacula-client'],
       $file_requires,
     ],
-    notify  => Service['bacula-fd'],
+    notify    => Service['bacula-fd'],
+    show_diff => false,
   }
 
   service { 'bacula-fd':

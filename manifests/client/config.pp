@@ -239,12 +239,13 @@ define bacula::client::config (
   }
 
   file { "/etc/bacula/bacula-dir.d/${name}.conf":
-    ensure  => $ensure,
-    owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0640',
-    content => template('bacula/client_config.erb'),
-    before  => Service['bacula-dir'],
-    notify  => Exec['bacula-dir reload'],
+    ensure    => $ensure,
+    owner     => 'bacula',
+    group     => 'bacula',
+    mode      => '0640',
+    content   => template('bacula/client_config.erb'),
+    before    => Service['bacula-dir'],
+    notify    => Exec['bacula-dir reload'],
+    show_diff => false,
   }
 }
