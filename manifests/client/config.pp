@@ -123,6 +123,7 @@ define bacula::client::config (
   $pool_diff           = undef,
   $pool_full           = undef,
   $pool_incr           = undef,
+  $maximum_bandwidth   = undef,
   $priority            = undef,
   $rerun_failed_levels = 'no',
   $restore_enable      = 'yes',

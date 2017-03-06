@@ -37,6 +37,9 @@ Job {
   Accurate = yes
 <% end -%>
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
+<% if @maximum_bandwidth -%>
+  Maximum Bandwidth = <%= @maximum_bandwidth %>
+<% end -%>
   Schedule = "<%= @client_schedule %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
   Messages = "<%= @director_server_real %>:messages:standard"
