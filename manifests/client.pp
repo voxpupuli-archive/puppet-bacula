@@ -50,7 +50,7 @@ class bacula::client (
     default => $director_server,
   }
 
-  package { 'bacula-client':
+  package { $bacula::params::client_package:
     ensure => present,
   }
 
@@ -59,18 +59,30 @@ class bacula::client (
     default => File['/var/lib/bacula', $plugin_dir]
   }
 
-  file { '/etc/bacula/bacula-fd.conf':
+  $bacula_fd_conf = $::operatingsystem ? {
+    /(?i:CentOS|Fedora|openSUSE)/ => '/etc/bacula/bacula-fd.conf',
+  }
+
+  file { $bacula_fd_conf:
     ensure    => file,
     owner     => 'root',
     group     => 'root',
     mode      => '0640',
     content   => template('bacula/bacula-fd.conf.erb'),
-    require   => [
-      Package['bacula-client'],
-      $file_requires,
-    ],
+    require   => [ Package[$bacula::params::client_package], $file_requires, ],
     notify    => Service['bacula-fd'],
     show_diff => false,
+  }
+
+  if $::operatingsystem =~ /(?i:opensuse)/ {
+    file { '/etc/systemd/system/bacula-fd.service.d':
+        ensure => directory,
+    } ->
+
+    file { '/etc/systemd/system/bacula-fd.service.d/override.conf':
+        source => 'puppet:///modules/bacula/systemd/override.conf',
+        before => Service['bacula-fd'],
+    }
   }
 
   service { 'bacula-fd':
@@ -78,5 +90,6 @@ class bacula::client (
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
+    require    => File[$bacula_fd_conf],
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "mdct-bacula",
   "version": "0.6.2",
-  "author": "Dart Container and Michael Watters",
+  "author": "Michael Watters <wattersm@watters.ws>",
   "summary": "This module is based on rharrison10-bacula",
   "license": " Apache-2.0",
   "source": "git://mdct-pagure.dartcontainer.com/mdct/puppet-bacula.git",
@@ -21,11 +21,17 @@
     {
       "operatingsystem":"Fedora",
       "operatingsystemrelease": [ "20", "21", "22", "23", "24", "25" ]
+    },
+    {
+      "operatingsystem":"openSUSE",
+      "operatingsystemrelease": [ "4" ]
     }
   ],
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">=2.2.0"},
     {"name":"puppetlabs-mysql","version_requirement":">=1.0.0"},
-    {"name":"puppetlabs/sqlite","version_requirement":">=0.0.1"}
+    {"name":"puppetlabs/sqlite","version_requirement":">=0.0.1"},
+    {"name":"puppetlabs/firewall", "version_requirement":">= 0.0.4"},
+    {"name":"darin/zypprepo", "version_requirement":">=1.0.2"}
   ]
 }
