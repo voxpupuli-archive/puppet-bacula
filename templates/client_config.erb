@@ -3,7 +3,7 @@ Client {
   Address  = "<%= @name %>"
   Password = "<%= @director_password_real %>"
   Catalog  = "<%= @director_server_real %>:<%= @db_backend_real %>"
-  File Retention = 6 Weeks
+  File Retention = 12 Weeks
   Job Retention  = 1 Year
   Auto Prune = Yes
 <% if @use_tls -%>
@@ -37,6 +37,7 @@ Job {
   Accurate = yes
 <% end -%>
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
+  Spool Attributes = yes
 <% if @maximum_bandwidth -%>
   Maximum Bandwidth = <%= @maximum_bandwidth %>
 <% end -%>
