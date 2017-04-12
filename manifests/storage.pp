@@ -87,6 +87,10 @@ class bacula::storage (
     owner   => 'bacula',
     group   => 'bacula',
     mode    => '0755',
+    seltype => $::osfamily ? {
+        'RedHat' => 'bacula_store_t',
+        default  => undef,
+    },
     require => Package[$db_package],
   }
 
