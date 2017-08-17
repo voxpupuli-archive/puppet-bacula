@@ -172,22 +172,23 @@ class bacula::director (
     content => '',
   }
 
-  $file_requires = $plugin_dir ? {
-    undef   => File[
+  if defined('$plugin_dir') {
+    $file_requires = File[
       '/etc/bacula/bacula-dir.d',
       '/etc/bacula/bacula-dir.d/empty.conf',
       '/var/lib/bacula',
       '/var/log/bacula',
       '/var/spool/bacula',
-    ],
-    default => File[
+      $plugin_dir]
+  }
+
+  else {
+    $file_requires = File[
       '/etc/bacula/bacula-dir.d',
       '/etc/bacula/bacula-dir.d/empty.conf',
       '/var/lib/bacula',
       '/var/log/bacula',
-      '/var/spool/bacula',
-      $plugin_dir
-    ],
+      '/var/spool/bacula']
   }
 
   $purge_script_ensure = $use_vol_purge_script ? {
