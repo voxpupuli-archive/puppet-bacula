@@ -53,6 +53,7 @@ describe 'bacula' do
         bacula_packages: 'bacula-console'
       }
     end
+
     it { is_expected.to contain_class('bacula') }
     it { is_expected.to contain_class('bacula::common') }
     it { is_expected.to contain_class('bacula::config') }
