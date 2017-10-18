@@ -1,10 +1,15 @@
+---
+# This file is managed via modulesync
+# https://github.com/voxpupuli/modulesync
+# https://github.com/voxpupuli/modulesync_config
 HOSTS:
   centos-7-x64:
     roles:
-      - default
+      - master
     platform: el-7-x86_64
-    box: puppetlabs/centos-7.0-64-nocm
+    box: centos/7
     hypervisor: vagrant
 CONFIG:
-  log_level: verbose
   type: aio
+...
+# vim: syntax=yaml

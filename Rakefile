@@ -1,15 +1,9 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet_blacksmith/rake_tasks'
 require 'voxpupuli/release/rake_tasks'
-require 'rubocop/rake_task'
-require 'puppet-strings/rake_tasks'
+require 'puppet-strings/tasks'
 
-RuboCop::RakeTask.new(:rubocop) do |task|
-  # These make the rubocop experience maybe slightly less terrible
-  task.options = ['-D', '-S', '-E']
-end
-
-PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
+PuppetLint.configuration.log_format = '%{path}:%{line}:%{check}:%{KIND}:%{message}'
 PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('relative')
 PuppetLint.configuration.send('disable_140chars')
@@ -31,11 +25,32 @@ RSpec::Core::RakeTask.new(:acceptance) do |t|
   t.pattern = 'spec/acceptance'
 end
 
-desc 'Run tests metadata_lint, lint, syntax, spec'
+desc 'Run tests metadata_lint, release_checks'
 task test: [
   :metadata_lint,
-  :lint,
-  :syntax,
-  :spec,
+  :release_checks,
 ]
+
+desc "Run main 'test' task and report merged results to coveralls"
+task test_with_coveralls: [:test] do
+  if Dir.exist?(File.expand_path('../lib', __FILE__))
+    require 'coveralls/rake/task'
+    Coveralls::RakeTask.new
+    Rake::Task['coveralls:push'].invoke
+  else
+    puts 'Skipping reporting to coveralls.  Module has no lib dir'
+  end
+end
+
+begin
+  require 'github_changelog_generator/task'
+  GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+    version = (Blacksmith::Modulefile.new).version
+    config.future_release = "v#{version}" if version =~ /^\d+\.\d+.\d+$/
+    config.header = "# Changelog\n\nAll notable changes to this project will be documented in this file.\nEach new release typically also includes the latest modulesync defaults.\nThese should not affect the functionality of the module."
+    config.exclude_labels = %w{duplicate question invalid wontfix wont-fix modulesync skip-changelog}
+    config.user = 'voxpupuli'
+  end
+rescue LoadError
+end
 # vim: syntax=ruby

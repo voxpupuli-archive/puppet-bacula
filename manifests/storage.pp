@@ -42,10 +42,10 @@ class bacula::storage(
     $director_server,
     $director_password,
     $storage_server,
-    $storage_package = '',
     $mysql_package,
     $sqlite_package,
     $console_password,
+    $storage_package = '',
     $template = 'bacula/bacula-sd.conf.erb'
   ) {
 

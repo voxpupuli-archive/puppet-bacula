@@ -10,15 +10,15 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_range": ">= 2.2.0"
+      "version_requirement": ">= 4.13.1 <5.0.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_range": ">= 0.0.1"
+      "version_requirement": ">= 5.1.0 <6.0.0"
     },
     {
       "name": "puppetlabs/sqlite",
-      "version_range": ">= 0.0.1"
+			"version_requirement": ">= 0.0.1 <1.0.0"
     }
   ]
 }

@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'bacula class' do
   describe 'with sample parameters' do
-    it 'should idempotently run' do
+    it 'idempotentlies run' do
       pp = <<-EOS
         class { 'bacula':
           is_storage        => false,
