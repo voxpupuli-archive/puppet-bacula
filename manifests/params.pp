@@ -32,12 +32,11 @@
 class bacula::params {
   $bat_console_package         = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-console-qt',
-    /(?i:opensuse)/   => 'bacula-console-bat',
     default           => 'bacula-console-bat',
   }
 
   $client_package = $::operatingsystem ? {
-    /(?i:CentOS|Fedora|openSUSE)/ => 'bacula-client',
+    /(?i:CentOS|Fedora|openSUSE|SLES)/ => 'bacula-client',
   }
 
   $console_package             = 'bacula-console'
@@ -45,13 +44,13 @@ class bacula::params {
   $director_mysql_package      = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-director-mysql',
     /(CentOS|Fedora)/ => 'bacula-director',
-    /(?i:opensuse)/   => 'bacula-mysql',
+    /(?i:opensuse|SLES)/   => 'bacula-mysql',
   }
 
   $director_postgresql_package = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-director-pgsql',
     /(CentOS|Fedora)/ => 'bacula-director',
-    /(?i:opensuse)/   => 'bacula-postgresql',
+    /(?i:opensuse|SLES)/   => 'bacula-postgresql',
     default           => 'bacula-director-postgresql',
   }
 
@@ -65,7 +64,7 @@ class bacula::params {
   $director_sqlite_package = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-director-sqlite',
     /(CentOS|Fedora)/ => 'bacula-director',
-    /(?i:opensuse)/   => 'bacula-sqlite3',
+    /(?i:opensuse|SLES)/   => 'bacula-sqlite3',
   }
 
   $lib    = $::architecture ? {
@@ -83,7 +82,7 @@ class bacula::params {
 
   $manage_logwatch = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => false,
-    /(?i:CentOS|Fedora|openSUSE)/ => false,
+    /(?i:CentOS|Fedora|openSUSE|SLES)/ => false,
     default           => true,
   }
 
@@ -92,13 +91,13 @@ class bacula::params {
 
   $storage_mysql_package       = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-mysql',
-    /(?i:CentOS|Fedora|openSUSE)/ => 'bacula-storage',
+    /(?i:CentOS|Fedora|openSUSE|SLES)/ => 'bacula-storage',
     default           => 'bacula-storage-mysql',
   }
 
   $storage_postgresql_package  = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-pgsql',
-    /(?i:CentOS|Fedora|openSUSE)/ => 'bacula-storage',
+    /(?i:CentOS|Fedora|openSUSE|SLES)/ => 'bacula-storage',
     default           => 'bacula-storage-postgresql',
   }
 
@@ -106,7 +105,7 @@ class bacula::params {
 
   $storage_sqlite_package = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => 'bacula-sd-sqlite',
-    /(?i:CentOS|Fedora|openSUSE)/ => 'bacula-storage',
+    /(?i:CentOS|Fedora|openSUSE|SLES)/ => 'bacula-storage',
     default           => 'bacula-storage-sqlite',
   }
 

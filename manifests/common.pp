@@ -49,7 +49,7 @@ class bacula::common (
 ) {
   include ::bacula::params
 
-  if $::operatingsystem =~ /(?i:opensuse)/ {
+  if $facts['operatingsystem'] =~ /(?i:opensuse)/ {
     $dist_name = regsubst($::lsbdistdescription, ' ', '_', 'G')
     $baseurl = "http://download.opensuse.org/repositories/home:/Ximi1970:/openSUSE:/Extra/${dist_name}"
 
@@ -58,6 +58,22 @@ class bacula::common (
       enabled      => 1,
       autorefresh  => 1,
       name         => 'home_Ximi1970_openSUSE_Extra',
+      gpgcheck     => 1,
+      gpgkey       => "${baseurl}/repodata/repomd.xml.key",
+      priority     => 99,
+      keeppackages => 1,
+      type         => 'rpm-md',
+    }
+  }
+
+  if $facts['operatingsystem'] == 'SLES' {
+    $baseurl = 'http://download.opensuse.org/repositories/home:/dschossig/SLE_12_SP3'
+
+    zypprepo { 'home_dschossig_SLE_12_SP3':
+      baseurl      => $baseurl,
+      enabled      => 1,
+      autorefresh  => 1,
+      name         => 'home:dschossig (SLE_12_SP3)',
       gpgcheck     => 1,
       gpgkey       => "${baseurl}/repodata/repomd.xml.key",
       priority     => 99,

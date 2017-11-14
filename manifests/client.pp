@@ -60,7 +60,7 @@ class bacula::client (
   }
 
   $bacula_fd_conf = $::operatingsystem ? {
-    /(?i:CentOS|Fedora|openSUSE)/ => '/etc/bacula/bacula-fd.conf',
+    /(?i:CentOS|Fedora|openSUSE|SLES)/ => '/etc/bacula/bacula-fd.conf',
   }
 
   file { $bacula_fd_conf:
