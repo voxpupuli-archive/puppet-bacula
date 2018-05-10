@@ -1,0 +1,10 @@
+
+module bacula_dir 1.0;
+
+require {
+    type bacula_t;
+    class capability dac_override;
+}
+
+#============= bacula_t ==============
+allow bacula_t self:capability dac_override;

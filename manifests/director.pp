@@ -292,4 +292,12 @@ class bacula::director (
       Service['bacula-dir'],
     ],
   }
+
+  # Fedora 28 SELinux policies cause the director service to fail
+  if $selinux {
+      selinux::module { 'bacula_dir':
+            source => 'puppet:///modules/bacula/selinux',
+      }
+  }
+
 }
