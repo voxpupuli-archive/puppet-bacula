@@ -156,11 +156,14 @@ class bacula::common (
     require => Package[$require_package],
   }
 
+  # To avoid SELinux denials this directory must belong to the root group.
+  # See https://danwalsh.livejournal.com/69478.html for more details on
+  # the root cause of this failure
   file { '/var/lib/bacula':
     ensure  => directory,
     owner   => 'bacula',
-    group   => 'bacula',
-    mode    => '0755',
+    group   => 'root',
+    mode    => '0775',
     require => Package[$require_package],
   }
 
