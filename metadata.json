@@ -19,6 +19,7 @@
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">=2.2.0"},
     {"name":"puppetlabs-mysql","version_requirement":">=1.0.0"},
+    {"name":"puppetlabs/postgresql","version_requirement":">= 5.2.1 < 6.0.0"},
     {"name":"puppetlabs/sqlite","version_requirement":">=0.0.1"},
     {"name":"puppetlabs/firewall", "version_requirement":">= 0.0.4"},
     {"name":"puppet/zypprepo", "version_requirement":">=2.0.0"}
