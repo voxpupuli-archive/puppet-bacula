@@ -1,0 +1,12 @@
+.*.sw?
+.nfs*
+pkg
+spec/fixtures
+.rspec_system
+.vagrant
+.bundle
+vendor
+.idea
+.project
+.DS_Store
+.gitkeep
