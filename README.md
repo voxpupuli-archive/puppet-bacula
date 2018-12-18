@@ -6,8 +6,8 @@ Copyright (c) 2011, Puppet Labs Inc.
 Author: Russell Harrison <rharrison@fedoraproject.org>
 Copyright (c) 2012-2013, Russell Harrison
 
-Author: Michael Watters <michael.watters@dart.biz>
-Copyright (c) 2017, Dart Container
+Author: Michael Watters <wattersm@watters.ws>
+Copyright (c) 2018, Michael Watters
 
 # About
 
@@ -49,7 +49,7 @@ This module is a fork of the [Puppet Labs](http://puppetlabs.com/)
 This module can be installed using r10k by adding the module to the Puppetfile.
 
 `mod 'puppet-bacula',
-    :git => 'git://mdct-pagure.dartcontainer.com/mdct/puppet-bacula.git'
+    :git => 'https://github.com/blackknight36/puppet-bacula.git'
 `
 
 Add these lines and then run r10k to update your environment.

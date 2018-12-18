@@ -1,12 +1,12 @@
 {
-  "name": "mdct-bacula",
-  "version": "0.6.2",
+  "name": "blackknight36-bacula",
+  "version": "0.7.4",
   "author": "Michael Watters <wattersm@watters.ws>",
-  "summary": "This module is based on rharrison10-bacula",
+  "summary": "This module is a continuation of the rharrison10-bacula module",
   "license": "Apache-2.0",
-  "source": "git://mdct-pagure.dartcontainer.com/mdct/puppet-bacula.git",
-  "project_page": "https://mdct-pagure.dartcontainer.com/mdct/puppet-bacula",
-  "issues_url": "https://mdct-pagure.dartcontainer.com/mdct/puppet-bacula/issues",
+  "source": "https://github.com/blackknight36/puppet-bacula.git",
+  "project_page": "https://github.com/blackknight36/puppet-bacula",
+  "issues_url": "https://github.com/blackknight36/puppet-bacula/issues",
   "description": "This module manages Bacula, a complete backup solution.",
   "tags": ["bacula", "backup"],
   "operatingsystem_support": [
@@ -17,11 +17,14 @@
     { "operatingsystem":"SLES", "operatingsystemrelease":[ "12" ] }
   ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">=2.2.0"},
-    {"name":"puppetlabs-mysql","version_requirement":">=1.0.0"},
+    {"name":"puppetlabs/stdlib", "version_requirement":">=2.2.0 <= 5.1.0"},
+    {"name":"puppetlabs-mysql", "version_requirement":">=1.0.0 <= 7.0.0"},
     {"name":"puppetlabs/postgresql","version_requirement":">= 5.2.1 < 6.0.0"},
-    {"name":"puppetlabs/sqlite","version_requirement":">=0.0.1"},
-    {"name":"puppetlabs/firewall", "version_requirement":">= 0.0.4"},
-    {"name":"puppet/zypprepo", "version_requirement":">=2.0.0"}
+    {"name":"puppetlabs/sqlite", "version_requirement":">=0.0.1 <= 0.1.0"},
+    {"name":"puppetlabs/firewall", "version_requirement":">= 0.0.4 <= 1.14.0"},
+    {"name":"puppet/zypprepo", "version_requirement":">=2.0.0 <= 2.2.2"}
+  ],
+  "requirements": [
+    {"name": "puppet", "version_requirement": ">= 3.8.0 < 7.0.0"}
   ]
 }
