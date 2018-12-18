@@ -107,12 +107,12 @@
 #   Require TLS connections. This directive is ignored unless <tt>TLS Enable</tt> is set to yes. If TLS is not required,
 #   and TLS is enabled, then Bacula will connect with other daemons either with or without TLS depending on what the
 #   other daemon requests. If TLS is enabled and TLS is required, then Bacula will refuse any connection that does
-#   not use TLS. Valid values are <tt>'yes'</tt> or <tt>'no'</tt>.
+#   not use TLS. Valid values are <tt>true</tt> or <tt>false</tt>.
 # [*tls_verify_peer*]
 #   Verify peer certificate. Instructs server to request and verify the client's x509 certificate. Any client
 #   certificate signed by a known-CA will be accepted unless the <tt>TLS Allowed CN</tt> configuration directive is used, in
-#   which case the client certificate must correspond to the Allowed Common Name specified. Valid values are <tt>'yes'</tt>
-#   or <tt>'no'</tt>.
+#   which case the client certificate must correspond to the Allowed Common Name specified. Valid values are <tt>true</tt>
+#   or <tt>false</tt>.
 # [*use_console*]
 #   Whether to configure a console resource on the director
 # [*use_tls*]
@@ -234,16 +234,16 @@ class bacula (
   $tls_ca_cert_dir       = undef,
   $tls_cert              = undef,
   $tls_key               = undef,
-  $tls_require           = 'yes',
-  $tls_verify_peer       = 'yes',
+  $tls_require           = true,
+  $tls_verify_peer       = true,
   $use_console           = false,
   $use_tls               = false,
   $use_vol_purge_script  = false,
   $use_vol_purge_mvdir   = undef,
-  $volume_autoprune      = 'Yes',
-  $volume_autoprune_diff = 'Yes',
-  $volume_autoprune_full = 'Yes',
-  $volume_autoprune_incr = 'Yes',
+  $volume_autoprune      = true,
+  $volume_autoprune_diff = true,
+  $volume_autoprune_full = true,
+  $volume_autoprune_incr = true,
   $volume_retention      = '1 Year',
   $volume_retention_diff = '40 Days',
   $volume_retention_full = '1 Year',

@@ -10,7 +10,7 @@ Director {
   Password = "<%= @director_password %>"
   <% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= @tls_require %>
+  TLS Require = <%= @tls_require ? 'yes':'no' %>
 <% if @tls_ca_cert -%>
   TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>

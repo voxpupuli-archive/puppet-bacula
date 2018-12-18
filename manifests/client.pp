@@ -39,8 +39,8 @@ class bacula::client (
   $tls_ca_cert_dir   = undef,
   $tls_cert          = undef,
   $tls_key           = undef,
-  $tls_require       = 'yes',
-  $tls_verify_peer   = 'yes',
+  $tls_require       = true,
+  $tls_verify_peer   = true,
   $use_tls           = false
 ) {
   include ::bacula::params

@@ -8,7 +8,7 @@
 #   If the configuration should be deployed to the director. <code>file</code> (default), <code>present</code>, or
 #   <code>absent</code>.
 # [*backup_enable*]
-#   If the backup job for the client should be enabled <code>'yes'</code> (default) or <code>'no'</code>.
+#   If the backup job for the client should be enabled <code>true</code> (default) or <code>false</code>.
 # [*client_schedule*]
 #   The schedule for backups to be performed.
 # [*db_backend*]
@@ -41,7 +41,7 @@
 #   priority <code>2</code> jobs must complete before the priority <code>1</code> job is run, unless <code>Allow Mixed
 #   Priority</code> is set. The default priority is <code>10</code>.
 # [*rerun_failed_levels*]
-#   If this directive is set to <code>'yes'</code> (default <code>'no'</code>), and Bacula detects that a previous job at a higher
+#   If this directive is set to <code>true</code> (default <code>false</code>), and Bacula detects that a previous job at a higher
 #   level (i.e. Full or Differential) has failed, the current job level will be upgraded to the higher level. This is particularly
 #   useful for Laptops where they may often be unreachable, and if a prior Full save has failed, you wish the very next backup to be
 #   a Full save rather than whatever level it is started as. There are several points that must be taken into account when using
@@ -49,7 +49,7 @@
 #   same name (you need to ensure that two jobs of the same name do not run simultaneously); secondly, the Ignore FileSet Changes
 #   directive is not considered when checking for failed levels, which means that any FileSet change will trigger a rerun.
 # [*restore_enable*]
-#   If the restore job for the client should be enabled <code>'yes'</code> (default) or <code>'no'</code>.
+#   If the restore job for the client should be enabled <code>true</code> (default) or <code>false</code>.
 # [*restore_where*]
 #   The default path to restore files to defined in the restore job for this client.
 # [*run_scripts*]
@@ -112,7 +112,7 @@
 #
 define bacula::client::config (
   $ensure              = file,
-  $backup_enable       = 'yes',
+  $backup_enable       = true,
   $client_schedule     = 'WeeklyCycle',
   $db_backend          = undef,
   $director_password   = '',
@@ -125,8 +125,8 @@ define bacula::client::config (
   $pool_incr           = undef,
   $maximum_bandwidth   = undef,
   $priority            = undef,
-  $rerun_failed_levels = 'no',
-  $restore_enable      = 'yes',
+  $rerun_failed_levels = false,
+  $restore_enable      = true,
   $restore_where       = '/var/tmp/bacula-restores',
   $run_scripts         = undef,
   $storage_server      = undef,
@@ -135,8 +135,8 @@ define bacula::client::config (
   $tls_ca_cert_dir   = undef,
   $tls_cert          = undef,
   $tls_key           = undef,
-  $tls_require       = 'yes',
-  $tls_verify_peer   = 'yes',
+  $tls_require       = true,
+  $tls_verify_peer   = true,
   $use_tls           = false,
 ) {
   include ::bacula::params
@@ -145,7 +145,7 @@ define bacula::client::config (
     fail "Name for client ${name} must be a fully qualified domain name"
   }
 
-  validate_re($backup_enable, '^(yes|Yes|no|No)$')
+  validate_bool($backup_enable)
 
   case $db_backend {
     undef   : {
@@ -186,7 +186,7 @@ define bacula::client::config (
   if !is_domain_name($director_server_real) {
     fail "director_server=${director_server_real} must be a fully qualified domain name"
   }
-  validate_re($restore_enable, '^(yes|Yes|no|No)$')
+  validate_bool($restore_enable)
   validate_absolute_path($restore_where)
 
   $pool_diff_real = $pool_diff ? {
@@ -204,8 +204,8 @@ define bacula::client::config (
     default => $pool_incr,
   }
 
-  if !($rerun_failed_levels in ['yes', 'no']) {
-    fail("rerun_failed_levels = ${rerun_failed_levels} must be either 'yes' or 'no'")
+  if !(validate_bool($rerun_failed_levels)) {
+    fail("rerun_failed_levels = ${rerun_failed_levels} must be a boolean value")
   }
 
   if $run_scripts {

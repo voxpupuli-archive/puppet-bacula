@@ -36,7 +36,7 @@ This module is a fork of the [Puppet Labs](http://puppetlabs.com/)
   `puppet-module install puppetlabs/mysql`
 
 * Declare the `mysql::server` class to set up a MySQL server on the Bacula
-  director node and set `manage_db` to true to have the bacula module manage the
+  director node and set `manage_db` to `true` to have the bacula module manage the
   MySQL database.
 
 ## SQLite Database backend
@@ -260,7 +260,7 @@ Require TLS connections. This directive is ignored unless `TLS Enable` is set
 to `yes`. If TLS is not required, and TLS is enabled, then Bacula will connect
 with other daemons either with or without TLS depending on what the other
 daemon requests. If TLS is enabled and TLS is required, then Bacula will refuse
-any connection that does not use TLS. Valid values are `'yes'` or `'no'`.
+any connection that does not use TLS. Valid values are `true` or `false`.
 
 ### tls_verify_peer
 
@@ -268,7 +268,7 @@ Verify peer certificate. Instructs server to request and verify the client's
 x509 certificate. Any client certificate signed by a known-CA will be accepted
 unless the `TLS Allowed CN` configuration directive is used, in which case the
 client certificate must correspond to the Allowed Common Name specified.
-Valid values are `'yes'` or `'no'`.
+Valid values are `true` or `false`.
 
 ### use_console
 
@@ -387,8 +387,8 @@ If the configuration should be deployed to the director. `file` (default),
 
 ### backup_enable
 
-If the backup job for the client should be enabled `'yes'` (default)
-or `'no'`.
+If the backup job for the client should be enabled `true` (default)
+or `false`.
 
 ### client_schedule
 
@@ -444,7 +444,7 @@ is run, unless `Allow Mixed Priority` is set. The default priority is `10`.
 
 ### rerun_failed_levels
 
-If this directive is set to `'yes'` (default `'no'`), and Bacula detects that a
+If this directive is set to `true` (default `false`), and Bacula detects that a
 previous job at a higher level (i.e. Full or Differential) has failed, the
 current job level will be upgraded to the higher level. This is particularly
 useful for Laptops where they may often be unreachable, and if a prior Full
@@ -460,8 +460,8 @@ levels, which means that any FileSet change will trigger a rerun.
 
 ### restore_enable
 
-If the restore job for the client should be enabled `'yes'` (default)
-or `'no'`.
+If the restore job for the client should be enabled `true` (default)
+or `false`.
 
 ### restore_where
 
@@ -501,7 +501,7 @@ Require TLS connections. This directive is ignored unless `TLS Enable` is set
 to `yes`. If TLS is not required, and TLS is enabled, then Bacula will connect
 with other daemons either with or without TLS depending on what the other
 daemon requests. If TLS is enabled and TLS is required, then Bacula will refuse
-any connection that does not use TLS. Valid values are `'yes'` or `'no'`.
+any connection that does not use TLS. Valid values are `true` or `false`.
 
 ### use_tls
 

@@ -89,10 +89,10 @@ class bacula::params::validate (
   }
 
   if $is_director {
-    validate_re($volume_autoprune, '^(Yes|yes|No|no)$')
-    validate_re($volume_autoprune_diff, '^(Yes|yes|No|no)$')
-    validate_re($volume_autoprune_full, '^(Yes|yes|No|no)$')
-    validate_re($volume_autoprune_incr, '^(Yes|yes|No|no)$')
+    validate_bool($volume_autoprune)
+    validate_bool($volume_autoprune_diff)
+    validate_bool($volume_autoprune_full)
+    validate_bool($volume_autoprune_incr)
 
     validate_bool($use_vol_purge_script)
     if $use_vol_purge_script {
@@ -184,12 +184,12 @@ class bacula::params::validate (
     validate_absolute_path($tls_cert)
     validate_absolute_path($tls_key)
 
-    if !($tls_require in ['yes', 'no']) {
-      fail '$tls_require must be either \'yes\' or \'no\''
+    if !(validate_bool($tls_require)) {
+      fail '$tls_require must be either true or false'
     }
 
-    if !($tls_verify_peer in ['yes', 'no']) {
-      fail '$tls_verify_peer must be either \'yes\' or \'no\''
+    if !(validate_bool($tls_verify_peer)) {
+      fail '$tls_verify_peer must be either true or false'
     }
   }
 }

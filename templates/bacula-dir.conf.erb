@@ -18,8 +18,8 @@ Director {
   Messages = "<%= @director_server_real -%>:messages:daemon"
 <% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= @tls_require %>
-  TLS Verify Peer = <%= @tls_verify_peer %>
+  TLS Require = <%= @tls_require ? 'yes':'no' %>
+  TLS Verify Peer = <%= @tls_verify_peer ? 'yes':'no' %>
 <% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
@@ -97,7 +97,7 @@ Storage {
   Media Type = File
 <% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= @tls_require %>
+  TLS Require = <%= @tls_require ? 'yes':'no' %>
 <% if @tls_ca_cert -%>
   TLS CA Certificate File = <%= @tls_ca_cert %>
 <% end -%>
@@ -117,7 +117,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = yes
-  Auto Prune = <%= @volume_autoprune %>
+  Auto Prune = <%= @volume_autoprune ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention %>
   Job Retention = 1 year
@@ -139,7 +139,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = <%= @volume_autoprune_full %>
+  Auto Prune = <%= @volume_autoprune_full ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_full %>
   # Don't allow re-use of volumes; one volume per job only
@@ -157,7 +157,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = <%= @volume_autoprune_diff %>
+  Auto Prune = <%= @volume_autoprune_diff ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_diff %>
   # Don't allow re-use of volumes; one volume per job only
@@ -175,7 +175,7 @@ Pool {
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
   Recycle = No
-  Auto Prune = <%= @volume_autoprune_incr %>
+  Auto Prune = <%= @volume_autoprune_incr ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_incr %>
   # Don't allow re-use of volumes; one volume per job only

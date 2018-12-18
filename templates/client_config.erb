@@ -8,7 +8,7 @@ Client {
   Auto Prune = Yes
 <% if @use_tls -%>
   TLS Enable = Yes
-  TLS Require = <%= @tls_require %>
+  TLS Require = <%= @tls_require ? 'yes':'no' %>
 <% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
@@ -27,7 +27,7 @@ Job {
   Name     = "<%= @name %>"
   Client   = "<%= @name %>"
   Type     = Backup
-  Enabled  = "<%= @backup_enable %>"
+  Enabled  = "<%= @backup_enable ? 'yes':'no' %>"
 <%- if @priority -%>
   Priority = <%= @priority %>
 <%- end -%>
@@ -44,7 +44,7 @@ Job {
   Schedule = "<%= @client_schedule %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"
   Messages = "<%= @director_server_real %>:messages:standard"
-  Rerun Failed Levels = <%= @rerun_failed_levels %>
+  Rerun Failed Levels = <%= @rerun_failed_levels ? 'yes':'no' %>
 <% if @run_scripts_real -%>
   <%- @run_scripts_real.each do |runscript| -%>
   RunScript {
@@ -72,12 +72,12 @@ Job {
 <% end -%>
 }
 
-<%- if @restore_enable.downcase == 'yes' -%>
+<%- if @restore_enable -%>
 Job {
   Name     = "<%= @name %> Restore"
   Client   = "<%= @name %>"
   Type     = Restore
-  Enabled  = "<%= @restore_enable %>"
+  Enabled  = "<%= @restore_enable ? 'yes':'no' %>"
   FileSet  = "<%= @fileset %>"
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"

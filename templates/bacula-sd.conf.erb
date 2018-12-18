@@ -11,8 +11,8 @@ Director {
   Password = "<%= @director_password -%>"
 <% if @use_tls -%>
   TLS Enable = yes
-  TLS Require = <%= @tls_require %>
-  TLS Verify Peer = <%= @tls_verify_peer %>
+  TLS Require = <%= @tls_require ? 'yes':'no' %>
+  TLS Verify Peer = <%= @tls_verify_peer ? 'yes':'no' %>
 <% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
 <% end -%>
@@ -47,7 +47,7 @@ Storage {
   # These TLS configuration options are used for incoming file daemon
   # connections. Director TLS settings are handled above.
   TLS Enable = yes
-  TLS Require = <%= @tls_require %>
+  TLS Require = <%= @tls_require ? 'yes':'no' %>
   # Peer certificate is not required/requested -- peer validity is verified by
   # the storage connection cookie provided to the File Daemon by the director.
   TLS Verify Peer = no
@@ -81,7 +81,7 @@ Device {
   Automatic Mount = Yes
   Removable Media = No
   Always Open = No
-  Block Checksum = <%= @block_checksum %>
+  Block Checksum = <%= @block_checksum ? 'yes':'no' %>
 }
 
 # All other Devices are created by the clients that need them - each will
