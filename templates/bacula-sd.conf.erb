@@ -22,8 +22,8 @@ Director {
 <% if @tls_ca_cert_dir -%>
   TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
-  # This is a server certificate, used for incoming
-  # console connections.
+  # This certificate is used by the bacula director to authenticate against the bacula file daemon.
+  # Any certificate signed by the bacula (puppet) CA will be accepted as valid.
   TLS Certificate = <%= @tls_cert %>
   TLS Key = <%= @tls_key %>
 <% end -%>
@@ -57,8 +57,8 @@ Storage {
 <% if @tls_ca_cert_dir -%>
   TLS CA Certificate Dir = <%= @tls_ca_cert_dir %>
 <% end -%>
-  # This is a server certificate, used for incoming
-  # console connections.
+  # This certificate is used by the bacula director to authenticate against the bacula file daemon.
+  # Any certificate signed by the bacula (puppet) CA will be accepted as valid.
   TLS Certificate = <%= @tls_cert %>
   TLS Key = <%= @tls_key %>
 <% end -%>
@@ -68,7 +68,7 @@ Storage {
 Director {
   Name = "<%= @storage_server_real -%>:monitor:storage"
   Password = "<%= @console_password -%>"
-  Monitor = Yes
+  Monitor = yes
 }
 
 # Not configure the default Device this Storage Daemon will provide
@@ -76,11 +76,11 @@ Device {
   Name = "DefaultFileStorage"
   Media Type = File
   Archive Device = <%= @storage_default_mount %>/default
-  Label Media = Yes
-  Random Access = Yes
-  Automatic Mount = Yes
-  Removable Media = No
-  Always Open = No
+  Label Media = yes
+  Random Access = yes
+  Automatic Mount = yes
+  Removable Media = no
+  Always Open = no
   Block Checksum = <%= @block_checksum ? 'yes':'no' %>
 }
 

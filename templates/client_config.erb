@@ -5,9 +5,9 @@ Client {
   Catalog  = "<%= @director_server_real %>:<%= @db_backend_real %>"
   File Retention = 12 Weeks
   Job Retention  = 1 Year
-  Auto Prune = Yes
+  Auto Prune = yes
 <% if @use_tls -%>
-  TLS Enable = Yes
+  TLS Enable = yes
   TLS Require = <%= @tls_require ? 'yes':'no' %>
 <% @tls_allowed_cn.each do |allowed_cn| -%>
   TLS Allowed CN = "<%= allowed_cn %>"
@@ -27,7 +27,7 @@ Job {
   Name     = "<%= @name %>"
   Client   = "<%= @name %>"
   Type     = Backup
-  Enabled  = "<%= @backup_enable ? 'yes':'no' %>"
+  Enabled  = <%= @backup_enable ? 'yes':'no' %>
 <%- if @priority -%>
   Priority = <%= @priority %>
 <%- end -%>
@@ -77,7 +77,7 @@ Job {
   Name     = "<%= @name %> Restore"
   Client   = "<%= @name %>"
   Type     = Restore
-  Enabled  = "<%= @restore_enable ? 'yes':'no' %>"
+  Enabled  = <%= @restore_enable ? 'yes':'no' %>
   FileSet  = "<%= @fileset %>"
   Storage  = "<%= @storage_server_real %>:storage:<%= @pool %>"
   Pool     = "<%= @storage_server_real %>:pool:<%= @pool %>"

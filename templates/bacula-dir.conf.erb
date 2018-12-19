@@ -138,7 +138,7 @@ Pool {
   # Clean up any we don't need, and keep them for a maximum of a year
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
-  Recycle = No
+  Recycle = no
   Auto Prune = <%= @volume_autoprune_full ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_full %>
@@ -156,7 +156,7 @@ Pool {
   # Clean up any we don't need, and keep them for a maximum of fourty days
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
-  Recycle = No
+  Recycle = no
   Auto Prune = <%= @volume_autoprune_diff ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_diff %>
@@ -174,7 +174,7 @@ Pool {
   # Clean up any we don't need, and keep them for a maximum of 40 days
   # Note the files for the old volumes will still remain on the disk but will
   # be truncated to a zero size.
-  Recycle = No
+  Recycle = no
   Auto Prune = <%= @volume_autoprune_incr ? 'yes':'no' %>
   Action On Purge = Truncate
   Volume Retention = <%= @volume_retention_incr %>
@@ -190,8 +190,8 @@ Pool {
   Pool Type = Backup
   # Clean up any we don't need, and keep them for a maximum of a month (in
   # theory the same time period for weekly backups from the clients)
-  Recycle = Yes
-  Auto Prune = Yes
+  Recycle = yes
+  Auto Prune = yes
   # We have no limit on the number of volumes, but we will simply set that
   # we should keep at least one weeks worth of backups of the database
   Volume Retention = 1 Week
@@ -393,12 +393,6 @@ Job {
   Write Bootstrap = "/var/lib/bacula/BackupCatalog.bsr"
   # Run after main backup
   Priority = 50
-# This doesn't seem to be working correctly removing it.
-#  RunScript {
-#   RunsWhen=After
-#   RunsOnClient=No
-#   Console = "purge volume action=all allpools storage=File"
-#  }
 }
 <% end -%>
 

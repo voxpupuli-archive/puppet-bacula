@@ -6,14 +6,14 @@ FileSet {
       Compression = GZIP
     }
 
-<% include_files.each do |file_include| -%>
+<% @include_files.each do |file_include| -%>
     File = <%= file_include %>
 <% end -%>
   }
 
 <% if @exclude_files -%>
   Exclude {
-<% exclude_files.each do |file_exclude| -%>
+<% @exclude_files.each do |file_exclude| -%>
     File = <%= file_exclude %>
 <% end -%>
   }
